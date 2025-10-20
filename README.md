@@ -1,6 +1,8 @@
 # Custom Instructions
 
-This set of instructions enhances and extends the modes/agents that come with Roo Code.
+Create your own AI dev team.
+I use this set of instructions to enhance and extend the modes/agents that come with Roo Code.
+They can easily be adapted to similar agentic coding assistants, such as Copilot, Cline, etc.
 
 Using the built-in-to-Roo ability to make rules files, this archive is a set of custom instructions for the built-in modes and some new ones, including:
 - Supplements "Architect" with a 3-step "Planner" process.
