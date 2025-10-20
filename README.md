@@ -1,6 +1,7 @@
 # Custom Instructions
 
-Create your own AI dev team.
+Custom instructions for setting up your own agentic AI development team.
+
 I use this set of instructions to enhance and extend the modes/agents that come with Roo Code.
 They can easily be adapted to similar agentic coding assistants, such as Copilot, Cline, etc.
 
