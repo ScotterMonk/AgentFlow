@@ -20,9 +20,10 @@
     `date + time; action summary` (semicolon separated).
     - Ex: `"2025-08-14 07:23; Approved to begin"`.
     - Ex: `"2025-08-14 07:25; Task completed: Added update_query() to utils_sql.py, refactored utils_sql.py, junk.py"`.
-- Backups: `@\.roo\docs\old_versions`.
+- Backups: `@\.roo\docs\old_versions/[file name]_[timestamp]`.
 - `testing type`: "Run py scripts in terminal", "Use pytest", "Use browser", "Use all", "No testing", "Custom".
 - `completed plans folder`: `@\.roo\docs\plans_completed`.
+- Git diff, recent commits.
 - `credentials`: `@\.env`. Password in DB is hashed.
 - Web automation & browsing: Prefer the MCP Puppeteer server via use_mcp_tool, using tools:
     puppeteer_navigate, puppeteer_screenshot, puppeteer_click, puppeteer_fill, puppeteer_hover, puppeteer_select, puppeteer_evaluate.
@@ -57,7 +58,7 @@ For analysis/plan formation, referencing in Task instructions, or to determine w
 - `/ask`: General Q/A.
 - `/task-simple`: Small ops/tasks.
 - `/githubber`: Use GitHub commands.
-- `/debug` (deprecated): Prefer `/code-monkey` or `/code`, depending on complexity.
+- `/debug`: Troubleshooting, investigating errors, or diagnosing problems.
 
 ## Standards
 
@@ -153,7 +154,7 @@ fixed += "."
 - Preserve existing comments.
 - Comment liberally.
 - File operations
-    - On name collisions, append _[iteration number].
+    - On name collisions, append _[timestamp].
 - Tool preference for web:
     - Default: MCP Puppeteer tools (selectors-first approach).
     - Fallback: Use any other browser tooling only if Puppeteer is unavailable or misconfigured.

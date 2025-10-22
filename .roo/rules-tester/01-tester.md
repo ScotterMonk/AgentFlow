@@ -15,15 +15,15 @@ If another mode is more appropriate for your task, pass task to appropriate mode
 - `/ask`: General Q/A.
 - `/task-simple`: Small ops/tasks.
 - `/githubber`: Use GitHub commands.
-- `/debug` (deprecated): Prefer `/code-monkey` or `/code`, depending on complexity.
+- `/debug`: Troubleshooting, investigating errors, or diagnosing problems.
 
 CRITICAL:
 - Be sure to use all applicable instructions and values in `@\.roo\rules\01-general.md`. 
     Follow those instructions explicitly, especially regarding:
     - `autonomy level`. If unknown, *ask user*.
-    - and separate dialog: `testing type`. If unknown, *ask user*.
+    - Separate dialog: `testing type`. If unknown, *ask user*.
 - `log file`.
-- Backup files before edits.
+- Before changing files, copy them into `.roo/docs/old_versions/[file name]_[timestamp]`.
 - If database operations, refer to `@\.roo\rules\02-database.md`.
 
 ## Critical Resources

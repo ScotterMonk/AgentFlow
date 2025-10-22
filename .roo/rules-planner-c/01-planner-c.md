@@ -19,7 +19,7 @@ Use these resources to thoroughly understand the application (expected behavior 
 - `Critical Resources` section in `@\.roo\rules\01-general.md`, which includes but is not limited to:
     - `app knowledge`: `@\agents.md`.
     - Codebase: `codebase_search`, `read_file`, `search_files`.
-    - `@\.roo\docs\old_versions`: backups.
+    - Backups: `.roo/docs/old_versions/[file name]_[timestamp]`.
     - `completed plans folder`: `@\.roo\docs\plans_completed`.
     - `credentials`: `@\.env`. User passwords in DB are hashed.
 
@@ -66,6 +66,7 @@ If still unknown, consult user.
 Notes:
     - Incorporate (or not) testing into the plan based on user's `testing type` choice.
     - Remember you are planning, not building.
+You MUST complete each step below before proceeding to the next.
 Steps:
 1) Pull high level `plan file` into memory as `plan`, which will have one or more `phase(s)`.
 2) Modify `plan` to have detailed tasks under each `phase`:

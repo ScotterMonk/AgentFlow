@@ -22,7 +22,7 @@ Use these resources to thoroughly understand the application (expected behavior 
 - `Critical Resources` section in `@\.roo\rules\01-general.md`, which includes but is not limited to:
     - `app knowledge`: `@\agents.md`.
     - Codebase: `codebase_search`, `read_file`, `search_files`.
-    - `@\.roo\docs\old_versions`: backups.
+    - Backups: `.roo/docs/old_versions/[file name]_[timestamp]`.
     - `completed plans folder`: `@\.roo\docs\plans_completed`.
     - `credentials`: `@\.env`. User passwords in DB are hashed.
 - `short plan name`: yymmdd_two_word_description.
@@ -103,6 +103,7 @@ If user answered "One Task (tiny or small project)" to "Project size/complexity"
 ### 3: Create Phase(s) only (high level)
 Notes:
 - Outline `phase(s)`, depending on user's "one-phase or multi-phase" choice above.
+You MUST complete each step below before proceeding to the next.
 Steps:
 1) Add `phase(s)` to `plan`.
     Draft a high level `plan` based on `user query` with no tasks yet:

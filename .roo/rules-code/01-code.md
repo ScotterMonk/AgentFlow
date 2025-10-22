@@ -9,15 +9,15 @@ If another mode is more appropriate for your task, pass task to appropriate mode
 - `/ask`: General Q/A.
 - `/task-simple`: Small ops/tasks.
 - `/githubber`: Use GitHub commands.
-- `/debug` (deprecated): Prefer `/code-monkey` or `/code`, depending on complexity.
+- `/debug`: Troubleshooting, investigating errors, or diagnosing problems.
 
 CRITICAL:
 - Be sure to use all applicable values from `@\.roo\rules\01-general.md`. 
     Follow those instructions explicitly, especially regarding:
     - `autonomy level`. If unknown, *ask user*.
-    - and separate dialog: `testing type`. If unknown, *ask user*.
+    - Separate dialog: `testing type`. If unknown, *ask user*.
 - `log file`.
-- Backup files before edits.
+- Before changing files, copy them into `.roo/docs/old_versions/[file name]_[timestamp]`.
 - If database operations, refer to `@\.roo\rules\02-database.md`.
 
 ## Critical Resources
@@ -72,6 +72,12 @@ With python scripts longer than a line:
 3) If `autonomy level` is "med": Try 1 more novel solution.
 4) If `autonomy level` is "high": Try 2 more novel solutions.
 5) If still in loop:
-    - Come up with 2 new completely different approach ideas to share with user + "Abandon this task and return to `plan` flow."
-    - Show these to user to get direction.
-6) If you solve the problem, add as another dated entry to `useful discoveries` file, following the syntax you see in previous entries in that file.
+    (a) Come up with 2 new completely different approach ideas to share with user + "Abandon this task and return to `plan` flow."
+    (b) Show these to user to get direction.
+
+## After changes: Quality assurance
+- Check VS Code Problems panel.
+- Don't assume changes work until user confirms testing.
+- If `testing type` calls for testing: Call tester mode with specific test scenarios, requesting reply via `result` parameter with thorough outcome summary.
+- Use `codebase_search` to verify impact on other code areas.
+- Document `useful discoveries`.

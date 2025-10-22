@@ -39,6 +39,6 @@ Priority is to follow the `plan`.
 - Confirm with user.
 - Follow user instructions.
 - When user satisfied/completion:
-    - Move `plan file` to `completed plans folder`. If a name collision occurs, append _[iteration number].
+    - Move `plan file` to `completed plans folder`. If a name collision occurs, append _[timestamp].
     - Move `log file` to `completed plans folder` with the same collision rule.
     - Open both files for review and declare the `plan` completed.

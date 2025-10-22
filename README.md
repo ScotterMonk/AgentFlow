@@ -1,12 +1,9 @@
 # Custom Instructions
 
-Custom instructions for setting up your own agentic AI development team.
-
-I use this set of instructions to enhance and extend the modes/agents that come with Roo Code.
-They can easily be adapted to similar agentic coding assistants, such as Copilot, Cline, etc.
+This set of instructions enhances and extends the modes/agents that come with Roo Code.
 
 Using the built-in-to-Roo ability to make rules files, this archive is a set of custom instructions for the built-in modes and some new ones, including:
-- Supplements "Architect" with a 3-step "Planner" process.
+- Supplements "Architect" with a 3-step "Planner" process (planner-a, planner-b, planner-c).
 - Supplements "Code" with a tightly controlled "Code Monkey" created to work with the short, detailed tasks created for it by Planner.
 - Front-end, Tester, GitHub, Docs Writer, etc.
 
@@ -43,11 +40,11 @@ Scenario: Building a new dashboard screen from scratch.
 
 **Example of small modification**
 Scenario: Fixing a bug, modifying front-end, or adding a function.
-- Use "code", "code monkey", "front-end", "tester", etc., as appropriate.
+- Use "code", "code monkey", "front-end", "debug", "tester", etc., as appropriate.
 
 ## Folder structure
 
-See the attached zip. These files should go in your project root. You'll see they coincide with where your current .roo folder is.
+These files should go in your project root. You'll see they coincide with where your current .roo folder is.
 
 ```
 app
@@ -93,10 +90,8 @@ app
     │   └── 01-project-mgr.md
     ├── rules-task-simple
     │   └── 01-task-simple.md
-    ├── rules-tester
-    │   └── 01-tester.md
-    └── useful
-        └── useful.md
+    └── rules-tester
+        └── 01-tester.md
 ```
 
 ## Fit to you
@@ -112,19 +107,27 @@ Be sure to modify the files you see in the .roo\docs folder to fit your project.
 - ".roo\rules-front-end\01-front-end.md"
 - and really, I'd look through all the rules files to modify to YOUR style.
 
-Here's an example prompt I'd give a "smart" model with large context:
+### IMPORTANT agents.md
+
+If your agentic assistant has an /init command, use it. Roo Code has /init. If not, do the following:
+
+Here's an example prompt I'd give a "thinking/reasoning" model with large context:
 "Goal: Modify 'agents.md' so it can be a succinct but detailed enough reference for any coder, ai, or team to use for understanding the application enough to be able to modify it. Be sure to analyze the entire application and think carefully through your investigation and conclusions."
 
-If you are building a new application or large/med/complex changes to your existing one, start with planner-a mode.
-If you are doing something smaller, then do what you usually do and use code mode.
+After the agents.md file is produced, you may wish to add something like the following (to fit your app) to the appropriate section:
+```md
+### Critical instructions and reference
+Highest priority - follow to the letter:
+`@\.roo\rules\01-general.md`
+```
 
-## Use as you will
+## Use and share as you wish
 
 Created in 2025 by
 Scott Howard Swain
 https://OceanMedia.net
 
-Free to use and modify.
+Free to use, modify, and share.
 
 You are responsible for 
 any benefits or problems

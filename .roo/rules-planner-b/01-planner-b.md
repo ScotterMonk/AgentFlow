@@ -24,7 +24,7 @@ Use these resources to thoroughly understand the application (expected behavior 
 - `Critical Resources` section in `@\.roo\rules\01-general.md`, which includes but is not limited to:
     - `app knowledge`: `@\agents.md`.
     - Codebase: `codebase_search`, `read_file`, `search_files`.
-    - `@\.roo\docs\old_versions`: backups.
+    - Backups: `.roo/docs/old_versions/[file name]_[timestamp]`.
     - `completed plans folder`: `@\.roo\docs\plans_completed`.
     - `credentials`: `@\.env`. User passwords in DB are hashed.
 
@@ -63,22 +63,23 @@ Determine if this is a new `plan` or continuation. If unknown, examine `log file
 ### 2: Q/A the Phases
 Keep it high level; no detailed tasks at this stage.
 For all of the following, keep in mind:
-- Values in `Critical Resources`.
+- The values in `Critical Resources`.
 - Guidelines in `Standards`.
 - Remember you are planning, not building.
-Step through the `plan`, one `phase` at a time.
-For each `phase`, take your time and think carefully as you do the following Q/A:
-    1) Check `phase` goals:
-        **Avoid building redundant functionality.**
-        Use existing related files, components, and utilities that 
-        can be copied, leveraged, or modification to be more general.
-        For example, before you create a function or class, make sure it does not already exist 
-        using all of the following methods:
-        - Use `codebase_search`.
-        - Use `@\agents.md`.
-    2) How will this `phase` affect the overall `plan`?
-    3) Make any necessary changes to the `plan`.
-    4) Move on to next `phase` when you are confident this `phase` is solid.
+- Step through the `plan`, one `phase` at a time.
+- For each `phase`, take your time and think carefully as you do the following Q/A.
+- You MUST complete each step below before proceeding to the next.
+1) Check `phase` goals:
+    **Avoid building redundant functionality.**
+    Use existing related files, components, and utilities that 
+    can be copied, leveraged, or modification to be more general.
+    For example, before you create a function or class, make sure it does not already exist 
+    using all of the following methods:
+    - Use `codebase_search`.
+    - Use `@\agents.md`.
+2) How will this `phase` affect the overall `plan`?
+3) Make any necessary changes to the `plan`.
+4) Move on to next `phase` when you are confident this `phase` is solid.
 
 ### 4: Finalize Plan
 1) Modify the `plan file` to reflect changes.
