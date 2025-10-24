@@ -39,7 +39,7 @@ Follow applicable `Standards` in `@\.roo\rules\01-general.md`.
 - PascalCase for classes.
 
 ## Coding Tasks
-1) Search for existing patterns and implementations in the codebase. Including but not limited to:
+1) CRITICAL: Search for existing patterns and implementations in the codebase. Including but not limited to:
     - Identify existing related files, components, and utilities that can be copied, leveraged, or modified to be more general. 
         Important: incorporate findings as a detailed list to add to the `plan`.
 2) Retrieve relevant architectural decisions from memory.

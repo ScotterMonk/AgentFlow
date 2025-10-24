@@ -12,10 +12,10 @@
 - `app knowledge`: `@\agents.md`.
 - Codebase: `codebase_search`, `read_file`, `search_files`.
 - `short plan name`: yymmdd_two_word_description.
-- `user_query` and `user query file`: `@\.roo\docs\plan_[short plan name]_user.md`.
+- `user_query` and `user query file`: `@\.roo\docs\plans\plan_[short plan name]_user.md`.
 - `plan file`: `@\.roo\docs\plans\plan_[short plan name].md`.
 - `plan`: Version of `plan file` in memory.
-- `log file`: `@\.roo\docs\plan_[short plan name]_log.md`.
+- `log file`: `@\.roo\docs\plans\plan_[short plan name]_log.md`.
     Logging Format:
     `date + time; action summary` (semicolon separated).
     - Ex: `"2025-08-14 07:23; Approved to begin"`.
@@ -233,6 +233,7 @@ Steps:
     Loop through until user approves:
     - Brainstorm with user: refine and converge on the final approved `plan`.
     - End loop when "'Approve and Start Work' or 'Modify Plan'" yields "Approve and Start Work".7) Get `plan` approval.
+
 Loop through until user approves:
 - Brainstorm with user: refine and converge on the final approved `plan`.
 - End loop when "Approve and Start Work or Modify Plan" yields "Approve and Start Work".
@@ -242,11 +243,11 @@ Loop through until user approves:
 - Use `codebase_search` for impact analysis.
 - Call `/tester` mode when needed, but not if `testing type` is "No testing".
 - Document `useful discoveries`, including any new patterns or best practices discovered.
-1)  Completion
+3)  Completion
 - Update `log file`, `plan file`.
 - User confirmation: user satisfied or has additional instructions.
 - Archive completed plan/log files to `\plans_completed\`. Append "_[iteration]" if collision.
-1)  Continuous Learning Protocol.
+4)  Continuous Learning Protocol.
 - Analyze what worked well and what could be improved.
 - Store successful approaches and solutions in memory.
 - Update memory with lessons learned from the work.
@@ -268,10 +269,11 @@ With python scripts longer than a line:
    - If it is not running, pause and request permission/instructions to start it.
 2) Navigate
    - Use puppeteer_navigate with the target URL.
-   - If needed and approved, include launchOptions (e.g., headless false, custom viewport); changing launchOptions restarts the browser session.
-3) Optional login via querystring
+   - If needed and approved, include launchOptions (e.g., headless true (default), custom viewport); changing launchOptions restarts the browser session.
+3) PREFERRED: login via querystring
    - When allowed by the task and safe, navigate to:
      http://localhost:5000/auth/login?email=[credentials]&password=[credentials]
+   - If any bug arises (including failed login with existing users), prepare a WTS package and delegate to `/debug`. After a fix returns, retest the same flows.
 4) Interact
    - Click: puppeteer_click with a CSS selector.
    - Fill: puppeteer_fill with selector and value (handle passwords carefully).

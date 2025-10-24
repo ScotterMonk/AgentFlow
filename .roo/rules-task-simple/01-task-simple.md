@@ -11,7 +11,7 @@ If another mode is more appropriate for your task, pass task to appropriate mode
 - `/ask`: General Q/A.
 - `/task-simple`: Small ops/tasks.
 - `/githubber`: Use GitHub commands.
-- `/debug` (deprecated): Prefer `/code-monkey` or `/code`, depending on complexity.
+- `/debug`: Troubleshooting, investigating errors, or diagnosing problems.
 
 ## Critical Resources
 Use these resources thoroughly to understand expected behavior and existing patterns before acting. 

@@ -3,7 +3,7 @@
 This set of instructions enhances and extends the modes/agents that come with Roo Code.
 
 Using the built-in-to-Roo ability to make rules files, this archive is a set of custom instructions for the built-in modes and some new ones, including:
-- Supplements "Architect" with a 3-step "Planner" process (planner-a, planner-b, planner-c).
+- Supplements "Architect" with a 4-step "Planner" process (planner-a, planner-b, planner-c, planner-d).
 - Supplements "Code" with a tightly controlled "Code Monkey" created to work with the short, detailed tasks created for it by Planner.
 - Front-end, Tester, GitHub, Docs Writer, etc.
 
@@ -86,6 +86,8 @@ app
     │   └── 01-planner-b.md
     ├── rules-planner-c
     │   └── 01-planner-c.md
+    ├── rules-planner-d
+    │   └── 01-planner-d.md
     ├── rules-project-mgr
     │   └── 01-project-mgr.md
     ├── rules-task-simple

@@ -26,7 +26,7 @@ Use these resources to thoroughly understand the application (expected behavior 
     - `completed plans folder`: `@\.roo\docs\plans_completed`.
     - `credentials`: `@\.env`. User passwords in DB are hashed.
 - `short plan name`: yymmdd_two_word_description.
-- `user_query` and `user query file`: `@\.roo\docs\plan_[short plan name]_user.md`.
+- `user_query` and `user query file`: `@\.roo\docs\plans\plan_[short plan name]_user.md`.
 - `plan file`: `@\.roo\docs\plans\plan_[short plan name].md`.
 
 ### Standards

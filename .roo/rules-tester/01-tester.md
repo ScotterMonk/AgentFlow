@@ -34,7 +34,7 @@ See `Critical Resources` section in `@\.roo\rules\01-general.md`.
 See `Standards` section in `@\.roo\rules\01-general.md`.
 
 ## Coding Tasks
-1) Search for existing patterns and implementations in the codebase.
+1) CRITICAL: Search for existing patterns and implementations in the codebase.
 2) Retrieve relevant architectural decisions from memory.
 3) Provide solutions that align with established patterns.
 4) Reference specific code examples from the codebase search.
@@ -64,26 +64,15 @@ With python scripts longer than a line:
 2) Run the script.
 
 #### "Use browser"
-- Use browser tool, clear cache. Use querystring for login; pattern: `http://localhost:5000/auth/login?email=[credentials]&password=[credentials]`. Use credentials from `@\.env`.
-- Assumptions:
-    - Admin and test/basic users already exist from .env. Do NOT create accounts unless explicitly instructed.
-- Check app is running:
-    - (Powershell) `py app.py`.
-    - If a login fails twice, verify existence/credentials using helper scripts:
-        - `debug_admin_login.py`, `debug_admin_credentials.py`.
-        - `check_admin_users.py`, `debug_test_data.py`.
-- If a user needs to be created:
-    - For admin permissions: `create_admin_user.py`.
-    - For "test" level permissions: `create_test_user.py`.
-    - For disposable user: `create_basic_test_user.py`.
+Web Automation with Puppeteer (MCP)
+Use exact instructions from "Web Automation with Puppeteer (MCP)" in `@\.roo\rules\01-general.md`.
+
+NOTES:
 - Test flows (examples):
     - Admin login: visit `/auth/login`, sign in with admin creds (from .env), expect redirect to admin dashboard (e.g., `/admin`), then verify access to `/admin/users` and edit behavior; confirm redirects/permission logic in `routes/auth.py` and `routes/admin.py`.
     - Test/basic user login: visit `/auth/login`, sign in with test/basic creds (from .env), expect redirect to `/home` or `/user/dashboard`; confirm access restrictions (cannot access `/admin`)
 - Evidence collection:
-- Capture screenshots for key steps and failures; store under `memlog/` with descriptive names (e.g., `memlog/<timestamp>_login_failure.png`)
     - Document exact steps taken, expected vs actual, and URLs visited
-- Integration:
-    - If any bug arises (including failed login with existing users), prepare a WTS package and delegate to `/debug`. After a fix returns, retest the same flows.
 
 #### "Use pytest"
 Environment prep:
