@@ -1,0 +1,13 @@
+notes/
+
+# VSCode
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python/
+env/
+venv/

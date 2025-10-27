@@ -3,7 +3,7 @@
 This set of instructions enhances and extends the modes/agents that come with Roo Code.
 
 Using the built-in-to-Roo ability to make rules files, this archive is a set of custom instructions for the built-in modes and some new ones, including:
-- Supplements "Architect" with a 4-step "Planner" process (planner-a, planner-b, planner-c, planner-d).
+- Replaces "Architect" with a 4-step "Planner" process (planner-a, planner-b, planner-c, planner-d).
 - Supplements "Code" with a tightly controlled "Code Monkey" created to work with the short, detailed tasks created for it by Planner.
 - Front-end, Tester, GitHub, Docs Writer, etc.
 
@@ -24,7 +24,11 @@ Possibly coming soon: a level above "Planner" where you brainstorm on a high lev
 ### Modifying your existing app
 Environment: Web/database application.
 
-**Example of large/medium modification**
+#### Example of small modification
+Scenario: Fixing a bug, modifying front-end, or adding a function.
+- Use "code", "code monkey", "front-end", "debug", "tester", etc., as appropriate.
+
+#### Example of large/medium modification
 Scenario: Building a new dashboard screen from scratch.
 - Start with "planner-a" mode. For this mode, I choose a model with high reasoning and large-as-possible context window.
 - Tell it what you want.
@@ -37,10 +41,6 @@ Scenario: Building a new dashboard screen from scratch.
 - Once you approve the plan, it will pass on to the other planner modes to flesh out and add detail to the plan.
 - Eventually, once you approve, it will pass the plan (with detailed instructions, mode hints, etc.) on to the "orchestrator" mode.
 - Note: This workflow sets the plan to prefer "code monkey" mode for the coding parts. If "code monkey" gets confused because a task is too difficult or complex, it has instructions to pass the task on to "code" mode which I use a "smarter" LLM for.
-
-**Example of small modification**
-Scenario: Fixing a bug, modifying front-end, or adding a function.
-- Use "code", "code monkey", "front-end", "debug", "tester", etc., as appropriate.
 
 ## Folder structure
 
@@ -97,7 +97,6 @@ app
 ```
 
 ## Fit to you
-
 Be sure to modify the files you see in the .roo\docs folder to fit your project. Especially:
 - "agents.md"
 - ".roo\docs\database_schema.md"
@@ -110,9 +109,19 @@ Be sure to modify the files you see in the .roo\docs folder to fit your project.
 - and really, I'd look through all the rules files to modify to YOUR style.
 
 ### IMPORTANT agents.md
+If your agentic assistant has an /init command, use it. 
+Roo Code has /init. 
+If not, skip down to "No Init" section.
 
-If your agentic assistant has an /init command, use it. Roo Code has /init. If not, do the following:
+#### Init
+Optimally, use a high reasoning, large context-window model.
+Type "/init" into chat.
+It will build you an agents.md file in your project root.
+Unfortunately, it may also build agents.md files in some of your .roo/rules-___ folders.
+I had some long talks with a few different LLMs about how useful those extra agents.md files are.
+Came to the conclusion it's better to fold all into the one agents.md file in app root.
 
+#### No init
 Here's an example prompt I'd give a "thinking/reasoning" model with large context:
 "Goal: Modify 'agents.md' so it can be a succinct but detailed enough reference for any coder, ai, or team to use for understanding the application enough to be able to modify it. Be sure to analyze the entire application and think carefully through your investigation and conclusions."
 

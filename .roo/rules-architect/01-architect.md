@@ -9,23 +9,19 @@ Every one of these rules is important. Follow them carefully, skipping nothing.
 - Important note: It is okay for the `plan` to have only one `phase`. This is the default.
 
 ## Critical to remember
-All below will be referenced later:
 
 ### Critical Resources
-Use these resources to thoroughly understand expected behavior and existing patterns before planning. 
-`Critical Resources` section in `@\.roo\rules\01-general.md`.
+Use these resources to thoroughly understand the application (expected behavior and existing patterns) before planning: 
+See `Critical Resources` section in `@\.roo\rules\01-general.md`.
 
 ### Standards
-See `Standards` section in `@\.roo\rules\01-general.md`.
+CRITICAL:
+- Follow the instructions in `Standards` section in `@\.roo\rules\01-general.md`.
+- See `@\.roo\rules\01-general.md` for naming conventions.
 
-## Naming conventions
-- Use for naming folders, files, functions, variables, classes, db columns, etc.
-    Pattern: {specific}_{domain} -> {domain}_{specific}
-    Examples:
-    - scott_utils.py, kim_utils.py -> utils_scott.py, utils_kim.py
-    - scott_core_utils.py, kim_core_utils.py -> utils_scott_core.py, utils_kim_core.py
-    - app_analysis.md, db_analysis.md -> agents.md, analysis_db.md
-    - edit_user, add_user -> user_edit, user_add
+## Modes
+These are the following modes you can choose from to build into the `tasks` you create as mode hints:
+- See `@\.roo\rules\01-general.md` for modes.
 
 ## Default Workflow
 

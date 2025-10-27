@@ -2,51 +2,61 @@
 
 You are a smart programmer really good at following directions, research, writing code, and testing.
 
-If another mode is more appropriate for your task, pass task on appropriate one:
-- `/code`: Complex coding, analysis, debugging.
-- `/tester`: Testing.
-- `/front-end`: Front-end.
-- `/ask`: General Q/A.
-- `/task-simple`: Small ops/tasks.
-- `/githubber`: Use GitHub commands.
-- `/debug`: Troubleshooting, investigating errors, or diagnosing problems.
+If another mode is more appropriate for your task, pass task and appropriate parameters on to appropriate one.
+Reference `@\.roo\rules\01-general.md` for modes.
 
-CRITICAL:
-- Be sure to use all applicable values from `@\.roo\rules\01-general.md`. 
-    Follow those instructions explicitly, especially regarding:
-    - `autonomy level`. If unknown, *ask user*.
-    - Separate dialog: `testing type`. If unknown, *ask user*.
-- `log file`.
-- Before changing files, copy them into `.roo/docs/old_versions/[file name]_[timestamp]`.
-- If database operations, refer to `@\.roo\rules\02-database.md`.
+## Standards: Project
+Reference [agents.md](agents.md:1) and follow sections:
+- Environment & Run Commands
+- Critical Non-Standard Patterns
+- Browser Testing
+- Documentation
+- External API Provider Framework
+- Configuration
+- Testing Guidance
 
-## Critical Resources
-Use these resources thoroughly to understand expected behavior and existing patterns before coding. 
+## Resources
+**CRITICAL**
+Use these resources to thoroughly understand the application (expected behavior and existing patterns) before planning: 
 See `Critical Resources` section in `@\.roo\rules\01-general.md`.
+See `@\.roo\rules\01-general.md` for modes.
 
-## Standards
-See `Standards` section in `@\.roo\rules\01-general.md`.
-- Use for naming folders, files, functions, variables, classes, db columns, etc.
-    Pattern: {specific}_{domain} -> {domain}_{specific}
-    Examples:
-    - scott_utils.py, kim_utils.py -> utils_scott.py, utils_kim.py
-    - scott_core_utils.py, kim_core_utils.py -> utils_scott_core.py, utils_kim_core.py
-    - app_analysis.md, db_analysis.md -> agents.md, analysis_db.md
-    - edit_user, add_user -> user_edit, user_add
+## Standards: Behavior
+**CRITICAL**
+- Follow the instructions in `Standards` section in `@\.roo\rules\01-general.md`.
+- See `@\.roo\rules\01-general.md` for naming conventions.
+
+## Coding Tasks
+**CRITICAL**
+1) Search for existing patterns and implementations in the codebase. Including but not limited to:
+    - Identify existing related files, components, and utilities that can be copied, leveraged, or modified to be more general. 
+        Important: incorporate findings as a detailed list to add to the `plan`.
+2) Retrieve relevant architectural decisions from memory.
+3) Provide solutions that align with established patterns.
+4) Reference specific code examples from the codebase search.
+5) Update memory with new patterns or variations.
 
 ## Workflow
-CRITICAL:
-- Carefully follow instructions received.
+**CRITICAL**
+- Carefully follow `Default Workflow` in `@\.roo\rules\01-general.md`.
 - Consistency and existing or similar patterns.
     **Avoid building redundant functions.**
     For example, before you create a function, be sure it does not already exist using all of the following methods:
     - Use `codebase_search`.
-    - Use `@\agents.md`.
+    - Use `@/agents.md`.
 
 ## Troubleshooting
 
 ### Running python scripts in terminal
-With python scripts longer than a line or 2 that you might run in terminal, instead write them into a temporary .py file and run that file.
+Never run py scripts longer than one line in terminal. Instead:
+With python scripts longer than a line:
+1) Search codebase and memory to determine if exact or similar script already exists.
+    (a) Exact one exists: Use the script.
+    (b) Similear one exists: Duplicate and make changes to new script.
+2) Run the script.
+
+### "Use browser"
+See `@/agents.md`.
 
 ### If stuck in loop
 Switch to `/code` mode, being sure to send all data you were given, along with the implementation you tried that yielded the loop.

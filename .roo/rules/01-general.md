@@ -9,7 +9,7 @@
     - "activate" → `.\activate.ps1`.
 
 ## Critical Resources
-- `app knowledge`: `@\agents.md`.
+- `app knowledge`: `@/agents.md`.
 - Codebase: `codebase_search`, `read_file`, `search_files`.
 - `short plan name`: yymmdd_two_word_description.
 - `user_query` and `user query file`: `@\.roo\docs\plans\plan_[short plan name]_user.md`.
@@ -25,16 +25,7 @@
 - `completed plans folder`: `@\.roo\docs\plans_completed`.
 - Git diff, recent commits.
 - `credentials`: `@\.env`. Password in DB is hashed.
-- Web automation & browsing: Prefer the MCP Puppeteer server via use_mcp_tool, using tools:
-    puppeteer_navigate, puppeteer_screenshot, puppeteer_click, puppeteer_fill, puppeteer_hover, puppeteer_select, puppeteer_evaluate.
-    Use these for:
-    - Navigating to local dev servers (e.g., http://localhost:5000) and public sites.
-    - Clicking, filling forms, selecting dropdowns, capturing screenshots, reading console logs, executing small JS snippets.
-- Web testing: Use MCP Puppeteer. Clear cache if relevant. 
-    For local testing, use querystring login when allowed: http://localhost:5000/auth/login?email=[`credentials`]&password=[`credentials` hashed]
-    Keep the Puppeteer session active until the task is verified complete.
-- Puppeteer console logs (MCP resource): console://logs
-- Puppeteer screenshots (MCP resource): screenshot://<name> (after capture)
+- Web automation & browsing: `browser_action`
 - Database: 
     - `@\.roo\rules\02-database.md`
     - `@\.roo\docs\database_schema.md`
@@ -49,7 +40,8 @@ For analysis/plan formation, referencing in Task instructions, or to determine w
 - Planner - Architecting a `plan`, a 3-step process:
     - `/planner-a`: Planning 1 - create `phase(s)` from `user query`. Pass flow to `/planner-b`.
     - `/planner-b`: Planning 2 - refine output from `/planner-a`. Q/A. Pass flow to `/planner-c`.
-    - `/planner-c`: Planning 3 - create `tasks` for each `phase`. Q/A. Get user approval. Pass flow to `/orchestrator`.
+    - `/planner-c`: Planning 3 - create `tasks` for each `phase`. Get user approval. Pass flow to `/planner-d`.
+    - `/planner-d`: Planning 3 - Q/A. Get user approval. Pass flow to `/orchestrator`.
 - `/orchestrator`: Execute approved `plan` by coordinating tasks across modes.
 - `/code-monkey`: Coding, analysis, following instructions.
 - `/code`: Complex coding, analysis, debugging.
@@ -62,38 +54,44 @@ For analysis/plan formation, referencing in Task instructions, or to determine w
 
 ## Standards
 
-### Modularization
-CRITICAL: Keep Python and JS files small. 
-Create and reference utility files (`@\utils`) liberally.
-
-### Function and class creation
-When you create or modify a function or class, add a 1-line comment sharing what your model name is and the date, using the exact following syntax:
-- ```# [Created-or-Modified] by [model] | yyyy-mm-dd```.
-Examples:
-- ```# Created by Sonnet 4.5 | 2025-10-04```, 
-- ```# Modified by Gemini 2.5 Pro | 2025-10-04```,
-- ```// Created by GPT-5 | 2025-10-04```, 
-- ```<!-- Modified by GLM-4.6 | 2025-10-04-->```.
-
-### Naming conventions
-- Use for naming folders, files, functions, variables, classes, db columns, etc.
-    Pattern: {specific}_{domain} -> {domain}_{specific}
-    Examples:
-    - scott_utils.py, kim_utils.py -> utils_scott.py, utils_kim.py
-    - scott_core_utils.py, kim_core_utils.py -> utils_scott_core.py, utils_kim_core.py
-    - app_analysis.md, db_analysis.md -> agents.md, analysis_db.md
-    - edit_user, add_user -> user_edit, user_add
-- Snake_case for functions, variables, and database tables & columns.
-- PascalCase for classes.
-
 ### Communication
 Be brief; don't echo user requests.
 
-### Indentation
-4 spaces.
+### Modularization
+CRITICAL: Keep Python and JS files small, preferably less than 400 lines of code. 
+Create and reference utility files (`@\utils`) liberally.
 
 ### Flask html templates
 Use `jinja-html` language mode.
+
+### Naming Conventions
+- Use for naming folders, files, functions, variables, classes, db columns, etc.
+    Pattern: {specific}_{domain} -> {domain}_{specific}
+    Examples:
+    - `scott_utils.py`, `kim_utils.py` -> `utils_scott.py`, `utils_kim.py`
+    - `scott_core_utils.py`, `kim_core_utils.py` -> `utils_scott_core.py`, `utils_kim_core.py`
+    - `edit_user`, `add_user` -> `user_edit`, `user_add`
+- Snake_case for functions, variables, database tables & columns.
+- PascalCase for classes.
+
+### Code Standards
+- All functions/classes MUST include: `# [Created-or-Modified] by [model] | yyyy-mm-dd_[iteration]`
+- Templates use `jinja-html` language mode
+- Compact vertical spacing.
+- Multi-line strings for complex SQL queries.
+- Prioritize readable code over compact syntax.
+- Prioritize quotes over semi-quotes. Ex:
+```python
+fixed += "."
+```
+- Simple solutions.
+- Preserve existing comments.
+- Comment liberally.
+- File operations
+    - On name collisions, append _[timestamp].
+- Tool preference for web:
+    - Default: `browser_action`.
+    - Fallback: Use any other browser tooling only if `browser_action` is unavailable or misconfigured.
 
 ### Markdown syntax
 
@@ -109,13 +107,13 @@ Use `jinja-html` language mode.
 - File paths with `@\` prefix for project root references
 
 #### Formatting
-- Use 4-space indentation for nested items
+- Use 4-space indentation for nested items.
 - Numbered lists with `)` separator: `1)`, `2)`
-- Avoid double-asterisks: "**Impact:**" -> "Impact:"
-- Keep it small/no redundancy: [`models/models_user.py`](app/models/models_user.py) -> `models/models_user.py`
-- Use colons for emphasis instead of bold
-- Back-ticks for code/file references, not brackets
-- Simple, direct formatting
+- Avoid double-asterisks: "**Impact:**" -> "Impact:".
+- Keep it small/no redundancy: [`models/models_user.py`](app/models/models_user.py) -> `models/models_user.py`.
+- Use colons for emphasis instead of bold.
+- Back-ticks for code/file references, not brackets.
+- Simple, direct formatting.
 - Compact bullet points without extra spacing.
 - Related items grouped tightly.
 - Clear section breaks with single empty line.
@@ -142,27 +140,6 @@ Content with extra spacing.
 - Item two
 ```
 
-### Code
-- Compact vertical spacing.
-- Multi-line strings for complex SQL queries.
-- Prioritize readable code over compact syntax.
-- Prioritize quotes over semi-quotes. Ex:
-```python
-fixed += "."
-```
-- Simple solutions.
-- Preserve existing comments.
-- Comment liberally.
-- File operations
-    - On name collisions, append _[timestamp].
-- Tool preference for web:
-    - Default: MCP Puppeteer tools (selectors-first approach).
-    - Fallback: Use any other browser tooling only if Puppeteer is unavailable or misconfigured.
-- Safety when browsing:
-    - MCP Puppeteer runs a local browser and can reach local files/internal IPs. Do not access sensitive hosts/resources without explicit user approval.
-    - Do not include secrets in screenshots or console logs.
-    - Use minimal launchOptions; only enable dangerous flags if the user explicitly approves (see ref-puppeteer "Launch Options").
-
 ## Default Workflow
 
 ### Initialization
@@ -184,8 +161,8 @@ For the following steps 5 through 6, be sure to determine these 2 settings as se
     - "One Task (tiny or small project)"
     - "One Phase (small to medium project), one-or-many tasks"
     - "Multi-Phase (larger project), many tasks per phase"
-6) SEPARATELY, Ask User: `autonomy level` for `plan`. Determine autonomy level separate from testing type below. Choices: "Low" (frequent direction), "Med", "High" (rare direction).
-7) SEPARATELY, Ask User `testing type` for `plan`, Choices: "Run py scripts in terminal", "Use pytest", "Use browser", "Use all", "No testing", "Custom". Important: provide these exact choices to the user.
+6) FOLLOW THIS INSTRUCTION EXACTLY: SEPARATELY FROM size/complexity above and testing types below, Ask User: `autonomy level` for `plan`. Determine autonomy level separate from testing type below. Choices: "Low" (frequent direction), "Med", "High" (rare direction).
+7) FOLLOW THIS INSTRUCTION EXACTLY: SEPARATELY from choices above, Ask User `testing type` for `plan`, Choices: "Run py scripts in terminal", "Use pytest", "Use browser", "Use all", "No testing", "Custom". Important: provide these exact choices to the user.
 8) Understand the ask: Problem/feature, intent, scope, constraints, dependencies.
 
 ### Planning
@@ -260,36 +237,23 @@ Never run py scripts longer than one line in terminal.
 With python scripts longer than a line:
 1) Search codebase and memory to determine if exact or similar script already exists.
     (a) Exact one exists: Use the script.
-    (b) Similear one exists: Duplicate and make changes to new script.
+    (b) Similar one exists: 
+        - Find what other objects depend on the script.
+        - Decide if modification or duplication is better.
+        - Modify or duplicate.
 2) Run the script.
 
-## Web Automation with Puppeteer (MCP)
-1) Preconditions
-   - Ensure the target web app/server is running before navigating (for localhost tasks).
-   - If it is not running, pause and request permission/instructions to start it.
-2) Navigate
-   - Use puppeteer_navigate with the target URL.
-   - If needed and approved, include launchOptions (e.g., headless true (default), custom viewport); changing launchOptions restarts the browser session.
-3) PREFERRED: login via querystring
-   - When allowed by the task and safe, navigate to:
-     http://localhost:5000/auth/login?email=[credentials]&password=[credentials]
-   - If any bug arises (including failed login with existing users), prepare a WTS package and delegate to `/debug`. After a fix returns, retest the same flows.
-4) Interact
-   - Click: puppeteer_click with a CSS selector.
-   - Fill: puppeteer_fill with selector and value (handle passwords carefully).
-   - Select: puppeteer_select for dropdowns by value.
-   - Hover: puppeteer_hover when required.
-   - Evaluate: puppeteer_evaluate for small JS snippets (read-only unless the user approves mutations).
-5) Observe
-   - Screenshots: puppeteer_screenshot with a meaningful name; optionally selector, width/height, encoded.
-   - Logs: read console://logs to inspect console output.
-6) Session behavior
-   - The Puppeteer server maintains session state. Changing launchOptions restarts the browser.
-   - Prefer stable sessions; restart only when necessary (e.g., headless toggle, custom executablePath).
+### Browser Testing (web automation / browsing)
+See `@/agents.md` for browser use procedures.
 
 ## Mode Communication
-Delegating via `message` param:
+Delegating via `message` param and include:
+- If using `plan`: Relevant `plan` details.
 - Relevant bug/issue details.
 - Implementation instructions.
 - Return command when complete.
 - Reply requirement via `result` param with outcome summary.
+
+## Error Handling and QA
+- Verify console and VS Code Problems panel after changes
+- Document notable findings in `/.roo/docs/useful.md` (see Documentation in `@/agents.md`

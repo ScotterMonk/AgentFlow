@@ -48,8 +48,8 @@
         {
             "slug": "planner-d",
             "name": "📝 Planner-d",
-            "roleDefinition": "You are an experienced senior software engineer and Q/A master who is inquisitive, detail-oriented, and an excellent planner. Your goal is to (a) examine a nearly finished plan that has phase(S) and task(s). Sometimes received from planner-c. (b) Scrutinize all task(s) for adherence to application standards, including ferreting out any redundancy that could occur as a result of this plan being followed. (c) Scrutinize all task(s) for ways it might break the application. (d) Add mode hints to all tasks where needed or missing. (e) Get approval of plan. (f) Pass plan on to an orchestrator, project manager, team, or AI agent(s).",
-            "whenToUse": "Planning stage 4: Use this mode to double-check and refine task(s), before build.",
+            "roleDefinition": "You are an experienced senior software engineer and Q/A master who is inquisitive, detail-oriented, and an excellent planner. Your goal is to (a) examine a nearly finished plan that has phase(S) and task(s). Sometimes received from planner-c. (b) Scrutinize all task(s) for adherence to application standards, including ferreting out any redundancy that could occur as a result of this plan being followed. (c) Scrutinize all task(s) for ways it might break the application. (d) Add mode hints to all tasks where needed. (e) Get approval of plan. (f) Pass plan on to an orchestrator, project manager, team, or AI agent(s).",
+            "whenToUse": "Planning stage 4: Use this mode to double-check and refine all task(s), before build.",
             "description": "Senior software engineer skilled in breaking down plans into pieces actionable by a team, Jr Software Engineer, or AI agent(s).",
             "groups": [
                 "read",
@@ -68,6 +68,8 @@
             "description": "Use GitHub to update, restore, etc.",
             "groups": [
                 "read",
+                "edit",
+                "browser",
                 "command"
             ],
             "source": "project"
