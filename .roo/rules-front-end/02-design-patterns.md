@@ -29,7 +29,7 @@ Standard page structure:
 Key layout components:
 - `.content-container` - Main content wrapper with max-width and padding
 - `.card`, `.card-header`, `.card-body`, `.card-footer` - Card-based layouts
-- `.container-table` - Table wrapper with border, rounded corners, and overflow-x-auto
+- `.container-table` - Table wrapper with border, rounded corners, overflow-x-auto
 
 ## CSS Variable System
 Reference `static/css/main.css` for complete variable definitions. Always use CSS variables instead of hardcoded values.
