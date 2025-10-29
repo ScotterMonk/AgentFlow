@@ -1,10 +1,13 @@
 # Custom Instructions
 
+Welcome to your customizable AI coding team!
+It can be used to create a new application or make changes/additions to an existing one. 
+
 This set of instructions enhances and extends the modes/agents that come with many coding agent/asisstants (or make your own). The instructions are tailored to work best with Roo Code but will work with many others.
 
 Using the built-in-to-Roo ability to make rules files, this archive is a set of custom instructions for the built-in modes and some new ones, including:
 - Replaces "Architect" with a 4-step "Planner" process (planner-a, planner-b, planner-c, planner-d).
-- Supplements "Code" with a tightly controlled "Code Monkey" created to work with the short, detailed tasks created for it by Planner.
+- Supplements "Code" with a tightly controlled budget-friendly "Code Monkey" created to work with the short, detailed tasks created for it by Planner.
 - Front-end, Tester, GitHub, Docs Writer, etc.
 
 Notes: 
@@ -12,8 +15,6 @@ Notes:
 - The author, Scott Howard Swain, is always eager to hear ideas to improve this.
 
 ## When/how to use?
-
-It can be used to create a new application or make changes/additions to an existing one. 
 
 ### Building a new app
 If building a new app, it assumes you already know *specs* (what platform, language(s), database type, etc.) for the project. 
