@@ -1,6 +1,6 @@
 # Custom Instructions
 
-This set of instructions enhances and extends the modes/agents that come with Roo Code.
+This set of instructions enhances and extends the modes/agents that come with many coding agent/asisstants (or make your own). The instructions are tailored to work best with Roo Code but will work with many others.
 
 Using the built-in-to-Roo ability to make rules files, this archive is a set of custom instructions for the built-in modes and some new ones, including:
 - Replaces "Architect" with a 4-step "Planner" process (planner-a, planner-b, planner-c, planner-d).
