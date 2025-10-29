@@ -23,8 +23,22 @@ Every one of these rules is important. Follow them carefully, skip nothing.
 ## Critical to remember
 
 ### Critical Resources
-Use these resources to thoroughly understand the application (expected behavior and existing patterns) before planning: 
+Use these resources to thoroughly understand the application (expected behavior and existing patterns) before planning:
 See `Critical Resources` section in `@\.roo\rules\01-general.md`.
+Database:
+- Canonical sources:
+    - Schema documentation: `@\.roo\docs\database_schema.md`
+    - Schema tool: `@\utils\schema_inspector.py`
+    - SQLAlchemy models: `@\models\models_*.py`
+- Source of Truth hierarchy:
+    1) PGDB (live PostgreSQL)
+    2) models_*.py (SQLAlchemy)
+    3) database_schema.md (generated)
+- Commands:
+    - `python utils/schema_inspector.py introspect`
+    - `python utils/schema_inspector.py compare-db-models`
+    - `python utils/schema_inspector.py generate-docs`
+    - `python utils/schema_inspector.py validate`
 
 ### Standards
 CRITICAL:
