@@ -2,6 +2,7 @@ notes/
 
 # VSCode
 .vscode/
+AgentFlow.code-workspace
 
 # Python
 __pycache__/
@@ -9,5 +10,9 @@ __pycache__/
 *.pyo
 *.pyd
 .Python/
+
+# Env
+.gitignore
+activate.ps1
 env/
 venv/
