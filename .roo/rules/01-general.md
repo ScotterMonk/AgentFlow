@@ -12,7 +12,7 @@
 - `app knowledge`: `@/agents.md`.
 - Codebase: `codebase_search`, `read_file`, `search_files`.
 - `short plan name`: yymmdd_two_word_description.
-- `user_query` and `user query file`: `@\.roo\docs\plans\plan_[short plan name]_user.md`.
+- `user_query` and `user query file`: `@\.roo\docs\plans\plan_[timestamp]_[short plan name]_user.md`.
 - `plan file`: `@\.roo\docs\plans\plan_[short plan name].md`.
 - `plan`: Version of `plan file` in memory.
 - `log file`: `@\.roo\docs\plans\plan_[short plan name]_log.md`.
@@ -24,24 +24,25 @@
 - `testing type`: "Run py scripts in terminal", "Use pytest", "Use browser", "Use all", "No testing", "Custom".
 - `completed plans folder`: `@\.roo\docs\plans_completed`.
 - Git diff, recent commits.
-- `credentials`: `@\.env`. Password in DB is hashed.
+- `credentials`: `@\.env`. User passwords in DB is hashed.
 - Web automation & browsing: `browser_action`
 - Database: 
     - `@\.roo\rules\02-database.md`
-    - `@\.roo\docs\database_schema.md`
+    - [`database_schema.md`](.roo/docs/database_schema.md:1)
     - `@\utils\database.py`
     - `@\models\models_*.py`
     - `db = SQLAlchemy()`
+	- db port = 5433
     - When creating a script to "check the database", write a temp .py file in the `@\temp` folder and run it. Do NOT paste the script into the terminal.
 - `useful discoveries`: `@\.roo\docs\useful.md`.
 
 ### Modes
 For analysis/plan formation, referencing in Task instructions, or to determine when to mode-switch:
-- Planner - Architecting a `plan`, a 3-step process:
+- Planner - Architecting a `plan`, a 4-step process:
     - `/planner-a`: Planning 1 - create `phase(s)` from `user query`. Pass flow to `/planner-b`.
     - `/planner-b`: Planning 2 - refine output from `/planner-a`. Q/A. Pass flow to `/planner-c`.
     - `/planner-c`: Planning 3 - create `tasks` for each `phase`. Get user approval. Pass flow to `/planner-d`.
-    - `/planner-d`: Planning 3 - Q/A. Get user approval. Pass flow to `/orchestrator`.
+    - `/planner-d`: Planning 4 - Q/A. Get user approval. Pass flow to `/orchestrator`.
 - `/orchestrator`: Execute approved `plan` by coordinating tasks across modes.
 - `/code-monkey`: Coding, analysis, following instructions.
 - `/code`: Complex coding, analysis, debugging.
@@ -58,7 +59,7 @@ For analysis/plan formation, referencing in Task instructions, or to determine w
 Be brief; don't echo user requests.
 
 ### Modularization
-CRITICAL: Keep Python and JS files small, preferably less than 400 lines of code. 
+CRITICAL: Keep Python and JS files small and modular, preferably less than 400 lines of code. 
 Create and reference utility files (`@\utils`) liberally.
 
 ### Flask html templates
@@ -68,6 +69,7 @@ Use `jinja-html` language mode.
 - Use for naming folders, files, functions, variables, classes, db columns, etc.
     Pattern: {specific}_{domain} -> {domain}_{specific}
     Examples:
+    - `admin_dashboard_utils.py`, `user_dashboard_utils.py` -> `dashboard_utils_admin.py`, `dashboard_utils_user.py`
     - `scott_utils.py`, `kim_utils.py` -> `utils_scott.py`, `utils_kim.py`
     - `scott_core_utils.py`, `kim_core_utils.py` -> `utils_scott_core.py`, `utils_kim_core.py`
     - `edit_user`, `add_user` -> `user_edit`, `user_add`
@@ -75,7 +77,7 @@ Use `jinja-html` language mode.
 - PascalCase for classes.
 
 ### Code Standards
-- All functions/classes MUST include: `# [Created-or-Modified] by [model] | yyyy-mm-dd_[iteration]`
+- All functions/classes MUST include: `# [Created-or-Modified] by [LLM model] | yyyy-mm-dd_[iteration]`
 - Templates use `jinja-html` language mode
 - Compact vertical spacing.
 - Multi-line strings for complex SQL queries.
@@ -209,7 +211,8 @@ Steps:
 7) Get `plan` approval.
     Loop through until user approves:
     - Brainstorm with user: refine and converge on the final approved `plan`.
-    - End loop when "'Approve and Start Work' or 'Modify Plan'" yields "Approve and Start Work".7) Get `plan` approval.
+    - End loop when "'Approve and Start Work' or 'Modify Plan'" yields "Approve and Start Work".
+8) Get `plan` approval.
 
 Loop through until user approves:
 - Brainstorm with user: refine and converge on the final approved `plan`.

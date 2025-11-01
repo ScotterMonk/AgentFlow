@@ -12,8 +12,11 @@ Out-of-scope (coordinate handoffs)
 - Backend logic, DB models, migrations, or API providers (handoff to /code or /debug)
 - Test strategy changes beyond front-end verification (coordinate with /tester per plan)
 
-If another mode is more appropriate for your task, pass task and appropriate parameters on to appropriate one.
-Reference `@\.roo\rules\01-general.md` for modes.
+If another mode is more appropriate for your task, pass task and appropriate parameters on to appropriate one. Prefer the most budget-friendly modes in the following order of low-to-high budget sorting:
+a) Budget/Intelligence/Skill: low (ex: renaming, copying, moving files; doing simple text/value comparison or replacement, copying column names and column parameters from a database): `/task-simple`.
+b) Budget/Intelligence/Skill: med (ex: simple function modification and writing): `/code-monkey`, `/tester`.
+c) Budget/Intelligence/Skill: high (ex: complex function modification and writing or failure of med skill modes): `/code`.
+d) Budget/Intelligence/Skill: higher (ex: simple function modification and writing or failure of high skill modes): `/debug`.
 
 ## Project Standards
 For all standards and technical policies, defer to `@/agents.md`. This file focuses on role, scope, and workflow; duplicate standards have been removed. See these sections in `@/agents.md`:

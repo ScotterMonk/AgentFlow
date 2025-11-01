@@ -92,6 +92,7 @@ Steps:
         Mode hint: /task-simple.
         Notes relevant to this task.
     ```
+3) Add `log file` entries to track what was done during this part of the `plan`.
 
 ### 3: Q/A the Task(s)
 For all of the following, keep in mind:
@@ -123,6 +124,7 @@ For each `task`, take your time and think carefully as you do the following Q/A:
     - Add integration points and acceptance criteria. 
 2) How will this task affect the overall `plan`?
 3) Make any necessary changes to the `plan`.
+4) Add `log file` entries to summarize each part of what was done during this part of the `plan`.
 
 ### 4: Finalize Plan
 1) Modify the `plan file` to reflect changes.
@@ -135,8 +137,7 @@ For each `task`, take your time and think carefully as you do the following Q/A:
 
 ### 5: Pass Plan on for final modifications
 1) Document new planning decisions in memory for future reference.
-2) Add a `log file` entry.
-3) Pass the following variables on to `/planner-d` for Q/A of `task(s)`:
+2) Pass the following variables on to `/planner-d` for Q/A of `task(s)`:
     - `plan`, `plan file`, `short plan name`.
     - `log file` name.
     - `user query`, `user query file` name.

@@ -8,7 +8,7 @@ This set of instructions enhances and extends the modes/agents that come with ma
 Using the built-in-to-Roo ability to make rules files, this archive is a set of custom instructions for the built-in modes and some new ones, including:
 - Replaces "Architect" with a 4-step "Planner" process (planner-a, planner-b, planner-c, planner-d).
 - Supplements "Code" with a tightly controlled budget-friendly "Code Monkey" created to work with the short, detailed tasks created for it by Planner.
-- Front-end, Tester, GitHub, Docs Writer, etc.
+- Front-end, Debugger, Tester, GitHub, Docs Writer, etc.
 
 Notes: 
 - This set of instructions is ever-evolving. 

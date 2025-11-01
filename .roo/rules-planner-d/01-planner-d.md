@@ -97,6 +97,7 @@ Steps:
             - Use `@/agents.md`.
 	- Be sure mode hints, integration points, and acceptance criteria exist as per rules in `/planner-c`.
     - Take all the time necessary until you are confident you have come up with a solid new `plan` that includes tasks. 
+3) Add `log file` entries to summarize each part of what was done during this part of the `plan`.
 
 ### 3: Q/A the Task(s)
 For all of the following, keep in mind:
@@ -127,6 +128,7 @@ For each `task`, take your time and think carefully as you do the following Q/A:
     - Q/A integration points and acceptance criteria. 
 2) How will this task affect the overall `plan`?
 3) Make any necessary changes to the `plan`.
+4) Add `log file` entries to summarize each part of what was done during this part of the `plan`.
 
 ### 4: Finalize Plan
 1) Modify the `plan file` to reflect changes.

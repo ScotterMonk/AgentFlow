@@ -75,10 +75,9 @@ For all of the following numbered steps, keep in mind:
 4) Get `plan` approval.
     Loop through until user approves:
     - Brainstorm with user: refine and converge on the final approved high level `plan`.
-    - End loop when "'Approve and pass to next planner level' or 'Modify this high level plan'" yields "Approve and pass to next planner level".
 
 ### 5: Pass Plan on for creation of detailed tasks
-1) Add an initial `log file` entry.
+1) Add `log file` entry to track what was done during this part of the `plan`.
 2) Output. Pass the following variables on to `/planner-c` for task(s) creation:
     - `plan`, `plan file`, `short plan name`.
     - `log file` name.
