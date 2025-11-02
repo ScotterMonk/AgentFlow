@@ -1,14 +1,15 @@
 # Custom Instructions
 
 Welcome to your customizable AI coding team!
-It can be used to create a new application or make changes/additions to an existing one. 
+Use it to create new apps or make changes/additions to existing ones. 
 
-This set of instructions enhances and extends the modes/agents that come with many coding agent/asisstants (or make your own). The instructions are tailored to work best with Roo Code but will work with many others.
+This set of instructions (markdown files) enhances and extends the modes/agents that come with many coding agent/asisstants (or make your own). The instructions are tailored to work with Roo Code (free highly customizable VS Code extension) but will work with many others, including Github Copilot and CLine.
 
-Using the built-in-to-Roo ability to make rules files, this archive is a set of custom instructions for the built-in modes and some new ones, including:
+Using the built-in-to-Roo ability to use rules files, this archive is a set of custom instructions for the built-in modes and some new ones, including:
 - Replaces "Architect" with a 4-step "Planner" process (planner-a, planner-b, planner-c, planner-d).
 - Supplements "Code" with a tightly controlled budget-friendly "Code Monkey" created to work with the short, detailed tasks created for it by Planner.
 - Front-end, Debugger, Tester, GitHub, Docs Writer, etc.
+- While planning and working, creates files to keep track of its goals, progress, and lessons learned.
 
 Notes: 
 - This set of instructions is ever-evolving. 
@@ -19,11 +20,9 @@ Notes:
 ### Building a new app
 If building a new app, it assumes you already know *specs* (what platform, language(s), database type, etc.) for the project. 
 That's just one layer "higher" than these instructions are built for.
-
 Possibly coming soon: a level above "Planner" where you brainstorm on a high level to get ideas for *specs* to feed planner.
 
 ### Modifying your existing app
-Environment: Web/database application.
 
 #### Example of small modification
 Scenario: Fixing a bug, modifying front-end, or adding a function.
@@ -39,9 +38,10 @@ Scenario: Building a new dashboard screen from scratch.
     - What level of autonomy do you want it to have when it starts the work?
     - What type of testing (browser, pytest, custom, none) do you want it to do as it completes tasks?
 - It will create a high level plan and ask you if you want to modify it or approve.
+- It will also create plan and log files to help itself and you keep track of goals, progress, and lessons learned.
 - Once you approve the plan, it will pass on to the other planner modes to flesh out and add detail to the plan.
 - Eventually, once you approve, it will pass the plan (with detailed instructions, mode hints, etc.) on to the "orchestrator" mode.
-- Note: This workflow sets the plan to prefer "code monkey" mode for the coding parts. If "code monkey" gets confused because a task is too difficult or complex, it has instructions to pass the task on to "code" mode which I use a "smarter" LLM for.
+- Note: This workflow sets the plan to prefer "code monkey" mode (lower budget than "code" mode) for the coding parts. If "code monkey" gets confused because a task is too difficult or complex, it has instructions to pass the task on to "code" mode which I assign a "smarter" LLM to.
 
 ## Folder structure
 
@@ -98,16 +98,13 @@ app
 ```
 
 ## Fit to you
-Be sure to modify the files you see in the .roo\docs folder to fit your project. Especially:
-- "agents.md"
+Be sure to modify the content of files you see in the .roo\docs folder to fit your project. Especially:
+- "agents.md" (In root, "above" .roo folder)
 - ".roo\docs\database_schema.md"
-- ".roo\docs\useful.md"
 - ".roo\rules\01-general.md"
 - ".roo\rules\02-database.md"
-- ".roo\rules-code\01-code.md"
-- ".roo\rules-code-monkey\01-code-monkey.md"
-- ".roo\rules-front-end\01-front-end.md"
-- and really, I'd look through all the rules files to modify to YOUR style.
+- ".roo\rules-front-end\02-design-patterns.md"
+and really, I'd look through all the rules files to modify to YOUR style.
 
 ### IMPORTANT agents.md
 If your agentic assistant has an /init command, use it. 
@@ -116,11 +113,8 @@ If not, skip down to "No Init" section.
 
 #### Init
 Optimally, use a high reasoning, large context-window model.
-Type "/init" into chat.
-It will build you an agents.md file in your project root.
-Unfortunately, it may also build agents.md files in some of your .roo/rules-___ folders.
-I had some long talks with a few different LLMs about how useful those extra agents.md files are.
-Came to the conclusion it's better to fold all into the one agents.md file in app root.
+Type into chat: "/init note: only create agents.md file in project root. Do not create any other agents.md files or modify any rules files."
+If you type only "/init", the LLM may create agent.md files in other folders. I talked with a few different LLMs about how useful those extra agents.md files are. Came to the conclusion it's better to fold all into the one agents.md file in app root.
 
 #### No init
 Here's an example prompt I'd give a "thinking/reasoning" model with large context:
