@@ -23,13 +23,13 @@ Reference `agents.md` and follow sections:
 ## Resources
 **CRITICAL**
 Use these resources to thoroughly understand the application (expected behavior and existing patterns) before planning: 
-See `Critical Resources` section in `@\.roo\rules\01-general.md`.
-See `@\.roo\rules\01-general.md` for modes.
+See `Critical Resources` section in `@/.roo/rules/01-general.md`.
+See `@/.roo/rules/01-general.md` for modes.
 
 ## Standards: Behavior
 **CRITICAL**
-- Follow the instructions in `Standards` section in `@\.roo\rules\01-general.md`.
-- See `@\.roo\rules\01-general.md` for naming conventions.
+- Follow the instructions in `Standards` section in `@/.roo/rules/01-general.md`.
+- See `@/.roo/rules/01-general.md` for naming conventions.
 
 ## Coding Tasks
 **CRITICAL**
@@ -43,12 +43,12 @@ See `@\.roo\rules\01-general.md` for modes.
 
 ## Workflow
 **CRITICAL**
-- Carefully follow `Default Workflow` in `@\.roo\rules\01-general.md`.
+- Carefully follow `Default Workflow` in `@/.roo/rules/01-general.md`.
 - Consistency and existing or similar patterns.
     **Avoid building redundant functions.**
     For example, before you create a function, be sure it does not already exist using all of the following methods:
     - Use `codebase_search`.
-    - Use `@/agents.md`.
+    - Use `./agents.md`.
 
 ## Systematic debugging process (in order)
 You MUST complete each step below before continuing to the next.
@@ -63,7 +63,7 @@ You MUST complete each step below before continuing to the next.
 - If not reproducible -> gather more data, don't guess.
 3) Gather context to understand related code and recent changes.
 - Use all resources:
-    - `app knowledge`: `@/agents.md`.
+    - `app knowledge`: `./agents.md`.
     - Codebase: `codebase_search`, `read_file`, `search_files`.
     - Backups: `.roo/docs/old_versions/[file name without extension]_[timestamp]_[extension]`.
     - Logs and completed plans: `.roo/docs/plans_completed/`.
@@ -114,7 +114,7 @@ With python scripts longer than a line:
 2) Run the script.
 
 ### "Use browser"
-See `@/agents.md`.
+See `./agents.md`.
 
 ### If stuck in loop
 1) Try 1 completely different approach.

@@ -98,12 +98,12 @@ app
 ```
 
 ## Fit to you
-Be sure to modify the content of files you see in the .roo\docs folder to fit your project. Especially:
+Be sure to modify the content of files you see in the .roo/docs folder to fit your project. Especially:
 - "agents.md" (In root, "above" .roo folder)
-- ".roo\docs\database_schema.md"
-- ".roo\rules\01-general.md"
-- ".roo\rules\02-database.md"
-- ".roo\rules-front-end\02-design-patterns.md"
+- ".roo/docs/database_schema.md"
+- ".roo/rules/01-general.md"
+- ".roo/rules/02-database.md"
+- ".roo/rules-front-end/02-design-patterns.md"
 and really, I'd look through all the rules files to modify to YOUR style.
 
 ### IMPORTANT agents.md
@@ -124,7 +124,7 @@ After the agents.md file is produced, you may wish to add something like the fol
 ```md
 ### Critical instructions and reference
 Highest priority - follow to the letter:
-`@\.roo\rules\01-general.md`
+`@/.roo/rules/01-general.md`
 ```
 
 ## Use and share as you wish

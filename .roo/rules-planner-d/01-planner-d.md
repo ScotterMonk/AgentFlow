@@ -24,12 +24,12 @@ Every one of these rules is important. Follow them carefully, skip nothing.
 
 ### Critical Resources
 Use these resources to thoroughly understand the application (expected behavior and existing patterns) before planning:
-See `Critical Resources` section in `@\.roo\rules\01-general.md`.
+See `Critical Resources` section in `@/.roo/rules/01-general.md`.
 Database:
 - Canonical sources:
-    - Schema documentation: `@\.roo\docs\database_schema.md`
-    - Schema tool: `@\utils\schema_inspector.py`
-    - SQLAlchemy models: `@\models\models_*.py`
+    - Schema documentation: `.roo/docs/database_schema.md`
+    - Schema tool: `utils/schema_inspector.py`
+    - SQLAlchemy models: `models/models_*.py`
 - Source of Truth hierarchy:
     1) PGDB (live PostgreSQL)
     2) models_*.py (SQLAlchemy)
@@ -42,12 +42,12 @@ Database:
 
 ### Standards
 CRITICAL:
-- Follow the instructions in `Standards` section in `@\.roo\rules\01-general.md`.
-- See `@\.roo\rules\01-general.md` for naming conventions.
+- Follow the instructions in `Standards` section in `@/.roo/rules/01-general.md`.
+- See `@/.roo/rules/01-general.md` for naming conventions.
 
 ## Modes
 These are the following modes you can choose from to build into the `tasks` you create as mode hints:
-- See `@\.roo\rules\01-general.md` for modes.
+- See `@/.roo/rules/01-general.md` for modes.
 
 ## Workflow
 
@@ -94,8 +94,8 @@ Steps:
             Use existing related files, components, and utilities that can be leveraged or modified to be more general.
             For example, before you create a function or class, make sure it does not already exist using all of the following methods:
             - Use `codebase_search`.
-            - Use `@/agents.md`.
-	- Be sure mode hints, integration points, and acceptance criteria exist as per rules in `/planner-c`.
+            - Use `./agents.md`.
+	- Be sure mode hints, integration points, and acceptance criteria exist as per rules in `@/.roo/rules/01-general.md`.
     - Take all the time necessary until you are confident you have come up with a solid new `plan` that includes tasks. 
 3) Add `log file` entries to summarize each part of what was done during this part of the `plan`.
 
@@ -117,7 +117,7 @@ For each `task`, take your time and think carefully as you do the following Q/A:
         For example, before you create a function or class, make sure it does not already exist 
         using all of the following methods:
         - Use `codebase_search`.
-        - Use `@/agents.md`.
+        - Use `./agents.md`.
     - Q/A mode hints. 
         CRITICAL that this is done accurately. Consult user if unsure which mode to assign for a task.
         Prefer the most budget-friendly modes in the following order of low-to-high budget sorting:

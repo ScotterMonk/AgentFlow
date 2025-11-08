@@ -21,12 +21,12 @@ Every one of the rules below is important. Follow them carefully, skip nothing.
 
 ### Critical Resources
 Use these resources to thoroughly understand the application (expected behavior and existing patterns) before planning: 
-See `Critical Resources` section in `@\.roo\rules\01-general.md`.
+See `Critical Resources` section in `@/.roo/rules/01-general.md`.
 
 ### Standards
 CRITICAL:
-- Follow the instructions in `Standards` section in `@\.roo\rules\01-general.md`.
-- See `@\.roo\rules\01-general.md` for naming conventions.
+- Follow the instructions in `Standards` section in `@/.roo/rules/01-general.md`.
+- See `@/.roo/rules/01-general.md` for naming conventions.
 
 ## Workflow
 
@@ -63,7 +63,7 @@ For all of the following numbered steps, keep in mind:
     For example, before you plan creation of a function or class, make sure it does not already exist 
     using all of the following methods:
     - Use `codebase_search`.
-    - Use `@/agents.md`.
+    - Use `./agents.md`.
 2) How will this `phase` affect the overall `plan`?
 3) Make any necessary changes to the `plan`.
 4) Move on to next `phase` when you are confident this `phase` is solid.

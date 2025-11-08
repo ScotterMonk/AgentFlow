@@ -55,7 +55,7 @@ Use web search tool.
 - Markdown:
     - Use back-ticks liberally, brackets rarely, line numbers never, and resist redundancy as you see here:
         [`app.py`](app.py) --> `app.py`.
-        [`@\.env`](.env) --> `@\.env`.
+        [`.env`](.env) --> `.env`.
         [`do()`](app.py:54) --> `do()` (app.py).
     - With numbered subheads, remove "#":
         "## 1) Setup" --> "1) Setup"

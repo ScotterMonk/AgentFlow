@@ -6,35 +6,35 @@
 - Global commands:
     - "git update" → `/githubber` mode.
     - "run", "run app", "turn on app", "server on" → `python app.py`.
-    - "activate" → `.\activate.ps1`.
+    - "activate" → `./activate.ps1`.
 
 ## Critical Resources
-- `app knowledge`: `@/agents.md`.
+- `app knowledge`: `./agents.md`.
 - Codebase: `codebase_search`, `read_file`, `search_files`.
 - `short plan name`: yymmdd_two_word_description.
-- `user_query` and `user query file`: `@\.roo\docs\plans\plan_[timestamp]_[short plan name]_user.md`.
-- `plan file`: `@\.roo\docs\plans\plan_[short plan name].md`.
+- `user_query` and `user query file`: `@/.roo/docs/plans/plan_[timestamp]_[short plan name]_user.md`.
+- `plan file`: `@/.roo/docs/plans/plan_[short plan name].md`.
 - `plan`: Version of `plan file` in memory.
-- `log file`: `@\.roo\docs\plans\plan_[short plan name]_log.md`.
+- `log file`: `@/.roo/docs/plans/plan_[short plan name]_log.md`.
     Logging Format:
     `date + time; action summary` (semicolon separated).
     - Ex: `"2025-08-14 07:23; Approved to begin"`.
     - Ex: `"2025-08-14 07:25; Task completed: Added update_query() to utils_sql.py, refactored utils_sql.py, junk.py"`.
-- Backups: `@\.roo\docs\old_versions/[file name]_[timestamp]`.
+- Backups: `.roo/docs/old_versions/[file name]_[timestamp]`.
 - `testing type`: "Run py scripts in terminal", "Use pytest", "Use browser", "Use all", "No testing", "Custom".
-- `completed plans folder`: `@\.roo\docs\plans_completed`.
+- `completed plans folder`: `.roo/docs/plans_completed`.
 - Git diff, recent commits.
-- `credentials`: `@\.env`. User passwords in DB is hashed.
+- `credentials`: `.env`. User passwords in DB is hashed.
 - Web automation & browsing: `browser_action`
 - Database: 
-    - `@\.roo\rules\02-database.md`
+    - `.roo/rules/02-database.md`
     - [`database_schema.md`](.roo/docs/database_schema.md:1)
-    - `@\utils\database.py`
-    - `@\models\models_*.py`
+    - `utils/database.py`
+    - `models/models_*.py`
     - `db = SQLAlchemy()`
 	- db port = 5433
-    - When creating a script to "check the database", write a temp .py file in the `@\temp` folder and run it. Do NOT paste the script into the terminal.
-- `useful discoveries`: `@\.roo\docs\useful.md`.
+    - When creating a script to "check the database", write a temp .py file in the `temp/` folder and run it. Do NOT paste the script into the terminal.
+- `useful discoveries`: `.roo/docs/useful.md`.
 
 ### Modes
 For analysis/plan formation, referencing in Task instructions, or to determine when to mode-switch:
@@ -60,7 +60,7 @@ Be brief; don't echo user requests.
 
 ### Modularization
 CRITICAL: Keep Python and JS files small and modular, preferably less than 400 lines of code. 
-Create and reference utility files (`@\utils`) liberally.
+Create and reference utility files (`utils/`) liberally.
 
 ### Flask html templates
 Use `jinja-html` language mode.
@@ -104,9 +104,7 @@ fixed += "."
 - Single empty line between major sections only
 
 #### File References
-- Use back-ticks liberally: `filename.py`, `@\.roo\docs\file.md`
 - Avoid brackets: `file.py` not `[file.py](path)`
-- File paths with `@\` prefix for project root references
 
 #### Formatting
 - Use 4-space indentation for nested items.
@@ -226,7 +224,7 @@ Loop through until user approves:
 3)  Completion
 - Update `log file`, `plan file`.
 - User confirmation: user satisfied or has additional instructions.
-- Archive completed plan/log files to `\plans_completed\`. Append "_[iteration]" if collision.
+- Archive completed plan/log files to `.roo/docs/plans_completed/`. Append "_[iteration]" if collision.
 4)  Continuous Learning Protocol.
 - Analyze what worked well and what could be improved.
 - Store successful approaches and solutions in memory.
@@ -247,7 +245,7 @@ With python scripts longer than a line:
 2) Run the script.
 
 ### Browser Testing (web automation / browsing)
-See `@/agents.md` for browser use procedures.
+See `./agents.md` for browser use procedures.
 
 ## Mode Communication
 Delegating via `message` param and include:
@@ -259,4 +257,4 @@ Delegating via `message` param and include:
 
 ## Error Handling and QA
 - Verify console and VS Code Problems panel after changes
-- Document notable findings in `/.roo/docs/useful.md` (see Documentation in `@/agents.md`
+- Document notable findings in `/.roo/docs/useful.md` (see Documentation in `./agents.md`

@@ -21,7 +21,7 @@ When in this mode, the following commands will run the processes below:
 
 ## Critical Resources
 Use these resources thoroughly to understand expected behavior and existing patterns before acting. 
-See `Critical Resources` section in `@\.github\copilot-instructions.md`.
+See `Critical Resources` section in `.roo/rules/01-general.md`.
 
 ## update: Stage, Commit, and Push Git Changes
 1) Examine repository's current status, showing all modified, untracked, and staged files

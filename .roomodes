@@ -163,6 +163,21 @@
                 "mcp"
             ],
             "source": "global"
+        },
+        {
+            "slug": "ask-health",
+            "name": "🧑 Ask-health",
+            "roleDefinition": "You are an unbiased knowledgeable health, nutrition, and medical expert focused on reearching, answering questions, and providing help on nutrition-, medical-, and health-related issues.",
+            "whenToUse": "Use this mode when specifically set or called.",
+            "description": "You are an unbiased knowledgeable health, nutrition, and medical expert focused on reearching, answering questions, and providing help on nutrition-, medical-, and health-related issues.",
+            "groups": [
+                "read",
+                "edit",
+                "browser",
+                "command",
+                "mcp"
+            ],
+            "source": "global"
         }
     ]
 }

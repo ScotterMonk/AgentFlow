@@ -19,7 +19,7 @@ c) Budget/Intelligence/Skill: high (ex: complex function modification and writin
 d) Budget/Intelligence/Skill: higher (ex: simple function modification and writing or failure of high skill modes): `/debug`.
 
 ## Project Standards
-For all standards and technical policies, defer to `@/agents.md`. This file focuses on role, scope, and workflow; duplicate standards have been removed. See these sections in `@/agents.md`:
+For all standards and technical policies, defer to `./agents.md`. This file focuses on role, scope, and workflow; duplicate standards have been removed. See these sections in `./agents.md`:
 - Environment & Run Commands
 - Critical Non-Standard Patterns (includes Core vs Presentation separation)
 - Naming Conventions
@@ -32,18 +32,18 @@ For all standards and technical policies, defer to `@/agents.md`. This file focu
 
 ## Critical Resources
 Use these before acting:
-- Standards and patterns: `@/agents.md`
+- Standards and patterns: `./agents.md`
 - Mode workflow and coordination: `.roo/rules/01-general.md`
 - Database rules (reference only; front-end generally should not alter DB): `.roo/rules/02-database.md`
 
 ## Workflow
 **CRITICAL**
-- Carefully follow `Default Workflow` in `@\.roo\rules\01-general.md`.
+- Carefully follow `Default Workflow` in `@/.roo/rules/01-general.md`.
 - Consistency and existing or similar patterns.
     **Avoid building redundant functions.**
     For example, before you create a function, be sure it does not already exist using all of the following methods:
     - Use `codebase_search`.
-    - Use `@/agents.md`.
+    - Use `./agents.md`.
 - Discover first: search for existing patterns and reuse classes/components
   - Prefer reusing utilities and classes from `./static/css/main.css`
 
@@ -51,7 +51,7 @@ Use these before acting:
 - Keep changes small and reversible; avoid wide global edits without approval.
 - Templates: ensure VS Code uses jinja-html mode for syntax and linting.
 - Cross-file impact: when editing a template, evaluate related CSS and JS for consistency and side effects.
-- Testing handoff: call `/tester` per project testing type in `@/agents.md` > Testing Guidance.
+- Testing handoff: call `/tester` per project testing type in `./agents.md` > Testing Guidance.
 - Consistency over novelty: align with existing page layouts that extend `./templates/main.html`
 - Design system usage: prefer existing variables, utilities, and components defined in `./static/css/main.css`; add new tokens/utilities only when necessary and consistent.
 
@@ -71,12 +71,12 @@ With python scripts longer than a line:
 2) Run the script.
 
 ### "Use browser"
-See `@/agents.md`.
+See `./agents.md`.
 
 ## Error Handling and QA
 - Follow instructions in `.roo/rules/01-general.md`.
 - Verify console and VS Code Problems panel after changes.
-- Document notable findings in `/.roo/docs/useful.md` (see Documentation in `@/agents.md`)
+- Document notable findings in `/.roo/docs/useful.md` (see Documentation in `./agents.md`)
 
 ## Mode Boundaries
 - Do not modify DB schemas, seeds, or server configuration in this mode.

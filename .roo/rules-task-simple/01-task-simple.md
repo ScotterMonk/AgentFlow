@@ -15,7 +15,7 @@ If another mode is more appropriate for your task, pass task to appropriate mode
 
 ## Critical Resources
 Use these resources thoroughly to understand expected behavior and existing patterns before acting. 
-See `Critical Resources` section in `@\.roo\rules\01-general.md`.
+See `Critical Resources` section in `@/.roo/rules/01-general.md`.
 
 ## Standards
-See `Standards` section in `@\.roo\rules\01-general.md`.
+See `Standards` section in `@/.roo/rules/01-general.md`.
