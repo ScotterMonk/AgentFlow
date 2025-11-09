@@ -21,12 +21,12 @@ Every one of the rules below is important. Follow them carefully, skip nothing.
 
 ### Critical Resources
 Use these resources to thoroughly understand the application (expected behavior and existing patterns) before planning: 
-See `Critical Resources` section in `@/.roo/rules/01-general.md`.
+See `Critical Resources` section in `.roo/rules/01-general.md`.
 
 ### Standards
 CRITICAL:
-- Follow the instructions in `Standards` section in `@/.roo/rules/01-general.md`.
-- See `@/.roo/rules/01-general.md` for naming conventions.
+- Follow the instructions in `Standards` section in `.roo/rules/01-general.md`.
+- See `.roo/rules/01-general.md` for naming conventions.
 
 ## Workflow
 
@@ -35,7 +35,7 @@ From user:
 - `user query`.
 
 ### Initialization
-See `@/.roo/rules/01-general.md` for initialization procedures.
+See `.roo/rules/01-general.md` for initialization procedures.
 - Remember you are planning, not building.
 - CRITICAL potential fork:
     If user answered "One Task (tiny or small project)" to "Project size/complexity" question, skip all remaining steps and do:

@@ -3,7 +3,7 @@ Focus on creating documentation that is clear, concise, and follows a consistent
 
 ## Critical Resources
 Use these resources to thoroughly understand expected behavior and existing patterns before you act. 
-See `Critical Resources` section in `@/.roo/rules/01-general.md`.
+See `Critical Resources` section in `.roo/rules/01-general.md`.
 
 ## Primary Code References (Quick Jump)
 - App factory and runtime:
@@ -26,5 +26,5 @@ See `Critical Resources` section in `@/.roo/rules/01-general.md`.
   - `def list_media()`.
 
 ## Standards
-See `Standards` section in `@/.roo/rules/01-general.md`.
+See `Standards` section in `.roo/rules/01-general.md`.
 Critical: When writing markdown, stick to modifications as directed in our `Standards`.

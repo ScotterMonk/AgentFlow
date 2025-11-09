@@ -171,7 +171,7 @@ CSS file usage:
 
 Templates:
 - Set VS Code language mode to `jinja-html`
-- Reference `@/.roo/rules/01-general.md` for naming conventions
+- Reference `.roo/rules/01-general.md` for naming conventions
 
 Visual consistency:
 - Curved corners: Use `--border-radius-lg` variable

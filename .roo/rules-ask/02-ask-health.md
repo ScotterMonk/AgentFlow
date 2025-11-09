@@ -19,7 +19,7 @@ This document will serve multiple purposes:
 Follow these directions carefully:
 1) Based on the user query:
 - Create a `short name` for the `plan` (research project) that uses dashes instead of spaces.
-- Create a `plan document`: new markdown document named `@/.roo/docs/plans/plan_[timestamp]_[short name].md`.
+- Create a `plan document`: new markdown document named `.roo/docs/plans/plan_[timestamp]_[short name].md`.
 - Feature the user query at the top.
 2) Open this empty document in main code window for user to easily view and edit at any time.
 

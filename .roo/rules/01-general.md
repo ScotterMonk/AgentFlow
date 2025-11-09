@@ -12,10 +12,10 @@
 - `app knowledge`: `./agents.md`.
 - Codebase: `codebase_search`, `read_file`, `search_files`.
 - `short plan name`: yymmdd_two_word_description.
-- `user_query` and `user query file`: `@/.roo/docs/plans/plan_[timestamp]_[short plan name]_user.md`.
-- `plan file`: `@/.roo/docs/plans/plan_[short plan name].md`.
+- `user_query` and `user query file`: `.roo/docs/plans/plan_[timestamp]_[short plan name]_user.md`.
+- `plan file`: `.roo/docs/plans/plan_[short plan name].md`.
 - `plan`: Version of `plan file` in memory.
-- `log file`: `@/.roo/docs/plans/plan_[short plan name]_log.md`.
+- `log file`: `.roo/docs/plans/plan_[short plan name]_log.md`.
     Logging Format:
     `date + time; action summary` (semicolon separated).
     - Ex: `"2025-08-14 07:23; Approved to begin"`.
@@ -173,10 +173,11 @@ For the following steps 5 through 6, be sure to determine these 2 settings as se
 3) Identify potential challenges based on past experiences.
 
 #### 2 Create plan with detailed tasks
+##### 2a: Do each numbered step below:
 Notes:
 - Incorporate (or not) testing into the plan based on user's `testing type` choice.
 - Outline `task(s)`.
-Steps:
+- Follow each step below in order, with precision, skip none.
 1) Pull or create high level `plan file` into memory as `plan`.
 2) Modify `plan` to have detailed task(s):
     - CRITICAL: Task structure. To prevent execution loop errors, tasks must follow these rules:
@@ -212,9 +213,11 @@ Steps:
     - End loop when "'Approve and Start Work' or 'Modify Plan'" yields "Approve and Start Work".
 8) Get `plan` approval.
 
-Loop through until user approves:
+##### 2b: Loop through until user approves:
+Notes:
 - Brainstorm with user: refine and converge on the final approved `plan`.
 - End loop when "Approve and Start Work or Modify Plan" yields "Approve and Start Work".
+- Follow each step below in order, with precision, skip none.
 1) Do the work.
 2) QA
 - Resolve VS Code Problems.
@@ -257,4 +260,4 @@ Delegating via `message` param and include:
 
 ## Error Handling and QA
 - Verify console and VS Code Problems panel after changes
-- Document notable findings in `/.roo/docs/useful.md` (see Documentation in `./agents.md`
+- Document notable findings in `.roo/docs/useful.md` (see Documentation in `./agents.md`

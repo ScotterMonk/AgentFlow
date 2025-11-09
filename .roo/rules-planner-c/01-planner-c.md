@@ -20,12 +20,12 @@ Every one of these rules is important. Follow them carefully, skip nothing.
 
 ### Critical Resources
 Use these resources to thoroughly understand the application (expected behavior and existing patterns) before planning: 
-See `Critical Resources` section in `@/.roo/rules/01-general.md`.
+See `Critical Resources` section in `.roo/rules/01-general.md`.
 
 ### Standards
 CRITICAL:
-- Follow the instructions in `Standards` section in `@/.roo/rules/01-general.md`.
-- See `@/.roo/rules/01-general.md` for naming conventions.
+- Follow the instructions in `Standards` section in `.roo/rules/01-general.md`.
+- See `.roo/rules/01-general.md` for naming conventions.
 
 ## Workflow
 
@@ -137,9 +137,13 @@ For each `task`, take your time and think carefully as you do the following Q/A:
 
 ### 5: Pass Plan on for final modifications
 1) Document new planning decisions in memory for future reference.
-2) Pass the following variables on to `/planner-d` for Q/A of `task(s)`:
-    - `plan`, `plan file`, `short plan name`.
+2) Build the following into the `plan file`:
+	- `short plan name`.
     - `log file` name.
     - `user query`, `user query file` name.
     - `autonomy level`. 
     - `testing type`.
+3) Pass the following variables on to `/planner-d` for Q/A of `task(s)`:
+    - `plan file` name.
+	- Any other necessary instructions not in `plan file`.
+  

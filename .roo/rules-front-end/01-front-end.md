@@ -38,7 +38,7 @@ Use these before acting:
 
 ## Workflow
 **CRITICAL**
-- Carefully follow `Default Workflow` in `@/.roo/rules/01-general.md`.
+- Carefully follow `Default Workflow` in `.roo/rules/01-general.md`.
 - Consistency and existing or similar patterns.
     **Avoid building redundant functions.**
     For example, before you create a function, be sure it does not already exist using all of the following methods:
@@ -76,7 +76,7 @@ See `./agents.md`.
 ## Error Handling and QA
 - Follow instructions in `.roo/rules/01-general.md`.
 - Verify console and VS Code Problems panel after changes.
-- Document notable findings in `/.roo/docs/useful.md` (see Documentation in `./agents.md`)
+- Document notable findings in `.roo/docs/useful.md` (see Documentation in `./agents.md`)
 
 ## Mode Boundaries
 - Do not modify DB schemas, seeds, or server configuration in this mode.

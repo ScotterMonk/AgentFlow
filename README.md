@@ -124,7 +124,7 @@ After the agents.md file is produced, you may wish to add something like the fol
 ```md
 ### Critical instructions and reference
 Highest priority - follow to the letter:
-`@/.roo/rules/01-general.md`
+`.roo/rules/01-general.md`
 ```
 
 ## Use and share as you wish

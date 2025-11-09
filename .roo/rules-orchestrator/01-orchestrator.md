@@ -7,11 +7,11 @@ Execute approved `plan` by coordinating tasks across modes.
 Usually, this `/orchestrator` mode is called by `/planner-c` mode. 
 
 ## Critical Resources
-See `Critical Resources` section in `@/.roo/rules/01-general.md`.
+See `Critical Resources` section in `.roo/rules/01-general.md`.
 Use these resources thoroughly to understand expected behavior and existing patterns before acting. 
 
 ## Standards
-See `Standards` section in `@/.roo/rules/01-general.md`.
+See `Standards` section in `.roo/rules/01-general.md`.
 
 ## Initialization
 Verify `plan file` and `log file` exist and are current.

@@ -14,7 +14,7 @@ Every one of these rules is important. Follow them carefully, skip nothing.
 
 ## Role and duties
 - Receive high level `plan` from `/planner-c` or user.
-- Make liberal use of the Critical Resources below.
+- Make liberal use of the `Critical Resources & Standards` below.
 - Scour the `codebase` to find if there are any parts of the `plan` already completed or if similar functionality exists that may be modified or learned from.
 - Brainstorm with user to add detailed tasks to create detailed `plan` for `/orchestrator` to use in final step at bottom.
 - For every existing `phase`, produce clear  and detailed `task(s)` with mode hints and integration points.
@@ -22,9 +22,9 @@ Every one of these rules is important. Follow them carefully, skip nothing.
 
 ## Critical to remember
 
-### Critical Resources
+### Critical Resources & Standards
 Use these resources to thoroughly understand the application (expected behavior and existing patterns) before planning:
-See `Critical Resources` section in `@/.roo/rules/01-general.md`.
+See `Critical Resources` section in `.roo/rules/01-general.md`.
 Database:
 - Canonical sources:
     - Schema documentation: `.roo/docs/database_schema.md`
@@ -39,15 +39,13 @@ Database:
     - `python utils/schema_inspector.py compare-db-models`
     - `python utils/schema_inspector.py generate-docs`
     - `python utils/schema_inspector.py validate`
-
-### Standards
 CRITICAL:
-- Follow the instructions in `Standards` section in `@/.roo/rules/01-general.md`.
-- See `@/.roo/rules/01-general.md` for naming conventions.
+- Follow the instructions in `Standards` section in `.roo/rules/01-general.md`.
+- See `.roo/rules/01-general.md` for naming conventions.
 
 ## Modes
 These are the following modes you can choose from to build into the `tasks` you create as mode hints:
-- See `@/.roo/rules/01-general.md` for modes.
+- See `.roo/rules/01-general.md` for modes.
 
 ## Workflow
 
@@ -63,6 +61,8 @@ From `planner-c` or user:
 Determine if this is a new `plan` or continuation. If unknown, examine `log file` and `plan file` to determine. 
 If still unknown, consult user.
 
+Step through and complete each of the following stages below. Do not skip any.
+
 ### 1: Pre-planning
 1) Search for similar planning documents and architectural decisions.
 2) Retrieve project history and previous relevant planning outcomes from memory.
@@ -73,12 +73,12 @@ Notes:
     - Incorporate (or not) testing into the plan based on user's `testing type` choice.
     - If creating tests: First be sure test does not already exist.
     - Remember you are creating a plan for another mode to build, not building.
-    - Use `Critical Resources` to check if proposed functionality already exists.
+    - Use `Critical Resources & Standards` to check if proposed functionality already exists.
     - Explicitely add refactoring to appropriate stages as tasks.
 You MUST complete each step below before proceeding to the next.
 Steps: 
 1) Pull `plan file` into memory as `plan`, which will have one or more `phase(s)`.
-2) Examine tasks under each `phase`, checking for:
+2) Create tasks under each `phase`, sticking to the following critical rules:
     - Real implementations only: Tasks should specify real functionality 
         (actual database calls, API integrations, etc.);
         no mock/simulated versions unless requested.
@@ -95,15 +95,14 @@ Steps:
             For example, before you create a function or class, make sure it does not already exist using all of the following methods:
             - Use `codebase_search`.
             - Use `./agents.md`.
-	- Be sure mode hints, integration points, and acceptance criteria exist as per rules in `@/.roo/rules/01-general.md`.
-    - Take all the time necessary until you are confident you have come up with a solid new `plan` that includes tasks. 
-3) Add `log file` entries to summarize each part of what was done during this part of the `plan`.
+	- Be sure mode hints, integration points, and acceptance criteria exist as per rules in `.roo/rules/01-general.md`.
+    - Take all the time necessary until you are confident you have come up with a solid new `plan` that includes tasks. This `plan` will be scrutinized by a highly intelligent and detailed validation process.
+3) Add `log file` entries to summarize each part of what was done during this part of the planning process.
 
-### 3: Q/A the Task(s)
-For all of the following, keep in mind:
-- Values in `Critical Resources`.
-- Guidelines in `Standards`.
+### 3: Deep Q/A the Task(s)
+For all of the following, keep in mind the values and guidelines in `Critical Resources & Standards`.
 Step through the `plan`, one `task` at a time.
+CRITICAL to complete each step below. Do not skip any.
 For each `task`, take your time and think carefully as you do the following Q/A:
 1) Q/A task structure to be sure tasks follow these rules:
     - Each task = ONE atomic action only. Use "Action:" instead of "Steps:" to reinforce this. 
@@ -126,9 +125,24 @@ For each `task`, take your time and think carefully as you do the following Q/A:
         c) Budget/Intelligence/Skill: high (ex: complex function modification and writing or failure of med skill modes): `/code`.
         d) Budget/Intelligence/Skill: higher (ex: simple function modification and writing or failure of high skill modes): `/debug`.
     - Q/A integration points and acceptance criteria. 
-2) How will this task affect the overall `plan`?
-3) Make any necessary changes to the `plan`.
-4) Add `log file` entries to summarize each part of what was done during this part of the `plan`.
+	- Task structure example:
+		```md
+		[High level description of goal for the plan.]
+		[Some notes.]
+		- Task 01: [Task description.]
+			Mode hint: /task-simple.
+			[Notes relevant to this task.]
+			[Potential code or pseudocode.]
+			[Potential test.]
+		- Task 02: [Task description.]
+			Mode hint: /code-monkey.
+			[Notes relevant to this task.]
+			[Potential code or pseudocode.]
+			[Potential test.]
+		```
+2) Determine "How will this task affect the overall `plan`?"
+Make any necessary changes to the `plan`.
+3) Add `log file` entries to summarize each part of what was done during this part of the planning process.
 
 ### 4: Finalize Plan
 1) Modify the `plan file` to reflect changes.
@@ -142,9 +156,12 @@ For each `task`, take your time and think carefully as you do the following Q/A:
 ### 5: Begin work
 1) Document new planning decisions in memory for future reference.
 2) Add a `log file` entry.
-3) Pass the following variables on to `/orchestrator` for execution:
-    - `plan`, `plan file`, `short plan name`.
+3) Build the following into the `plan file`:
+	- `short plan name`.
     - `log file` name.
     - `user query`, `user query file` name.
     - `autonomy level`. 
     - `testing type`.
+4) Pass the following variables on to `/orchestrator` for execution:
+    - `plan file` name.
+	- Any other necessary instructions not in `plan file`.

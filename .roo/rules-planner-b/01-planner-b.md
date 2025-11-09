@@ -21,12 +21,12 @@ Every one of the rules below is important. Follow them carefully, skip nothing.
 
 ### Critical Resources
 Use these resources to thoroughly understand the application (expected behavior and existing patterns) before planning: 
-See `Critical Resources` section in `@/.roo/rules/01-general.md`.
+See `Critical Resources` section in `.roo/rules/01-general.md`.
 
 ### Standards
 CRITICAL:
-- Follow the instructions in `Standards` section in `@/.roo/rules/01-general.md`.
-- See `@/.roo/rules/01-general.md` for naming conventions.
+- Follow the instructions in `Standards` section in `.roo/rules/01-general.md`.
+- See `.roo/rules/01-general.md` for naming conventions.
 
 ## Workflow
 
