@@ -9,8 +9,15 @@
     - "activate" → `./activate.ps1`.
 
 ## Critical Resources
+
+### Sources of knowledge
 - `app knowledge`: `./agents.md`.
 - Codebase: `codebase_search`, `read_file`, `search_files`.
+- Git diff, recent commits.
+- `credentials` for everything: `.env`. User passwords in DB are hashed.
+- Database: see below.
+
+### Planning
 - `short plan name`: yymmdd_two_word_description.
 - `user_query` and `user query file`: `.roo/docs/plans/plan_[timestamp]_[short plan name]_user.md`.
 - `plan file`: `.roo/docs/plans/plan_[short plan name].md`.
@@ -23,26 +30,21 @@
 - Backups: `.roo/docs/old_versions/[file name]_[timestamp]`.
 - `testing type`: "Run py scripts in terminal", "Use pytest", "Use browser", "Use all", "No testing", "Custom".
 - `completed plans folder`: `.roo/docs/plans_completed`.
-- Git diff, recent commits.
-- `credentials`: `.env`. User passwords in DB is hashed.
+
+### Database
+See `.roo/rules/02-database.md` for all database procedures.
+
+### Other
 - Web automation & browsing: `browser_action`
-- Database: 
-    - `.roo/rules/02-database.md`
-    - [`database_schema.md`](.roo/docs/database_schema.md:1)
-    - `utils/database.py`
-    - `models/models_*.py`
-    - `db = SQLAlchemy()`
-	- db port = 5433
-    - When creating a script to "check the database", write a temp .py file in the `temp/` folder and run it. Do NOT paste the script into the terminal.
 - `useful discoveries`: `.roo/docs/useful.md`.
 
 ### Modes
 For analysis/plan formation, referencing in Task instructions, or to determine when to mode-switch:
 - Planner - Architecting a `plan`, a 4-step process:
-    - `/planner-a`: Planning 1 - create `phase(s)` from `user query`. Pass flow to `/planner-b`.
-    - `/planner-b`: Planning 2 - refine output from `/planner-a`. Q/A. Pass flow to `/planner-c`.
-    - `/planner-c`: Planning 3 - create `tasks` for each `phase`. Get user approval. Pass flow to `/planner-d`.
-    - `/planner-d`: Planning 4 - Q/A. Get user approval. Pass flow to `/orchestrator`.
+    - `/planner-a`: Planning stage 1 - create `phase(s)` from `user query`. Pass flow to `/planner-b`.
+    - `/planner-b`: Planning stage 2 - refine output from `/planner-a`. Q/A. Pass flow to `/planner-c`.
+    - `/planner-c`: Planning stage 3 - create `tasks` for each `phase`. Get user approval. Pass flow to `/planner-d`.
+    - `/planner-d`: Planning stage 4 - Q/A. Get user approval. Pass flow to `/orchestrator`.
 - `/orchestrator`: Execute approved `plan` by coordinating tasks across modes.
 - `/code-monkey`: Coding, analysis, following instructions.
 - `/code`: Complex coding, analysis, debugging.

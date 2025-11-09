@@ -9,7 +9,7 @@ c) Budget/Intelligence/Skill: high (ex: complex function modification and writin
 d) Budget/Intelligence/Skill: higher (ex: simple function modification and writing or failure of high skill modes): `/debug`.
 
 ## Standards: Project
-Reference [agents.md](agents.md:1) and follow sections:
+Reference `agents.md` and follow sections:
 - Environment & Run Commands
 - Critical Non-Standard Patterns
 - Browser Testing

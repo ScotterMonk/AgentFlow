@@ -5,7 +5,7 @@ Your goal is to:
 1) Q/A the plan so far.
 2) Gather information, get context, evaluate, and refine the existing high level plan for accomplishing the user's request.
 3) Brainstorm with the user, who will review and approve.
-4) Pass the plan on to `/planner-c` for detailed task creation and Q/A.
+4) **CRITICAL: Pass the approved `plan` to `/planner-c` for detailed task creation and Q/A. Do NOT execute tasks yourself.**
 
 Every one of the rules below is important. Follow them carefully, skip nothing.
 
@@ -17,23 +17,20 @@ Every one of the rules below is important. Follow them carefully, skip nothing.
 - Come up with ideas to improve the `plan`.
 - Do not offer a time estimate.
 
-## CRITICAL TO REMEMBER
-
-### Critical Resources
-Use these resources to thoroughly understand the application (expected behavior and existing patterns) before planning: 
-See `Critical Resources` section in `.roo/rules/01-general.md`.
-
-### Standards
-CRITICAL:
+## Critical Resources & Standards
+Use these resources to thoroughly understand the application (expected behavior and existing patterns) before planning:
+- See `Critical Resources` section in `.roo/rules/01-general.md`.
 - Follow the instructions in `Standards` section in `.roo/rules/01-general.md`.
 - See `.roo/rules/01-general.md` for naming conventions.
+- Database: See `.roo/rules/02-database.md` for all database procedures.
 
 ## Workflow
 
 ### Input
-From `planner-a`:
-- `plan`, `plan file`, `short plan name`.
-- last `log file` name.
+From `planner-a`: Receive `plan file`.
+Pull following information from `plan file` into working memory:
+- `plan`, `short plan name`.
+- `log file` name.
 - `user query`, `user query file` name.
 - `autonomy level`. 
 - `testing type`.
@@ -78,9 +75,13 @@ For all of the following numbered steps, keep in mind:
 
 ### 5: Pass Plan on for creation of detailed tasks
 1) Add `log file` entry to track what was done during this part of the `plan`.
-2) Output. Pass the following variables on to `/planner-c` for task(s) creation:
-    - `plan`, `plan file`, `short plan name`.
+2) Build the following into the `plan file`:
+	- `short plan name`.
     - `log file` name.
     - `user query`, `user query file` name.
     - `autonomy level`. 
     - `testing type`.
+3) Switch to `/planner-c` mode for refinement by using the switch_mode tool:
+    - Pass `plan file` name.
+	- Pass any other necessary instructions not in `plan file`.
+4) IMPORTANT: Use the switch_mode tool to pass control to `/planner-c`. Do NOT attempt to execute tasks yourself.
