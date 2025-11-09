@@ -74,24 +74,21 @@ Steps:
             - Use `./agents.md`.
             - Add mode hints, integration points, and acceptance criteria.
     - Take all the time necessary until you are confident you have come up with a solid new `plan` that includes tasks.
-    Example:
-    ```md
-    Phase 1) High level description of goal for this phase.
-    Some notes.
-    - Task 1.1: Copy renamed file_name.ext into backup folder.
-        Mode hint: /task-simple.
-        Notes relevant to this task.
-    - Task 1.2: Modify def function_name so it accepts new params x and y.
-        Mode hint: /code-monkey.
-        Notes relevant to this task.
-    - Task 1.3: Refactor all dependencies related to function_name.
-        Mode hint: /code-monkey.
-        Notes relevant to this task.
-    Phase 2) High level description of goal for this phase.
-    - Task 2.1: Do a thing.
-        Mode hint: /task-simple.
-        Notes relevant to this task.
-    ```
+    - Task structure example:
+		```md
+		[High level description of goal for the plan.]
+		[Some notes.]
+		- Task 01: [Task description.]
+			Mode hint: /task-simple.
+			[Notes relevant to this task.]
+			[Potential code or pseudocode.]
+			[Potential test.]
+		- Task 02: [Task description.]
+			Mode hint: /code-monkey.
+			[Notes relevant to this task.]
+			[Potential code or pseudocode.]
+			[Potential test.]
+		```
 3) Add `log file` entries to track what was done during this part of the `plan`.
 
 ### 3: Q/A the Task(s)
