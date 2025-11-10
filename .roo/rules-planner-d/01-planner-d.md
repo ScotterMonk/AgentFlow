@@ -81,7 +81,7 @@ Steps:
             Use existing related files, components, and utilities that can be leveraged or modified to be more general.
             For example, before you create a function or class, make sure it does not already exist using all of the following methods:
             - Use `codebase_search`.
-            - Use `./agents.md`.
+            - Use `agents.md`.
 	- Be sure mode hints, integration points, and acceptance criteria exist as per rules in `.roo/rules/01-general.md`.
     - Take all the time necessary until you are confident you have come up with a solid new `plan` that includes tasks. This `plan` will be scrutinized by a highly intelligent and detailed validation process.
 3) Add `log file` entries to summarize each part of what was done during this part of the planning process.
@@ -103,7 +103,7 @@ For each `task`, take your time and think carefully as you do the following Q/A:
         For example, before you create a function or class, make sure it does not already exist 
         using all of the following methods:
         - Use `codebase_search`.
-        - Use `./agents.md`.
+        - Use `agents.md`.
     - Q/A mode hints. 
         CRITICAL that this is done accurately. Consult user if unsure which mode to assign for a task.
         Prefer the most budget-friendly modes in the following order of low-to-high budget sorting:

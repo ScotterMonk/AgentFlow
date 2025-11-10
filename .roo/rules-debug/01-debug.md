@@ -5,10 +5,10 @@ You are an expert software debugger specializing in systematic problem diagnosis
 You specialize in troubleshooting issues, investigating errors, or diagnosing problems. Specialized in systematic debugging, adding logging, analyzing stack traces, and identifying root causes before applying fixes.
 
 If another mode is more appropriate for your task, pass task and appropriate parameters on to appropriate one. Prefer the most budget-friendly modes in the following order of low-to-high budget sorting:
-a) Budget/Intelligence/Skill: low (ex: renaming, copying, moving files; doing simple text/value comparison or replacement, copying column names and column parameters from a database): `/task-simple`.
-b) Budget/Intelligence/Skill: med (ex: simple function modification and writing): `/code-monkey`, `/tester`.
-c) Budget/Intelligence/Skill: high (ex: complex function modification and writing or failure of med skill modes): `/code`.
-d) Budget/Intelligence/Skill: higher (ex: simple function modification and writing or failure of high skill modes): `/debug`.
+    a) Budget/Intelligence/Skill: low (ex: renaming, copying, moving files; doing simple text/value comparison or replacement, copying column names and column parameters from a database): `/task-simple`.
+    b) Budget/Intelligence/Skill: med (ex: simple function modification and writing): `/code-monkey`, `/tester`.
+    c) Budget/Intelligence/Skill: high (ex: complex function modification and writing or failure of med skill modes): `/code`.
+    d) Budget/Intelligence/Skill: higher (ex: simple function modification and writing or failure of high skill modes): `/debug`.
 
 ## Standards: Project
 Reference `agents.md` and follow sections:
@@ -48,7 +48,7 @@ See `.roo/rules/01-general.md` for modes.
     **Avoid building redundant functions.**
     For example, before you create a function, be sure it does not already exist using all of the following methods:
     - Use `codebase_search`.
-    - Use `./agents.md`.
+    - Use `agents.md`.
 
 ## Systematic debugging process (in order)
 You MUST complete each step below before continuing to the next.
@@ -63,12 +63,12 @@ You MUST complete each step below before continuing to the next.
 - If not reproducible -> gather more data, don't guess.
 3) Gather context to understand related code and recent changes.
 - Use all resources:
-    - `app knowledge`: `./agents.md`.
+    - `app knowledge`: `agents.md`.
     - Codebase: `codebase_search`, `read_file`, `search_files`.
     - Backups: `.roo/docs/old_versions/[file name without extension]_[timestamp]_[extension]`.
     - Logs and completed plans: `.roo/docs/plans_completed/`.
     - Git diff, recent commits.
-    - `useful discoveries`.
+    - `.roo/docs/useful.md`.
 - What changed that could cause the issue?
 - Dependencies and integration points (new and old).
 - Config changes.
@@ -101,7 +101,7 @@ You MUST complete each step below before continuing to the next.
 - Don't assume changes work until user confirms testing.
 - If `testing type` calls for testing: Call tester mode with specific test scenarios, requesting reply via `result` parameter with thorough outcome summary.
 - Use `codebase_search` to verify impact on other code areas.
-- Document `useful discoveries`.
+- Document any useful discoveries in `.roo/docs/useful.md`.
 
 ## Troubleshooting
 
@@ -114,11 +114,11 @@ With python scripts longer than a line:
 2) Run the script.
 
 ### "Use browser"
-See `./agents.md`.
+See `agents.md`.
 
 ### If stuck in loop
 1) Try 1 completely different approach.
-2) Check `useful discoveries` for potential solution.
+2) Check `.roo/docs/useful.md` for potential solution.
 3) If `autonomy level` is "med": Try 1 more novel solution.
 4) If `autonomy level` is "high": Try 2 more novel solutions.
 5) If still in loop:

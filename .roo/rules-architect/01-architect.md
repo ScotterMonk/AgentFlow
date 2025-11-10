@@ -13,40 +13,25 @@ Every one of these rules is important. Follow them carefully, skipping nothing.
 
 ### Critical Resources & Standards
 Use these resources to thoroughly understand the application (expected behavior and existing patterns) before planning: 
-See `Critical Resources` section in `@\.roo\rules\01-general.md`.
+See `Critical Resources` section in `.roo\rules\01-general.md`.
 - Database: See `.roo/rules/02-database.md` for all database procedures.
 CRITICAL:
-- Follow the instructions in `Standards` section in `@\.roo\rules\01-general.md`.
-- See `@\.roo\rules\01-general.md` for naming conventions.
+- Follow the instructions in `Standards` section in `.roo\rules\01-general.md`.
+- See `.roo\rules\01-general.md` for naming conventions.
 
 ## Modes
 These are the following modes you can choose from to build into the `tasks` you create as mode hints:
-- See `@\.roo\rules\01-general.md` for modes.
+- See `.roo\rules\01-general.md` for modes.
 
 ## Workflow
 
-### Initialization
-1) Determine if this is a new `plan` or continuation. If unknown, examine files below to determine.
-    `log file` (create new if needed):
-    - If an existing log is non-empty or references a previous plan, move it to `completed plans folder`.
-    - Log entries: `date + time; action summary`.
-        - Ex: `"2025-08-14 07:23; Approved to begin"`.
-        - Ex: `"2025-08-14 07:24; Task completed: Added update_query() to utils_sql.py, refactored utils_sql.py, junk.py"`.
-2) Determine `short plan name` based on user query.
-3) Save `user query` into `user query file`.
-4) Create or modify `plan file`.
-    - If an existing plan is non-empty or from a past project, move it to `completed plans folder`.
-    - Create a fresh `plan file`.
-For the following steps 5 through 6, be sure to determine these 2 settings as separate questions to user.
-5) SEPARATELY, Ask User: `autonomy level` for `plan`. 
-    Determine autonomy level separate from testing type below. Choices: "Low" (frequent direction), "Med", "High" (rare direction).
-6) SEPARATELY, Ask User `testing type` for `plan`.
-    Choices: "Run py scripts in terminal", "Use pytest", "Use browser", "Use all", "No testing", "Custom". Important: provide these exact choices to the user.
-7) Understand the ask: Problem/feature, intent, scope, constraints, dependencies.
+### 1 Input
+Follow instructions in `Input` section in `.roo\rules\01-general.md`.
 
-### Planning
+### 2: Initialization
+Follow instructions in `Initialization` section in `.roo\rules\01-general.md`.
 
-#### 1 Pre-planning
+### 3: Pre-planning
 1) Search for similar planning documents and architectural decisions.
 2) Retrieve project history and previous relevant planning outcomes from memory.
 3) Identify potential challenges based on past experiences.
@@ -69,64 +54,13 @@ For the following steps 5 through 6, be sure to determine these 2 settings as se
     - Brainstorm with user: refine and converge on the final approved `plan`.
     - End loop when "Approve and Start Work" or "Modify Plan" yields "Approve and Start Work".
 
-#### 3 Add tasks to the plan
-Notes:
-    - Incorporate (or not) testing into the plan based on user's `testing type` choice.
-    - If creating tests: First be sure test does not already exist.
-    - Remember you are creating a plan for another mode to build, not building.
-    - Use `Critical Resources & Standards` to check if proposed functionality already exists.
-    - Explicitely add refactoring to appropriate stages as tasks.
-You MUST complete each step below before proceeding to the next.
-- Take all the time necessary until you are confident each task meets all task criteria detailed below.
-Steps:
-1) Modify `plan` to have detailed `task(s)`:
-    - Real implementations only: Tasks should specify real functionality 
-        (actual database calls, API integrations, etc.); no mock/simulated versions unless requested.
-    - Include pseudo-code or code where appropriate to clarify concepts.
-    - CRITICAL: Task structure. Tasks must follow these rules:
-        - Each task = ONE atomic action only. Use "Action:" instead of "Steps:" to reinforce this. 
-        - NO multi-step instructions within tasks.
-        - Avoid numbered sub-steps within tasks.
-        - NO complex dependencies between tasks.
-        - Tasks must be self-contained and executable independently.
-        - **Avoid building redundant functions.**
-            Search codebase and memory to determine if exact OR SIMILAR script already exists.
-            Use existing related files, components, and utilities that can be leveraged or modified to be more general.
-            For example, before you create a function or class, make sure it does not already exist.
-			Use all of the following methods:
-            - Use `codebase_search`.
-            - Use `./agents.md`.
-            - Add mode hints, integration points, and acceptance criteria.
-			- Q/A mode hints. 
-				CRITICAL that this is done accurately. Consult user if unsure which mode to assign for a task.
-				Prefer the most budget-friendly modes in the following order of low-to-high budget sorting:
-				a) Budget/Intelligence/Skill: low (ex: renaming, copying, moving files; doing simple text/value comparison or replacement, copying column names and column parameters from a database): `/task-simple`.
-				b) Budget/Intelligence/Skill: med (ex: simple function modification and writing): `/code-monkey`, `/tester`.
-				c) Budget/Intelligence/Skill: high (ex: complex function modification and writing or failure of med skill modes): `/code`.
-				d) Budget/Intelligence/Skill: higher (ex: simple function modification and writing or failure of high skill modes): `/debug`.
-			- Task structure example:
-			```md
-			[High level description of goal for the plan.]
-			[Some notes.]
-			- Task 01: [Task description.]
-				Mode hint: /task-simple.
-				[Notes relevant to this task.]
-				[Potential code or pseudocode.]
-				[Potential test.]
-			- Task 02: [Task description.]
-				Mode hint: /code-monkey.
-				[Notes relevant to this task.]
-				[Potential code or pseudocode.]
-				[Potential test.]
-			```
-2) Open the new `plan file` in main editor window for user to easily examine/edit.
-3) Brainstorm on the `plan` with user to resolve any questions, issues, or ambiguity.
-    Loop through the following until you have a clear understanding of the user's need (keeping aware of `autonomy level`):
-    - Explore values in `Critical Resources & Standards`;
-    - Ask clarifying questions of user.
-    - Modify the `plan file` as changes occur.
+### 4: Understand user need
+Follow all instructions in `Understand user need` section in `.roo/rules/01-general.md`.
 
-#### 4 Deep Q&A the plan
+### 5: Add tasks to the plan
+Follow all instructions in `Add detailed tasks` section in `.roo/rules/01-general.md`.
+
+### 6: Deep Q&A the plan
 1)  Walk through every task in the plan.
 	For each task:
 	- Simulate what effects the task will have.
@@ -139,7 +73,7 @@ Steps:
     - Brainstorm with user: refine and converge on the final approved `plan`.
     - End loop when "Approve and Start Work or Modify Plan" yields "Approve and Start Work".
 
-#### 5 Hand off to Orchestrator
+### 7: Hand off to Orchestrator
 CRITICAL: After user approval, `/architect` mode does NOT execute the plan. Instead:
 1) Document new planning decisions in memory for future reference.
 2) Add an initial `log file` entry.

@@ -44,53 +44,11 @@ If still unknown, consult user.
 3) Identify potential challenges based on past experiences.
 
 ### 2: Add Numbered Discrete Tasks to the Plan
-Notes:
-    - Incorporate (or not) testing into the plan based on user's `testing type` choice.
-    - If creating tests: First be sure test does not already exist.
-    - Remember you are creating a plan for another mode to build, not building.
-    - Use `Critical Resources` to check if proposed functionality already exists.
-    - Explicitely add refactoring to appropriate stages as tasks.
-You MUST complete each step below before proceeding to the next.
-Steps:
-1) Pull high level `plan file` into memory as `plan`, which will have one or more `phase(s)`.
-2) Modify `plan` to have detailed `task(s)` under each `phase`:
-    - Real implementations only: Tasks should specify real functionality 
-        (actual database calls, API integrations, etc.); no mock/simulated versions unless requested.
-    - Include pseudo-code or code where appropriate to clarify complex concepts.
-    - CRITICAL: Task structure. Tasks must follow these rules:
-        - Each task = ONE atomic action only. Use "Action:" instead of "Steps:" to reinforce this. 
-        - NO multi-step instructions within tasks.
-        - Avoid numbered sub-steps within tasks.
-        - NO complex dependencies between tasks.
-        - Tasks must be self-contained and executable independently.
-        - **Avoid building redundant functions.**
-            Search codebase and memory to determine if exact OR SIMILAR script already exists.
-            Use existing related files, components, and utilities that can be leveraged or modified to be more general.
-            For example, before you create a function or class, make sure it does not already exist using all of the following methods:
-            - Use `codebase_search`.
-            - Use `./agents.md`.
-            - Add mode hints, integration points, and acceptance criteria.
-    - Take all the time necessary until you are confident you have come up with a solid new `plan` that includes tasks.
-    - Task structure example:
-		```md
-		[High level description of goal for the plan.]
-		[Some notes.]
-		- Task 01: [Task description.]
-			Mode hint: /task-simple.
-			[Notes relevant to this task.]
-			[Potential code or pseudocode.]
-			[Potential test.]
-		- Task 02: [Task description.]
-			Mode hint: /code-monkey.
-			[Notes relevant to this task.]
-			[Potential code or pseudocode.]
-			[Potential test.]
-		```
-3) Add `log file` entries to track what was done during this part of the `plan`.
+Follow all instructions in `Add detailed tasks` section in `.roo/rules/01-general.md`.
 
 ### 3: Q/A the Task(s)
 For all of the following, keep in mind:
-- Values in `Critical Resources`, ___________.
+- Values in `Critical Resources`.
 - Guidelines in `Standards`.
 - Check if proposed functionality already exists.
 Step through the `plan`, one `task` at a time.
@@ -107,7 +65,7 @@ For each `task`, take your time and think carefully as you do the following Q/A:
         For example, before you create a function or class, make sure it does not already exist 
         using all of the following methods:
         - Use `codebase_search`.
-        - Use `./agents.md`.
+        - Use `agents.md`.
     - Add mode hints. 
         CRITICAL that this is done accurately. Consult user if unsure which mode to assign for a task.
         Prefer the most budget-friendly modes in the following order of low-to-high budget sorting:

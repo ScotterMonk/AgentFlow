@@ -48,7 +48,7 @@ See `.roo/rules/01-general.md` for which other modes are available.
     **Avoid building redundant functions.**
     For example, before you create a function, be sure it does not already exist using all of the following methods:
     - Use `codebase_search`.
-    - Use `./agents.md`.
+    - Use `agents.md`.
 
 ## Troubleshooting
 
@@ -61,11 +61,11 @@ With python scripts longer than a line:
 2) Run the script.
 
 ### "Use browser"
-See `.roo/rules/01-general.md`.
+See `agents.md` for browser use procedures.
 
 ### If stuck in loop
 1) Try 1 completely different approach.
-2) Check `useful discoveries` for potential solution.
+2) Check `.roo/docs/useful.md` for potential solution.
 3) If `autonomy level` is "med": Try 1 more novel solution.
 4) If `autonomy level` is "high": Try 2 more novel solutions.
 5) If still in loop:
@@ -77,4 +77,4 @@ See `.roo/rules/01-general.md`.
 - Don't assume changes work until user confirms testing.
 - If `testing type` calls for testing: Call tester mode with specific test scenarios, requesting reply via `result` parameter with thorough outcome summary.
 - Use `codebase_search` to verify impact on other code areas.
-- Document `useful discoveries`.
+- Document any useful discoveries in `.roo/docs/useful.md`.

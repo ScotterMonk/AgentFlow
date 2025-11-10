@@ -46,7 +46,7 @@ See `.roo/rules/01-general.md` for modes.
     **Avoid building redundant functions.**
     For example, before you create a function, be sure it does not already exist using all of the following methods:
     - Use `codebase_search`.
-    - Use `./agents.md`.
+    - Use `agents.md`.
 
 ## Troubleshooting
 
@@ -59,7 +59,7 @@ With python scripts longer than a line:
 2) Run the script.
 
 ### "Use browser"
-See `./agents.md`.
+See `agents.md`.
 
 ### If stuck in loop
 Switch to `/code` mode, being sure to send all data you were given, along with the implementation you tried that yielded the loop.

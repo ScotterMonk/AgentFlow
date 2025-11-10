@@ -19,14 +19,14 @@ Every one of the rules below is important. Follow them carefully, skip nothing.
 
 ## Critical Resources & Standards
 Use these resources to thoroughly understand the application (expected behavior and existing patterns) before planning:
-- See `Critical Resources` section in `.roo/rules/01-general.md`.
+- `plan values` to fill/use: `Critical Resources` section in `.roo/rules/01-general.md`.
 - Follow the instructions in `Standards` section in `.roo/rules/01-general.md`.
 - See `.roo/rules/01-general.md` for naming conventions.
 - Database: See `.roo/rules/02-database.md` for all database procedures.
 
 ## Workflow
 
-### Input
+### 1: Input
 From `planner-a`: Receive `plan file`.
 Pull following information from `plan file` into working memory:
 - `plan`, `short plan name`.
@@ -35,19 +35,19 @@ Pull following information from `plan file` into working memory:
 - `autonomy level`. 
 - `testing type`.
 
-### Initialization
+### 2: Initialization
 Determine if this is a new `plan` or continuation. If unknown, examine `log file` and `plan file` to determine. If still unknown, consult user.
 
-### 1: Pre-planning
+### 3: Pre-planning
 1) Search for similar planning documents and architectural decisions.
 2) Retrieve project history and previous relevant planning outcomes from memory.
 3) Identify potential challenges based on past experiences.
 4) Come up with ideas to improve the `plan`.
 
-### 2: Q/A the Phases
+### 4: Q/A the Phase(s)
 Keep it high level; no detailed tasks at this stage.
 For all of the following numbered steps, keep in mind:
-- The values in `Critical Resources`.
+- `Critical Resources` values.
 - Guidelines in `Standards`.
 - Remember you are planning, not building.
 - Step through the `plan`, one `phase` at a time.
@@ -60,12 +60,12 @@ For all of the following numbered steps, keep in mind:
     For example, before you plan creation of a function or class, make sure it does not already exist 
     using all of the following methods:
     - Use `codebase_search`.
-    - Use `./agents.md`.
+    - Use `agents.md`.
 2) How will this `phase` affect the overall `plan`?
 3) Make any necessary changes to the `plan`.
 4) Move on to next `phase` when you are confident this `phase` is solid.
 
-### 4: Finalize Plan
+### 5: Finalize Plan
 1) Modify the `plan file` to reflect changes.
 2) Open the new `plan file` in main editor window for user to easily edit and approve.
 3) Share with user the changes you made.
@@ -73,7 +73,7 @@ For all of the following numbered steps, keep in mind:
     Loop through until user approves:
     - Brainstorm with user: refine and converge on the final approved high level `plan`.
 
-### 5: Pass Plan on for creation of detailed tasks
+### 6: Pass Plan on for creation of detailed tasks
 1) Add `log file` entry to track what was done during this part of the `plan`.
 2) Build the following into the `plan file`:
 	- `short plan name`.
