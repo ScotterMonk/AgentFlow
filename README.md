@@ -6,10 +6,12 @@ Use it to create new apps or make changes/additions to existing ones.
 This set of instructions (markdown files) enhances and extends the modes/agents that come with many coding agent/asisstants (or make your own). The instructions are tailored to work with Roo Code (free highly customizable VS Code extension) but will work with many others, including Github Copilot and CLine.
 
 Using the built-in-to-Roo ability to use rules files, this archive is a set of custom instructions for the built-in modes and some new ones, including:
-- Replaces "Architect" with a 4-step "Planner" process (planner-a, planner-b, planner-c, planner-d).
-- Supplements "Code" with a tightly controlled budget-friendly "Code Monkey" created to work with the short, detailed tasks created for it by Planner.
-- Front-end, Debugger, Tester, GitHub, Docs Writer, etc.
-- While planning and working, creates files to keep track of its goals, progress, and lessons learned.
+- Supercharged alternative to "Architect" with a 4-step "Planner" process (planner-a, planner-b, planner-c, planner-d).
+- Modified Architect mode to be more detailed and for smaller tasks than full on "Planner" process.
+- Designed both Architect and Planner modes  to "front load" spend on high "intelligence" thinking models to create a plan that is so detailed, the "Workers" like "Code", "Code Monkey", etc. can be faster/cheaper models. Overall, I'm finding this method burns far less tokens, has far less errors, and runs longer without human intervention.
+- Supplemented "Code" with a tightly controlled budget-friendly "Code Monkey" created to work with the short, detailed tasks created for it by Planner.
+- Added "Front-end", "Debugger", "Tester", "GitHubber", "Docs Writer", etc.
+- While planning and while working, creates detailed files to keep track of its goals, progress, and lessons learned.
 
 Notes: 
 - This set of instructions is ever-evolving. 
@@ -106,6 +108,9 @@ Be sure to modify the content of files you see in the .roo/docs folder to fit yo
 - ".roo/rules-front-end/02-design-patterns.md"
 and really, I'd look through all the rules files to modify to YOUR style.
 
+### Misc
+- I've added "Orchestrator" to .roomodes local mode file so that I can give it read, edit, and command permissions.
+
 ### IMPORTANT agents.md
 If your agentic assistant has an /init command, use it. 
 Roo Code has /init. 
@@ -118,7 +123,7 @@ If you type only "/init", the LLM may create agent.md files in other folders. I 
 
 #### No init
 Here's an example prompt I'd give a "thinking/reasoning" model with large context:
-"Goal: Modify 'agents.md' so it can be a succinct but detailed enough reference for any coder, ai, or team to use for understanding the application enough to be able to modify it. Be sure to analyze the entire application and think carefully through your investigation and conclusions."
+"Goal: Modify 'agents.md' so it can be a succinct but detailed enough reference for any coder, ai, or team to use for understanding the application enough to be able to modify it. Be sure to analyze the entire application and think carefully through your investigation and conclusions. Do not modify any other files. Reference `.roo/rules/01-general.md` liberally, rather than duplicating *anything* that is in `.roo/rules/01-general.md`."
 
 After the agents.md file is produced, you may wish to add something like the following (to fit your app) to the appropriate section:
 ```md
