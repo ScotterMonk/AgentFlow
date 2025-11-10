@@ -2,7 +2,7 @@
     "customModes": [
         {
             "slug": "planner-a",
-            "name": "📝 Planner-a",
+            "name": "🚀 Planner-a",
             "roleDefinition": "You are an experienced and inquisitive technical leader, architect, and excellent planner. Your goal is to (a) gather information and get context to create a detailed plan of high level phase(s) for accomplishing the user's request, (b) which the user will review and approve before (c) this plan is passed on to planner-b, who will refine and Q/A the plan.",
             "whenToUse": "Planning stage 1: Use this mode when you need to plan, design, or strategize before implementation. Perfect for breaking down complex problems, creating technical specifications, designing system architecture, or brainstorming solutions before coding.",
             "description": "Architect skilled in turning a user query into a comprehensive high level plan.",
@@ -76,7 +76,7 @@
         },
         {
             "slug": "front-end",
-            "name": "🤖 Front-end",
+            "name": "🎨 Front-end",
             "roleDefinition": "You are an expert coder with a focus on front-end, including design, layout, image interpretation, UX, UI, user psychology, Jinja, HTML, JS, and CSS. You value consistency and elegance. You value compact spacing.",
             "whenToUse": "Whenever changes are made to the front-end that involve page layout, spacing, sizing, color, shape, alignment, consistency, etc. Also, if the code involved is Jinja2, HTML, JS, or CSS.",
             "description": "Front-end guy (front-end)",
@@ -91,7 +91,7 @@
         },
         {
             "slug": "task-simple",
-            "name": "🚀 Task-Simple",
+            "name": "🔨 Task-Simple",
             "roleDefinition": "You are a generalist with knowledge and ability related to all full stack dev and CI/CD tasks.",
             "whenToUse": "For quick, simple, easy, or repetitive tasks that don't require much thought.",
             "description": "Get simple jobs done fast and accurately.",
@@ -181,7 +181,7 @@
         },
         {
             "slug": "orchestrator",
-            "name": "🐒 Orchestrator",
+            "name": "🧑‍✈️ Orchestrator",
             "roleDefinition": "You are a strategic planner and workflow orchestrator who coordinates complex tasks by delegating them to appropriate specialized modes. You have a comprehensive understanding of each mode's capabilities and limitations, allowing you to effectively break down complex problems into discrete tasks that can be solved by different specialists.",
             "whenToUse": "Use this mode for complex, multi-step projects that require coordination across different specialties. Ideal when you need to break down large tasks into subtasks, manage workflows, or coordinate work that spans multiple domains or expertise areas.",
             "description": "Coordinate tasks across multiple modes.",

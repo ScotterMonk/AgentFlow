@@ -1,12 +1,12 @@
 # Custom Instructions
 
-Welcome to your customizable AI coding team!
-Use it to create new apps or make changes/additions to existing ones. 
+Your customizable AI coding team!
+Use it to create apps or make changes/additions to existing ones. 
 
-This set of instructions (markdown files) enhances and extends the modes/agents that come with many coding agent/asisstants (or make your own). The instructions are tailored to work with Roo Code (free highly customizable VS Code extension) but will work with many others, including Github Copilot and CLine.
+This set of instructions (markdown files) enhances and extends the modes/agents that come with many coding agents/asisstants (or make your own). The instructions are tailored to work with Roo Code (free highly customizable VS Code extension) but will work with many others, including Github Copilot and CLine.
 
 Using the built-in-to-Roo ability to use rules files, this archive is a set of custom instructions for the built-in modes and some new ones, including:
-- Supercharged alternative to "Architect" with a 4-step "Planner" process (planner-a, planner-b, planner-c, planner-d).
+- Supercharged alternative to "Architect": a 4-step "Planner" process (planner-a, planner-b, planner-c, planner-d).
 - Modified Architect mode to be more detailed and for smaller tasks than full on "Planner" process.
 - Designed both Architect and Planner modes  to "front load" spend on high "intelligence" thinking models to create a plan that is so detailed, the "Workers" like "Code", "Code Monkey", etc. can be faster/cheaper models. Overall, I'm finding this method burns far less tokens, has far less errors, and runs longer without human intervention.
 - Supplemented "Code" with a tightly controlled budget-friendly "Code Monkey" created to work with the short, detailed tasks created for it by Planner.
@@ -23,8 +23,9 @@ Notes:
 If building a new app, it assumes you already know *specs* (what platform, language(s), database type, etc.) for the project. 
 That's just one layer "higher" than these instructions are built for.
 Possibly coming soon: a level above "Planner" where you brainstorm on a high level to get ideas for *specs* to feed planner.
+Until then, use "Ask" mode or query your favorite LLM chat to help you sculpt your *specs*.
 
-### Modifying your existing app
+### Use cases for modifying your existing app
 
 #### Example of small modification
 Scenario: Fixing a bug, modifying front-end, or adding a function.
@@ -119,7 +120,7 @@ If not, skip down to "No Init" section.
 #### Init
 Optimally, use a high reasoning, large context-window model.
 Type into chat: "/init note: only create agents.md file in project root. Do not create any other agents.md files or modify any rules files."
-If you type only "/init", the LLM may create agent.md files in other folders. I talked with a few different LLMs about how useful those extra agents.md files are. Came to the conclusion it's better to fold all into the one agents.md file in app root.
+Note: If you type only "/init", the LLM may create agent.md files in other folders (like within the various rules subfolders in the .roo folder). I talked with a few different LLMs about how useful those extra agents.md files are. Came to the conclusion it's better to fold all into the one agents.md file in app root.
 
 #### No init
 Here's an example prompt I'd give a "thinking/reasoning" model with large context:
