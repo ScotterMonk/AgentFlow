@@ -2,8 +2,8 @@
 ALWAYS use the live postgres database for testing and production (`PGDB`); never SQLite or any other database system.
 
 ## Credentials
-- Connection credentials: `\.env`
-- Users' credentials: `\.env` (hash is stored in the pw_hashed column)
+- Connection credentials: `.env`
+- Users' credentials: `.env` (hash is stored in the pw_hashed column)
 
 ## Structure
 - Schema documentation: `.roo/docs/database_schema.md`

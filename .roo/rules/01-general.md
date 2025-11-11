@@ -56,6 +56,16 @@ For analysis/plan formation, referencing in Task instructions, or to determine w
 - `/githubber`: Use GitHub commands.
 - `/debug`: Troubleshooting, investigating errors, or diagnosing problems.
 
+### Best mode for job
+If another mode is more appropriate for your task, pass task and appropriate parameters (concise WTS) on to appropriate one. 
+Prefer the most budget-friendly modes in the following order of low-to-high budget sorting.
+Budget/Intelligence/Skill:
+    a) low (ex: renaming, copying, moving files; doing simple text/value comparison or replacement, copying column names and column parameters from a database): `/task-simple`.
+    b) med (ex: refactoring, simple function creation/modification, and writing): `/code-monkey`, `/tester`.
+    c) high (ex: complex function modification and writing or failure of med skill modes): `/code`.
+    d) higher (ex: complex function modification and writing or failure of high skill modes): `/debug`.
+If front-end task, use `/front-end`.
+
 ## Standards
 
 ### Communication
@@ -64,6 +74,13 @@ Be brief; don't echo user requests.
 ### Modularization
 CRITICAL: Keep Python and JS files small and modular, preferably less than 400 lines of code. 
 Create and reference utility files (`utils/`) liberally.
+
+### Simplification
+Reference `.roo/docs/simplification.md` when:
+- Implementing similar functionality multiple ways
+- Accumulating special case handling
+- Complexity spiraling in a module
+Look for the unifying principle that eliminates multiple components.
 
 ### Flask html templates
 Use `jinja-html` language mode.
@@ -228,7 +245,7 @@ Notes:
     - Incorporate (or not) testing into the plan based on user's `testing type` choice.
     - If creating tests: First be sure test does not already exist.
     - Remember you are creating a plan for another mode to build, not building.
-    - Use `Critical Resources & Standards` to check if proposed functionality already exists.
+    - Use `Sources of knowledge` to check if proposed functionality already exists.
     - Explicitely add refactoring to appropriate stages as tasks.
 You MUST complete each step below before proceeding to the next.
 - Take all the time necessary until you are confident each task meets all task criteria detailed below.
@@ -253,10 +270,7 @@ Steps:
 		- Q/A mode hints. 
             CRITICAL that this is done accurately. Consult user if unsure which mode to assign for a task.
             Prefer the most budget-friendly modes in the following order of low-to-high budget sorting:
-            a) Budget/Intelligence/Skill: low (ex: renaming, copying, moving files; doing simple text/value comparison or replacement, copying column names and column parameters from a database): `/task-simple`.
-            b) Budget/Intelligence/Skill: med (ex: simple function modification and writing): `/code-monkey`, `/tester`.
-            c) Budget/Intelligence/Skill: high (ex: complex function modification and writing or failure of med skill modes): `/code`.
-            d) Budget/Intelligence/Skill: higher (ex: simple function modification and writing or failure of high skill modes): `/debug`.
+            See `Best mode for job` above.
 		- Task structure example:
 			```md
 			[High level description of goal for the plan.]

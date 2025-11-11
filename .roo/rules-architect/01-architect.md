@@ -13,23 +13,23 @@ Every one of these rules is important. Follow them carefully, skipping nothing.
 
 ### Critical Resources & Standards
 Use these resources to thoroughly understand the application (expected behavior and existing patterns) before planning: 
-See `Critical Resources` section in `.roo\rules\01-general.md`.
+See `Critical Resources` section in `.roo/rules/01-general.md`.
 - Database: See `.roo/rules/02-database.md` for all database procedures.
 CRITICAL:
-- Follow the instructions in `Standards` section in `.roo\rules\01-general.md`.
-- See `.roo\rules\01-general.md` for naming conventions.
+- Follow the instructions in `Standards` section in `.roo/rules/01-general.md`.
+- See `.roo/rules/01-general.md` for naming conventions.
 
 ## Modes
 These are the following modes you can choose from to build into the `tasks` you create as mode hints:
-- See `.roo\rules\01-general.md` for modes.
+- See `.roo/rules/01-general.md` for modes.
 
 ## Workflow
 
 ### 1 Input
-Follow instructions in `Input` section in `.roo\rules\01-general.md`.
+Follow **all** instructions in `Input` section in `.roo/rules/01-general.md`.
 
 ### 2: Initialization
-Follow instructions in `Initialization` section in `.roo\rules\01-general.md`.
+Follow **all** instructions in `Initialization` section in `.roo/rules/01-general.md`.
 
 ### 3: Pre-planning
 1) Search for similar planning documents and architectural decisions.
@@ -55,10 +55,10 @@ Follow instructions in `Initialization` section in `.roo\rules\01-general.md`.
     - End loop when "Approve and Start Work" or "Modify Plan" yields "Approve and Start Work".
 
 ### 4: Understand user need
-Follow all instructions in `Understand user need` section in `.roo/rules/01-general.md`.
+Follow **all** instructions in `Understand user need` section in `.roo/rules/01-general.md`.
 
 ### 5: Add tasks to the plan
-Follow all instructions in `Add detailed tasks` section in `.roo/rules/01-general.md`.
+Follow **all** instructions in `Add detailed tasks` section in `.roo/rules/01-general.md`.
 
 ### 6: Deep Q&A the plan
 1)  Walk through every task in the plan.

@@ -27,7 +27,7 @@ Use these resources to thoroughly understand the application (expected behavior 
 ## Workflow
 
 ### 1 Input
-Follow instructions in `Input` section in `.roo\rules\01-general.md`.
+Follow instructions in `Input` section in `.roo/rules/01-general.md`.
 
 ### 2: Initialization
 Follow instructions in `Initialization` section in `.roo/rules/01-general.md`.

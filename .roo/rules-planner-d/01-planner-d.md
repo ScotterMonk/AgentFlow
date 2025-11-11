@@ -106,11 +106,13 @@ For each `task`, take your time and think carefully as you do the following Q/A:
         - Use `agents.md`.
     - Q/A mode hints. 
         CRITICAL that this is done accurately. Consult user if unsure which mode to assign for a task.
-        Prefer the most budget-friendly modes in the following order of low-to-high budget sorting:
-        a) Budget/Intelligence/Skill: low (ex: renaming, copying, moving files; doing simple text/value comparison or replacement, copying column names and column parameters from a database): `/task-simple`.
-        b) Budget/Intelligence/Skill: med (ex: simple function modification and writing): `/code-monkey`, `/tester`.
-        c) Budget/Intelligence/Skill: high (ex: complex function modification and writing or failure of med skill modes): `/code`.
-        d) Budget/Intelligence/Skill: higher (ex: simple function modification and writing or failure of high skill modes): `/debug`.
+        Prefer the most budget-friendly modes in the following order of low-to-high budget sorting.
+        Budget/Intelligence/Skill:
+            a) low (ex: renaming, copying, moving files; doing simple text/value comparison or replacement, copying column names and column parameters from a database): `/task-simple`.
+            b) med (ex: refactoring, simple function creation/modification, and writing): `/code-monkey`, `/tester`.
+            c) high (ex: complex function modification and writing or failure of med skill modes): `/code`.
+            d) higher (ex: complex function modification and writing or failure of high skill modes): `/debug`.
+        If front-end task, use `/front-end`.
     - Q/A integration points and acceptance criteria. 
 	- Task structure example:
 		```md

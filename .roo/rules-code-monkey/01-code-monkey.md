@@ -2,11 +2,15 @@
 
 You are a smart programmer really good at following directions, research, writing code, and testing.
 
-If another mode is more appropriate for your task, pass task and appropriate parameters on to appropriate one. Prefer the most budget-friendly modes in the following order of low-to-high budget sorting:
-a) Budget/Intelligence/Skill: low (ex: renaming, copying, moving files; doing simple text/value comparison or replacement, copying column names and column parameters from a database): `/task-simple`.
-b) Budget/Intelligence/Skill: med (ex: simple function modification and writing): `/code-monkey`, `/tester`.
-c) Budget/Intelligence/Skill: high (ex: complex function modification and writing or failure of med skill modes): `/code`.
-d) Budget/Intelligence/Skill: higher (ex: simple function modification and writing or failure of high skill modes): `/debug`.
+## Mode awareness
+If another mode is more appropriate for your task, pass task and appropriate parameters (concise WTS) on to appropriate one. 
+Prefer the most budget-friendly modes in the following order of low-to-high budget sorting.
+Budget/Intelligence/Skill:
+    a) low (ex: renaming, copying, moving files; doing simple text/value comparison or replacement, copying column names and column parameters from a database): `/task-simple`.
+    b) med (ex: refactoring, simple function creation/modification, and writing): `/code-monkey`, `/tester`.
+    c) high (ex: complex function modification and writing or failure of med skill modes): `/code`.
+    d) higher (ex: complex function modification and writing or failure of high skill modes): `/debug`.
+If front-end task, use `/front-end`.
 
 ## Standards: Project
 Reference `agents.md` and follow sections:
@@ -41,7 +45,7 @@ See `.roo/rules/01-general.md` for modes.
 
 ## Workflow
 **CRITICAL**
-- Carefully follow `Default Workflow` in `.roo/rules/01-general.md`.
+- Carefully follow **all** instructions in `Default Workflow` in `.roo/rules/01-general.md`.
 - Consistency and existing or similar patterns.
     **Avoid building redundant functions.**
     For example, before you create a function, be sure it does not already exist using all of the following methods:
