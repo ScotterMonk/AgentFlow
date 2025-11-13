@@ -2,6 +2,10 @@ window_width=800
 window_height=480
 include_roo_only=true
 ignore_patterns=.git,__pycache__,.venv,.idea,.vscode,node_modules,*.pyc
+# comma-separated list of root-level files to sync (e.g., .roomodes)
+root_allowlist=
 backup_mode=timestamped
+# comma-separated list of root-level files to sync (e.g., .roomodes)
+root_allowlist=
 preserve_mtime=true
 dry_run=false

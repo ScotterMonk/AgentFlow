@@ -46,7 +46,7 @@ class SyncEngine:
         self.event_queue = event_queue
     
     def scan_folders(self, folders: List[Path]) -> Dict[str, List[Dict[str, Any]]]:
-        # [Modified] by google/gemini-2.5-pro | 2025-11-13_01
+        # [Modified] by google/gemini-2.5-pro | 2025-11-13_02
         """
         Scan folders to build a file index.
         
@@ -113,6 +113,30 @@ class SyncEngine:
                         "path": item_path,
                         "mtime": mtime,
                         "size": size,
+                        "base_folder": folder
+                    })
+            
+            # After scanning .roo, attempt to include root-level allowlisted files
+            root_allowlist = self.config.get("root_allowlist", [])
+            for allowlist_entry in root_allowlist:
+                candidate_path = folder / allowlist_entry
+                # Include only if: exists, is_file, not symlink
+                if (candidate_path.exists() and
+                    candidate_path.is_file() and
+                    not candidate_path.is_symlink()):
+                    stats = candidate_path.stat()
+                    # Use synthetic relative key = filename only
+                    synthetic_key = allowlist_entry
+                    self._emit_event(
+                        EventType.SCAN_FILE,
+                        folder=str(folder),
+                        file_path=synthetic_key,
+                        message=f"Scanning allowlisted root file: {synthetic_key}"
+                    )
+                    file_index[synthetic_key].append({
+                        "path": candidate_path,
+                        "mtime": stats.st_mtime,
+                        "size": stats.st_size,
                         "base_folder": folder
                     })
         

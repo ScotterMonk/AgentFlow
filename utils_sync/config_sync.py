@@ -10,6 +10,7 @@ DEFAULTS = {
     "backup_mode": "timestamped",
     "preserve_mtime": True,
     "dry_run": False,
+    "root_allowlist": [],  # comma-separated list of root-level files to sync
 }
 
 
@@ -22,7 +23,7 @@ def _to_bool(value: str) -> bool:
 
 
 def load_config(config_path="config.txt"):
-    # [Created-or-Modified] by [LLM model] | 2025-11-13_01
+    # [Created-or-Modified] by [LLM model] | 2025-11-13_02
     """
     Load a simple key=value config file and return a dict with typed values
     and defaults applied.
@@ -33,6 +34,7 @@ def load_config(config_path="config.txt"):
     - Integers: window_width, window_height (must be positive).
     - Booleans: include_roo_only, preserve_mtime, dry_run (true/false, case-insensitive).
     - ignore_patterns: comma-separated list -> list of strings.
+    - root_allowlist: comma-separated list -> list of strings.
     - Unknown keys are returned as strings.
     - If file missing or parsing error, defaults are returned.
     """
@@ -68,6 +70,9 @@ def load_config(config_path="config.txt"):
                 elif key == "ignore_patterns":
                     parts: List[str] = [p.strip() for p in val.split(",") if p.strip()]
                     config[key] = parts
+                elif key == "root_allowlist":
+                    parts: List[str] = [p.strip() for p in val.split(",") if p.strip()]
+                    config[key] = parts
                 else:
                     # store as string for unknown keys
                     config[key] = val
@@ -82,6 +87,8 @@ def load_config(config_path="config.txt"):
         config["window_height"] = DEFAULTS["window_height"]
     if not isinstance(config.get("ignore_patterns"), list):
         config["ignore_patterns"] = DEFAULTS["ignore_patterns"].copy()
+    if not isinstance(config.get("root_allowlist"), list):
+        config["root_allowlist"] = DEFAULTS["root_allowlist"].copy()
 
     for b in ("include_roo_only", "preserve_mtime", "dry_run"):
         if not isinstance(config.get(b), bool):
