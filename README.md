@@ -100,6 +100,40 @@ app
         └── 01-tester.md
 ```
 
+## Agentflow File Sync Utility
+
+A Python utility for synchronizing `.roo` directories across multiple project folders based on file modification times.
+
+### Overview
+The Agentflow File Sync Utility scans `.roo` subdirectories in multiple project folders, identifies files that need updating based on modification times, and performs intelligent file synchronization with atomic operations and backup support.
+
+### GUI Usage
+Launch the graphical interface with:
+```
+python main_gui.py
+```
+
+Use the interface to:
+- Select multiple folders containing `.roo` directories
+- Configure sync settings via the Settings window (dry-run mode, backup options)
+- Monitor live progress during synchronization
+
+### CLI Usage
+Run headless synchronization with:
+```
+python cli_sync.py <folder1> <folder2> ...
+```
+
+Example:
+```
+python cli_sync.py /path/to/project1 /path/to/project2 /path/to/project3
+```
+
+### Configuration
+Settings are stored in `config.txt` with options for:
+- `dry_run`: Enable/disable dry-run mode
+- `backup_mode`: Configure backup behavior (none, timestamped)
+
 ## Fit to you
 Be sure to modify the content of files you see in the .roo/docs folder to fit your project. Especially:
 - "agents.md" (In root, "above" .roo folder)
