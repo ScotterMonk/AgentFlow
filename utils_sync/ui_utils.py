@@ -8,7 +8,7 @@ from tkinter import ttk
 
 class FolderItem:
     """A UI component representing a single folder in the folder list."""
-    # [Modified] by Claude Sonnet 4.5 | 2025-11-13_02
+    # [Modified] by openai/gpt-5.1 | 2025-11-14_01
     
     def __init__(self, parent, folder_path: str, remove_callback):
         """Initialize a folder item widget.
@@ -21,12 +21,16 @@ class FolderItem:
         # Create main frame for this folder item
         self.frame = ttk.Frame(parent, relief=tk.FLAT, borderwidth=0)
         
+        # Create a top row container for the main controls
+        top_frame = ttk.Frame(self.frame)
+        top_frame.pack(fill=tk.X)
+        
         # Store folder path
         self.folder_path = folder_path
         
         # Create label showing the folder path
         self.label = ttk.Label(
-            self.frame,
+            top_frame,
             text=folder_path,
             anchor=tk.W
         )
@@ -34,7 +38,7 @@ class FolderItem:
         
         # Create progress bar
         self.progress_bar = ttk.Progressbar(
-            self.frame,
+            top_frame,
             mode="determinate",
             length=100
         )
@@ -43,7 +47,7 @@ class FolderItem:
         
         # Create status label
         self.status_label = ttk.Label(
-            self.frame,
+            top_frame,
             text="",
             anchor=tk.W,
             width=15
@@ -52,12 +56,23 @@ class FolderItem:
         
         # Create remove button
         self.remove_button = ttk.Button(
-            self.frame,
+            top_frame,
             text="X",
             width=3,
             command=lambda: remove_callback(folder_path)
         )
         self.remove_button.pack(side=tk.RIGHT, padx=(0, 5), pady=2)
+        
+        # Preview label for planned overwrites (shown under the main row)
+        self.preview_label = ttk.Label(
+            self.frame,
+            text="",
+            anchor=tk.W,
+            justify=tk.LEFT,
+            font=("TkDefaultFont", 8),
+            foreground="gray"
+        )
+        self.preview_label.pack(fill=tk.X, padx=(20, 5), pady=(0, 2))
     
     def update_status(self, text: str, color: str = "black"):
         """Update the status label text and color.
@@ -83,8 +98,18 @@ class FolderItem:
         else:
             self.progress_bar["value"] = 0
     
+    def update_preview(self, lines):
+        """Update the planned overwrite preview text for this folder item."""
+        # [Created] by openai/gpt-5.1 | 2025-11-14_01
+        if lines:
+            text = "\n".join(f"- {line}" for line in lines)
+        else:
+            text = ""
+        self.preview_label.config(text=text)
+    
     def reset_status(self):
         """Reset the status label and progress bar to initial states."""
-        # [Created] by Claude Sonnet 4.5 | 2025-11-13_02
+        # [Modified] by openai/gpt-5.1 | 2025-11-14_01
         self.status_label.config(text="", foreground="black")
         self.progress_bar["value"] = 0
+        self.preview_label.config(text="")

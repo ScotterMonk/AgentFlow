@@ -53,10 +53,14 @@ class MainApp:
         # Store button references
         self.browse_button = None
         self.sync_button = None
+        self.confirm_button = None
         
         # Store status label references
         self.dry_run_label = None
         self.ignore_patterns_label = None
+        
+        # Store planned actions for two-stage sync (preview then execute)
+        self.planned_actions = []
         
         # Create UI widgets
         self._create_widgets()
@@ -127,13 +131,22 @@ class MainApp:
         )
         self.browse_button.grid(row=0, column=0, padx=(0, 5))
         
-        # Sync button
+        # Sync button (first stage: plan/preview)
         self.sync_button = ttk.Button(
             button_frame,
-            text="Sync",
+            text="Preview",
             command=self._start_sync
         )
         self.sync_button.grid(row=0, column=1, padx=(0, 5))
+        
+        # Confirm button (second stage: execute planned actions)
+        self.confirm_button = ttk.Button(
+            button_frame,
+            text="Confirm",
+            state=tk.DISABLED,
+            command=self._confirm_sync
+        )
+        self.confirm_button.grid(row=0, column=2, padx=(0, 5))
         
         # Settings button
         self.settings_button = ttk.Button(
@@ -141,7 +154,7 @@ class MainApp:
             text="Settings",
             command=self._open_settings_window
         )
-        self.settings_button.grid(row=0, column=2)
+        self.settings_button.grid(row=0, column=3)
     
     def _open_folder_dialog(self):
         """Open folder selection dialog and add valid folder to list."""
@@ -204,8 +217,8 @@ class MainApp:
             self.folder_widgets[folder_path] = folder_item
     
     def _start_sync(self):
-        """Start the sync process in a background thread."""
-        # [Modified] by Claude Sonnet 4.5 | 2025-11-13_04
+        """Run planning phase and show per-folder preview before actual sync."""
+        # [Modified] by openai/gpt-5.1 | 2025-11-14_01
         
         # Check if already syncing
         if self.is_syncing:
@@ -219,11 +232,102 @@ class MainApp:
             )
             return
         
-        # Pre-sync confirmation for real runs
+        # Set syncing state for planning phase
+        self.is_syncing = True
+        
+        # Disable buttons during planning
+        self.sync_button.config(state=tk.DISABLED)
+        self.browse_button.config(state=tk.DISABLED)
+        if self.confirm_button:
+            self.confirm_button.config(state=tk.DISABLED)
+        
+        # Reset status of all folder widgets and show planning state
+        for widget in self.folder_widgets.values():
+            widget.reset_status()
+            widget.update_status("Planning...", "blue")
+        
+        try:
+            # Run scan and plan synchronously to compute actions
+            folder_paths = [Path(p) for p in self.selected_folders]
+            file_index = self.sync_engine.scan_folders(folder_paths)
+            actions = self.sync_engine.plan_actions(file_index)
+        except Exception as e:
+            messagebox.showerror(
+                "Preview Failed",
+                f"Error while planning sync:\n{e}"
+            )
+            self.is_syncing = False
+            self.sync_button.config(state=tk.NORMAL)
+            self.browse_button.config(state=tk.NORMAL)
+            return
+        
+        # Store planned actions for confirmation stage
+        self.planned_actions = actions
+        
+        # Build per-folder list of files that will be overwritten
+        overwrites_by_folder = {folder: [] for folder in self.selected_folders}
+        for action in actions:
+            dest_path = action["destination_path"]
+            relative = str(action["relative_path"])
+            for base in self.selected_folders:
+                base_path = Path(base)
+                try:
+                    dest_path.relative_to(base_path)
+                    overwrites_by_folder[base].append(relative)
+                    break
+                except ValueError:
+                    continue
+        
+        any_actions = False
+        for folder_path, widget in self.folder_widgets.items():
+            lines = overwrites_by_folder.get(folder_path, [])
+            # Update per-folder preview under the folder name
+            if hasattr(widget, "update_preview"):
+                widget.update_preview(lines)
+            if lines:
+                any_actions = True
+                widget.update_status(f"{len(lines)} overwrite(s) planned", "orange")
+            else:
+                widget.update_status("No changes", "gray")
+        
+        # Re-enable buttons after planning
+        self.is_syncing = False
+        self.browse_button.config(state=tk.NORMAL)
+        self.sync_button.config(state=tk.NORMAL)
+        
+        # Enable Confirm if there is work to do
+        if any_actions:
+            if self.confirm_button:
+                self.confirm_button.config(state=tk.NORMAL)
+        else:
+            if self.confirm_button:
+                self.confirm_button.config(state=tk.DISABLED)
+            messagebox.showinfo(
+                "Nothing to Sync",
+                "All selected folders are already up to date. No files will be overwritten."
+            )
+    
+    def _confirm_sync(self):
+        """Execute the planned sync actions after user confirmation."""
+        # [Created] by openai/gpt-5.1 | 2025-11-14_01
+        
+        # Do not start if already syncing
+        if self.is_syncing:
+            return
+        
+        # Ensure we have planned actions
+        if not self.planned_actions:
+            messagebox.showinfo(
+                "Nothing to Sync",
+                "There are no planned actions to execute. Run Preview first."
+            )
+            return
+        
+        # For non-dry runs, show a clear warning before modifying files
         if not self.config.get("dry_run", False):
             confirm = messagebox.askyesno(
                 "Confirm Sync",
-                "WARNING: This is NOT a dry run. Files will be modified.\n\nAre you sure you want to proceed?"
+                "This will now apply the planned changes and modify files.\n\nProceed?"
             )
             if not confirm:
                 return
@@ -231,67 +335,59 @@ class MainApp:
         # Set syncing state
         self.is_syncing = True
         
-        # Disable buttons
+        # Disable buttons during execution
         self.sync_button.config(state=tk.DISABLED)
         self.browse_button.config(state=tk.DISABLED)
+        if self.confirm_button:
+            self.confirm_button.config(state=tk.DISABLED)
         
-        # Reset status of all folder widgets
+        # Reset folder widget statuses
         for widget in self.folder_widgets.values():
             widget.reset_status()
         
-        # Create and start sync worker
-        worker = SyncWorker(self.selected_folders, self.event_queue)
+        # Start background worker to execute planned actions
+        folder_paths = [Path(p) for p in self.selected_folders]
+        worker = SyncWorker(self.sync_engine, folder_paths, self.planned_actions)
         worker.start()
     
     def _process_events(self):
         """Process events from the event queue periodically."""
-        # [Modified] by Claude Sonnet 4.5 | 2025-11-13_02
+        # [Modified] by openai/gpt-5.1 | 2025-11-14_01
         
         # Process all events currently in the queue
         while not self.event_queue.empty():
             try:
                 event = self.event_queue.get_nowait()
                 
-                # Get the widget for this folder path
-                widget = self.folder_widgets.get(event.folder_path)
-                
-                # Handle different event types
+                # Handle different event types using the current ProgressEvent schema
                 if event.event_type == EventType.SCAN_START:
-                    if widget:
+                    # Global scan start – mark all folders as scanning
+                    for widget in self.folder_widgets.values():
                         widget.update_status("Scanning...", "blue")
                 
                 elif event.event_type == EventType.SCAN_FILE:
-                    if widget and event.total > 0:
-                        widget.update_progress(event.current, event.total)
+                    # Per-folder scan notification when folder is available
+                    folder_widget = self.folder_widgets.get(event.folder)
+                    if folder_widget:
+                        folder_widget.update_status("Scanning...", "blue")
                 
-                elif event.event_type == EventType.SCAN_COMPLETE:
-                    if widget:
-                        widget.update_status("Scan complete", "green")
-                        widget.update_progress(100, 100)
-                
-                elif event.event_type == EventType.COPY_START:
-                    # Update all widgets to show syncing status
-                    for w in self.folder_widgets.values():
-                        w.update_status("Syncing...", "orange")
-                
-                elif event.event_type == EventType.COPY_PROGRESS:
-                    if widget and event.total > 0:
-                        widget.update_progress(event.current, event.total)
+                elif event.event_type == EventType.COPY:
+                    # A file was copied; show generic syncing state
+                    for widget in self.folder_widgets.values():
+                        widget.update_status("Syncing...", "orange")
                 
                 elif event.event_type == EventType.SKIP:
-                    if widget:
-                        widget.update_status("Up to date", "gray")
-                
-                elif event.event_type == EventType.COPY_COMPLETE:
-                    if widget:
-                        widget.update_status("Sync complete", "green")
+                    # In dry-run, files are skipped; detailed per-file preview is handled
+                    # in the planning stage, so we keep the UI unchanged here.
+                    pass
                 
                 elif event.event_type == EventType.ERROR:
-                    if widget:
-                        widget.update_status(f"Error: {event.message}", "red")
+                    # Show a generic error state; detailed message goes to the log
+                    for widget in self.folder_widgets.values():
+                        widget.update_status("Error during sync", "red")
                 
-                elif event.event_type == EventType.ALL_COMPLETE:
-                    # Re-enable buttons
+                elif event.event_type == EventType.COMPLETE:
+                    # Re-enable buttons when the engine signals completion
                     self.is_syncing = False
                     self.sync_button.config(state=tk.NORMAL)
                     self.browse_button.config(state=tk.NORMAL)

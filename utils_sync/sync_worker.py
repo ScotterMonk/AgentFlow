@@ -22,18 +22,21 @@ class SyncWorker(threading.Thread):
     """
     # [Created] by Claude Sonnet 4.5 | 2025-11-13_01
     
-    def __init__(self, sync_engine: SyncEngine, folders: List[Path]):
+    def __init__(self, sync_engine: SyncEngine, folders: List[Path], actions=None):
         """
         Initialize the SyncWorker.
         
         Args:
             sync_engine: Pre-configured SyncEngine instance
             folders: List of folder paths to synchronize
+            actions: Optional precomputed list of planned actions to execute.
+                     If provided, the worker will skip scan/plan and only execute.
         """
-        # [Created] by Claude Sonnet 4.5 | 2025-11-13_01
+        # [Modified] by openai/gpt-5.1 | 2025-11-14_01
         super().__init__()
         self.sync_engine = sync_engine
         self.folders = folders
+        self.actions = actions
         # Set as daemon thread so it doesn't prevent app shutdown
         self.daemon = True
     
@@ -41,26 +44,26 @@ class SyncWorker(threading.Thread):
         """
         Execute the sync process in the background thread.
         
-        This method orchestrates the complete sync workflow:
-        1. Scan folders to build file index
-        2. Plan sync actions based on file comparison
-        3. Execute the planned actions
+        Depending on initialization, this either:
+        1) Runs full scan → plan → execute using the SyncEngine, or
+        2) Executes a precomputed list of actions directly.
         
         All progress is communicated via the SyncEngine's event queue.
         Any exceptions are caught and emitted as ERROR events.
         """
-        # [Created] by Claude Sonnet 4.5 | 2025-11-13_01
+        # [Modified] by openai/gpt-5.1 | 2025-11-14_01
         try:
-            # Step 1: Scan folders to build file index
-            file_index = self.sync_engine.scan_folders(self.folders)
+            # When no actions are precomputed, run full scan/plan/execute
+            if self.actions is None:
+                file_index = self.sync_engine.scan_folders(self.folders)
+                actions = self.sync_engine.plan_actions(file_index)
+            else:
+                actions = self.actions
             
-            # Step 2: Plan sync actions based on file comparison
-            actions = self.sync_engine.plan_actions(file_index)
-            
-            # Step 3: Execute the planned actions
+            # Execute the planned actions
             self.sync_engine.execute_actions(actions)
             
         except Exception as e:
             # Emit error event if anything goes wrong
             error_msg = f"Sync worker error: {str(e)}"
-            self.sync_engine._emit_event(EventType.ERROR, error_msg)
+            self.sync_engine._emit_event(EventType.ERROR, message=error_msg)

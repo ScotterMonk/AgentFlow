@@ -1,6 +1,11 @@
 """Utilities for sync configuration loading."""
 import os
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
+try:
+    from dotenv import load_dotenv
+    DOTENV_AVAILABLE = True
+except ImportError:
+    DOTENV_AVAILABLE = False
 
 DEFAULTS = {
     "window_width": 800,
@@ -22,11 +27,39 @@ def _to_bool(value: str) -> bool:
     return str(value).strip().lower() in ("1", "true", "yes", "y", "on")
 
 
-def load_config(config_path="config.txt"):
+def resolve_config_path(config_path: Optional[str] = None) -> str:
+    # [Created-or-Modified] by [LLM model] | 2025-11-13_01
+    """
+    Resolve the config file path, checking .env for AGENTFLOW_CONFIG.
+
+    Args:
+        config_path: Optional explicit config path
+
+    Returns:
+        Resolved config file path
+    """
+    if config_path:
+        return config_path
+
+    # Try to load .env if available
+    if DOTENV_AVAILABLE:
+        load_dotenv()
+        env_config = os.getenv("AGENTFLOW_CONFIG")
+        if env_config:
+            return env_config
+
+    # Default fallback
+    return "config.txt"
+
+
+def load_config(config_path: Optional[str] = None):
     # [Created-or-Modified] by [LLM model] | 2025-11-13_02
     """
     Load a simple key=value config file and return a dict with typed values
     and defaults applied.
+
+    Args:
+        config_path: Optional explicit config path. If None, resolves via resolve_config_path().
 
     Rules:
     - Lines beginning with '#' or empty lines are skipped.
@@ -40,7 +73,9 @@ def load_config(config_path="config.txt"):
     """
     config: Dict[str, Any] = DEFAULTS.copy()
 
-    if not os.path.exists(config_path):
+    resolved_path = resolve_config_path(config_path)
+
+    if not os.path.exists(resolved_path):
         return config.copy()
 
     try:

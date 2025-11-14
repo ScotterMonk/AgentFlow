@@ -8,4 +8,4 @@ backup_mode=timestamped
 # comma-separated list of root-level files to sync (e.g., .roomodes)
 root_allowlist=
 preserve_mtime=true
-dry_run=false
+dry_run=true

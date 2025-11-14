@@ -42,7 +42,11 @@ The engine orchestrates a scan → plan → execute workflow:
 1) Ensure Python 3.9+ is installed
 2) Clone this repo
 3) Optional but recommended: create and activate a virtual environment
-4) No extra packages are required for core sync; the GUI uses Tkinter which ships with most Python installs
+4) Install dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
+   The only dependency is `python-dotenv` for .env file support
 
 ## Quick start
 
@@ -71,7 +75,27 @@ CLI
 
 ## Configuration
 
-The app reads settings from [config.txt](config.txt) in project root. Example:
+### Config File Location
+
+By default, the app reads settings from `config.txt` in the project root. You can override this in three ways:
+
+1. Environment variable via `.env` file:
+   ```
+   AGENTFLOW_CONFIG=/path/to/custom-config.txt
+   ```
+
+2. CLI flag:
+   ```
+   python cli_sync.py --config /path/to/custom-config.txt folder1 folder2
+   ```
+
+3. Default fallback: `config.txt` in project root
+
+Priority order: CLI flag > environment variable > default
+
+### Config File Format
+
+Example `config.txt`:
 
 ```
 # window size for GUI (pixels)

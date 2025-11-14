@@ -54,7 +54,7 @@ def run_cli_sync(folders):
     folders = [Path(f) for f in folders]
 
     # Load configuration
-    config = load_config()
+    config = load_config(args.config)
 
     # Validate number of folders
     if len(folders) < 2:
@@ -105,6 +105,10 @@ def _parse_args():
         "folders",
         nargs="+",
         help="Folders to synchronize (must contain a .roo subdirectory)"
+    )
+    p.add_argument(
+        "--config",
+        help="Path to config file (optional, defaults to config.txt or AGENTFLOW_CONFIG env var)"
     )
     return p.parse_args()
 
