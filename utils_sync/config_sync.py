@@ -16,6 +16,7 @@ DEFAULTS = {
     "preserve_mtime": True,
     "dry_run": False,
     "root_allowlist": [],  # comma-separated list of root-level files to sync
+    "folders_faves": [],  # comma-separated list of favorite folders for UI
 }
 
 
@@ -53,7 +54,7 @@ def resolve_config_path(config_path: Optional[str] = None) -> str:
 
 
 def load_config(config_path: Optional[str] = None):
-    # [Created-or-Modified] by [LLM model] | 2025-11-13_02
+    # [Created-or-Modified] by [LLM model] | 2025-11-15_01
     """
     Load a simple key=value config file and return a dict with typed values
     and defaults applied.
@@ -68,6 +69,7 @@ def load_config(config_path: Optional[str] = None):
     - Booleans: include_roo_only, preserve_mtime, dry_run (true/false, case-insensitive).
     - ignore_patterns: comma-separated list -> list of strings.
     - root_allowlist: comma-separated list -> list of strings.
+    - folders_faves: comma-separated list -> list of strings.
     - Unknown keys are returned as strings.
     - If file missing or parsing error, defaults are returned.
     """
@@ -79,7 +81,8 @@ def load_config(config_path: Optional[str] = None):
         return config.copy()
 
     try:
-        with open(config_path, "r", encoding="utf-8") as fh:
+        # Always open the resolved config path (handles default, .env, or explicit paths)
+        with open(resolved_path, "r", encoding="utf-8") as fh:
             for raw in fh:
                 line = raw.strip()
                 if not line or line.startswith("#"):
@@ -108,6 +111,9 @@ def load_config(config_path: Optional[str] = None):
                 elif key == "root_allowlist":
                     parts: List[str] = [p.strip() for p in val.split(",") if p.strip()]
                     config[key] = parts
+                elif key == "folders_faves":
+                    parts: List[str] = [p.strip() for p in val.split(",") if p.strip()]
+                    config[key] = parts
                 else:
                     # store as string for unknown keys
                     config[key] = val
@@ -124,6 +130,8 @@ def load_config(config_path: Optional[str] = None):
         config["ignore_patterns"] = DEFAULTS["ignore_patterns"].copy()
     if not isinstance(config.get("root_allowlist"), list):
         config["root_allowlist"] = DEFAULTS["root_allowlist"].copy()
+    if not isinstance(config.get("folders_faves"), list):
+        config["folders_faves"] = DEFAULTS["folders_faves"].copy()
 
     for b in ("include_roo_only", "preserve_mtime", "dry_run"):
         if not isinstance(config.get(b), bool):
@@ -133,13 +141,14 @@ def load_config(config_path: Optional[str] = None):
 
 
 def save_config(config_dict: Dict[str, Any], path: str = "config.txt") -> bool:
-    # [Created-or-Modified] by [LLM model] | 2025-11-13_01
+    # [Created-or-Modified] by [LLM model] | 2025-11-15_02
     """
     Serialize config_dict to a simple key=value file.
 
     Serialization rules:
     - bool -> "true" or "false" (lowercase)
-    - list -> comma-separated values with no spaces (e.g., ".git,__pycache__")
+    - list -> comma-separated values with a single space after the comma
+      (e.g., ".git, __pycache__")
     - int -> decimal string
     - other types -> str(value)
 
@@ -160,9 +169,9 @@ def save_config(config_dict: Dict[str, Any], path: str = "config.txt") -> bool:
                 # int -> decimal
                 elif isinstance(val, int) and not isinstance(val, bool):
                     sval = str(val)
-                # list -> comma separated, no extra spaces
+                # list -> comma separated, single space after comma
                 elif isinstance(val, (list, tuple)):
-                    sval = ",".join(str(x) for x in val)
+                    sval = ", ".join(str(x) for x in val)
                 else:
                     sval = str(val)
                 fh.write(f"{key}={sval}\n")

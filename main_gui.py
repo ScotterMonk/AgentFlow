@@ -8,6 +8,7 @@ from tkinter import ttk, filedialog, messagebox
 import queue
 from pathlib import Path
 from functools import partial
+import datetime
 from utils_sync import config_sync, file_path_utils
 from utils_sync.sync_core import SyncEngine
 from utils_sync.sync_worker import SyncWorker
@@ -28,6 +29,12 @@ class MainApp:
         
         # Load configuration
         self.config = config_sync.load_config()
+        
+        # Initialize favorite folders from config, normalizing paths
+        raw_faves = self.config.get("folders_faves", [])
+        self.favorite_folders = [
+            file_path_utils.normalize_path(p) for p in raw_faves
+        ]
         
         # Set up main window
         self.root.title("Agentflow File Sync")
@@ -54,6 +61,7 @@ class MainApp:
         self.browse_button = None
         self.sync_button = None
         self.confirm_button = None
+        self.load_favorites_button = None
         
         # Store status label references
         self.dry_run_label = None
@@ -74,10 +82,10 @@ class MainApp:
     
     def _create_widgets(self):
         """Create and layout all UI widgets."""
-        # [Created] by Claude Sonnet 4.5 | 2025-11-13_01
+        # [Modified] by openai/gpt-5.1 | 2025-11-15_01
         
         # Main frame with padding
-        main_frame = ttk.Frame(self.root, padding="10")
+        main_frame = ttk.Frame(self.root, padding="3")
         main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
         
         # Configure grid weights for resizing
@@ -92,14 +100,14 @@ class MainApp:
             text="Agentflow File Sync",
             font=("TkDefaultFont", 16, "bold")
         )
-        title_label.grid(row=0, column=0, pady=(0, 5), sticky=tk.W)
+        title_label.grid(row=0, column=0, pady=(0, 2), sticky=tk.W)
         
         # Description label
         desc_label = ttk.Label(
             main_frame,
             text="Synchronize files across multiple folders with intelligent conflict resolution."
         )
-        desc_label.grid(row=1, column=0, pady=(0, 5), sticky=tk.W)
+        desc_label.grid(row=1, column=0, pady=(0, 2), sticky=tk.W)
         
         # Dry run status label
         self.dry_run_label = ttk.Label(main_frame, text="")
@@ -107,17 +115,44 @@ class MainApp:
         
         # Ignore patterns label
         self.ignore_patterns_label = ttk.Label(main_frame, text="")
-        self.ignore_patterns_label.grid(row=3, column=0, pady=(0, 10), sticky=tk.W)
+        self.ignore_patterns_label.grid(row=3, column=0, pady=(0, 3), sticky=tk.W)
         
         # Folder list frame
         folder_frame = ttk.Frame(main_frame, relief=tk.SUNKEN, borderwidth=1)
-        folder_frame.grid(row=4, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), pady=(0, 10))
+        folder_frame.grid(row=4, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), pady=(0, 3))
         folder_frame.columnconfigure(0, weight=1)
         folder_frame.rowconfigure(0, weight=1)
+
+        # Create scrollable canvas + frame for folder list
+        self.folder_canvas = tk.Canvas(
+            folder_frame,
+            borderwidth=0,
+            highlightthickness=0
+        )
+        self.folder_canvas.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
+
+        folder_scrollbar = ttk.Scrollbar(
+            folder_frame,
+            orient=tk.VERTICAL,
+            command=self.folder_canvas.yview
+        )
+        folder_scrollbar.grid(row=0, column=1, sticky=(tk.N, tk.S))
+
+        self.folder_canvas.configure(yscrollcommand=folder_scrollbar.set)
+
+        # Inner frame that holds the per-folder widgets
+        self.folder_list_frame = ttk.Frame(self.folder_canvas)
+        self.folder_canvas.create_window((0, 0), window=self.folder_list_frame, anchor="nw")
+
+        # Update scroll region whenever the inner frame size changes
+        self.folder_list_frame.bind(
+            "<Configure>",
+            lambda e: self.folder_canvas.configure(scrollregion=self.folder_canvas.bbox("all"))
+        )
         
-        # Create scrollable frame for folder list
-        self.folder_list_frame = ttk.Frame(folder_frame)
-        self.folder_list_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), padx=5, pady=5)
+        # Enable mouse wheel scrolling
+        self.folder_canvas.bind("<MouseWheel>", self._on_mousewheel)
+        self.folder_list_frame.bind("<MouseWheel>", self._on_mousewheel)
         
         # Bottom button frame
         button_frame = ttk.Frame(main_frame)
@@ -131,22 +166,38 @@ class MainApp:
         )
         self.browse_button.grid(row=0, column=0, padx=(0, 5))
         
-        # Sync button (first stage: plan/preview)
+        # Scan button (first stage: plan/preview, was "Preview")
         self.sync_button = ttk.Button(
             button_frame,
-            text="Preview",
+            text="Scan",
             command=self._start_sync
         )
         self.sync_button.grid(row=0, column=1, padx=(0, 5))
         
-        # Confirm button (second stage: execute planned actions)
+        # Execute button (second stage: execute planned actions, was "Confirm")
         self.confirm_button = ttk.Button(
             button_frame,
-            text="Confirm",
+            text="Execute",
             state=tk.DISABLED,
             command=self._confirm_sync
         )
         self.confirm_button.grid(row=0, column=2, padx=(0, 5))
+        
+        # Load Favorites button
+        self.load_favorites_button = ttk.Button(
+            button_frame,
+            text="Load Favorites",
+            command=self._load_favorite_folders
+        )
+        self.load_favorites_button.grid(row=0, column=3, padx=(0, 5))
+        
+        # Save Favorites button
+        self.save_favorites_button = ttk.Button(
+            button_frame,
+            text="Save Favorites",
+            command=self._save_current_selection_as_favorites
+        )
+        self.save_favorites_button.grid(row=0, column=4, padx=(0, 5))
         
         # Settings button
         self.settings_button = ttk.Button(
@@ -154,7 +205,7 @@ class MainApp:
             text="Settings",
             command=self._open_settings_window
         )
-        self.settings_button.grid(row=0, column=3)
+        self.settings_button.grid(row=0, column=5)
     
     def _open_folder_dialog(self):
         """Open folder selection dialog and add valid folder to list."""
@@ -195,7 +246,7 @@ class MainApp:
     
     def _update_folder_list_ui(self):
         """Update the folder list UI to reflect current selected folders."""
-        # [Modified] by Claude Sonnet 4.5 | 2025-11-13_02
+        # [Modified] by openai/gpt-5.1 | 2025-11-15_01
         
         # Destroy all existing widgets in the folder list frame
         for widget in self.folder_list_frame.winfo_children():
@@ -206,19 +257,114 @@ class MainApp:
         
         # Create a FolderItem for each selected folder
         for folder_path in self.selected_folders:
+            # Determine initial favorite state, normalizing paths when possible
+            try:
+                normalized_path = file_path_utils.normalize_path(folder_path)
+                is_fav = normalized_path in self.favorite_folders
+            except Exception as exc:
+                # Fail soft if normalization fails; fall back to raw path membership
+                print(
+                    f"Error normalizing selected folder path {folder_path!r} "
+                    f"for favorites: {exc}"
+                )
+                is_fav = folder_path in self.favorite_folders
+            
             folder_item = FolderItem(
                 self.folder_list_frame,
                 folder_path,
-                self._remove_folder
+                self._remove_folder,
+                self._remove_planned_action,
+                toggle_favorite_callback=lambda p, fav, fp=folder_path: self._set_folder_favorite(fp, fav),
+                is_favorite=is_fav,
             )
             folder_item.frame.pack(fill=tk.X, padx=2, pady=2)
             
             # Store widget reference in dictionary
             self.folder_widgets[folder_path] = folder_item
     
+    def _format_mtime(self, mtime: float) -> str:
+        """Format a POSIX mtime value for display in the preview."""
+        # [Created] by openai/gpt-5.1 | 2025-11-14_02
+        try:
+            dt = datetime.datetime.fromtimestamp(mtime)
+            return dt.strftime("%Y-%m-%d %H:%M:%S")
+        except Exception:
+            return ""
+    
+    def _update_overwrite_previews(self) -> None:
+        """Rebuild per-folder overwrite previews from the current planned actions."""
+        # [Created] by openai/gpt-5.1 | 2025-11-14_02
+    
+        # Build per-folder list of planned overwrites, including timestamps and action refs
+        overwrites_by_folder = {folder: [] for folder in self.selected_folders}
+        for action in self.planned_actions:
+            dest_path = action.get("destination_path")
+            relative = str(action.get("relative_path", ""))
+            dest_mtime = action.get("destination_mtime")
+    
+            # Pre-format timestamp once for display; use destination mtime snapshot from scan
+            timestamp = self._format_mtime(dest_mtime) if dest_mtime is not None else ""
+    
+            if dest_path is None:
+                continue
+    
+            for base in self.selected_folders:
+                base_path = Path(base)
+                try:
+                    dest_path.relative_to(base_path)
+                    overwrites_by_folder[base].append(
+                        {
+                            "relative": relative,
+                            "timestamp": timestamp,
+                            "action": action,
+                        }
+                    )
+                    break
+                except ValueError:
+                    continue
+    
+        any_actions = False
+        for folder_path, widget in self.folder_widgets.items():
+            items = overwrites_by_folder.get(folder_path, [])
+            # Update per-folder preview under the folder name
+            if hasattr(widget, "update_preview"):
+                widget.update_preview(items)
+            # Track whether any actions are planned for enabling the Execute button
+            if items:
+                any_actions = True
+            # Show a clear post-scan status for all folders
+            widget.update_status("Scanned", "green")
+    
+        # Enable or disable Execute based on whether any actions remain
+        if any_actions:
+            if self.confirm_button:
+                self.confirm_button.config(state=tk.NORMAL)
+        else:
+            if self.confirm_button:
+                self.confirm_button.config(state=tk.DISABLED)
+            messagebox.showinfo(
+                "Nothing to Sync",
+                "All selected folders are already up to date. No files will be overwritten."
+            )
+    
+    def _remove_planned_action(self, action_to_remove: dict) -> None:
+        """Remove a single planned action from the queue and refresh previews."""
+        # [Created] by openai/gpt-5.1 | 2025-11-14_02
+        if not self.planned_actions:
+            return
+    
+        # Remove by identity; callbacks receive the original action dict instance
+        self.planned_actions = [
+            a for a in self.planned_actions
+            if a is not action_to_remove
+        ]
+    
+        # Rebuild previews and update Execute button state
+        self._update_overwrite_previews()
+    
     def _start_sync(self):
         """Run planning phase and show per-folder preview before actual sync."""
-        # [Modified] by openai/gpt-5.1 | 2025-11-14_01
+        # [Modified] by openai/gpt-5.1 | 2025-11-14_02
         
         # Check if already syncing
         if self.is_syncing:
@@ -264,48 +410,21 @@ class MainApp:
         # Store planned actions for confirmation stage
         self.planned_actions = actions
         
-        # Build per-folder list of files that will be overwritten
-        overwrites_by_folder = {folder: [] for folder in self.selected_folders}
-        for action in actions:
-            dest_path = action["destination_path"]
-            relative = str(action["relative_path"])
-            for base in self.selected_folders:
-                base_path = Path(base)
-                try:
-                    dest_path.relative_to(base_path)
-                    overwrites_by_folder[base].append(relative)
-                    break
-                except ValueError:
-                    continue
-        
-        any_actions = False
-        for folder_path, widget in self.folder_widgets.items():
-            lines = overwrites_by_folder.get(folder_path, [])
-            # Update per-folder preview under the folder name
-            if hasattr(widget, "update_preview"):
-                widget.update_preview(lines)
-            if lines:
-                any_actions = True
-                widget.update_status(f"{len(lines)} overwrite(s) planned", "orange")
-            else:
-                widget.update_status("No changes", "gray")
-        
         # Re-enable buttons after planning
         self.is_syncing = False
         self.browse_button.config(state=tk.NORMAL)
         self.sync_button.config(state=tk.NORMAL)
         
-        # Enable Confirm if there is work to do
-        if any_actions:
-            if self.confirm_button:
-                self.confirm_button.config(state=tk.NORMAL)
-        else:
-            if self.confirm_button:
-                self.confirm_button.config(state=tk.DISABLED)
-            messagebox.showinfo(
-                "Nothing to Sync",
-                "All selected folders are already up to date. No files will be overwritten."
-            )
+        # Build per-folder preview list of files that will be overwritten
+        # including last-modified timestamps and per-file removal "X" controls.
+        self._update_overwrite_previews()
+        
+        # Clear any queued scan events so they don't overwrite the preview status
+        while not self.event_queue.empty():
+            try:
+                self.event_queue.get_nowait()
+            except queue.Empty:
+                break
     
     def _confirm_sync(self):
         """Execute the planned sync actions after user confirmation."""
@@ -412,12 +531,12 @@ class MainApp:
     
     def _open_settings_window(self):
         """Open the settings configuration window."""
-        # [Created] by Claude Sonnet 4.5 | 2025-11-13_03
+        # [Created-or-Modified] by openai/gpt-5.1 | 2025-11-15_01
         
         # Create modal window
         settings_window = tk.Toplevel(self.root)
         settings_window.title("Settings")
-        settings_window.geometry("400x300")
+        settings_window.geometry("400x360")
         settings_window.transient(self.root)
         settings_window.grab_set()
         
@@ -471,15 +590,19 @@ class MainApp:
         ttk.Label(ignore_frame, text="Ignore Patterns:").pack(anchor=tk.W)
         ttk.Label(
             ignore_frame,
-            text="(comma-separated)",
+            text="(comma-separated; wraps automatically)",
             font=("TkDefaultFont", 8)
         ).pack(anchor=tk.W)
         
         current_patterns = self.config.get("ignore_patterns", [])
         patterns_str = ", ".join(current_patterns) if current_patterns else ""
-        ignore_entry = ttk.Entry(ignore_frame, width=40)
-        ignore_entry.insert(0, patterns_str)
-        ignore_entry.pack(fill=tk.X, pady=(5, 0))
+        ignore_text = tk.Text(
+            ignore_frame,
+            height=6,
+            wrap="word"
+        )
+        ignore_text.insert("1.0", patterns_str)
+        ignore_text.pack(fill=tk.X, pady=(5, 0))
         
         # Button frame
         button_frame = ttk.Frame(main_frame)
@@ -502,7 +625,7 @@ class MainApp:
                 backup_var.get(),
                 preserve_var.get(),
                 dryrun_var.get(),
-                ignore_entry.get()
+                ignore_text.get("1.0", "end")
             )
         )
         save_button.pack(side=tk.LEFT, padx=5)
@@ -517,7 +640,7 @@ class MainApp:
             dry_run: Whether to run in dry-run mode
             ignore_patterns_str: Comma-separated ignore patterns
         """
-        # [Modified] by Claude Sonnet 4.5 | 2025-11-13_04
+        # [Created-or-Modified] by openai/gpt-5.1 | 2025-11-15_01
         
         # Parse ignore patterns
         patterns = [p.strip() for p in ignore_patterns_str.split(",") if p.strip()]
@@ -544,6 +667,101 @@ class MainApp:
             "Configuration has been saved successfully."
         )
     
+    def _set_folder_favorite(self, folder_path: str, is_favorite: bool) -> None:
+        """Add or remove a folder from the favorites list and persist to config."""
+        # [Created-or-Modified] by [LLM model] | 2025-11-15_01
+        # Ignore missing or empty paths
+        if not folder_path:
+            return
+
+        try:
+            normalized = file_path_utils.normalize_path(folder_path)
+        except Exception as exc:
+            # Log and fail soft; GUI should not crash on bad path
+            print(f"Error normalizing favorite folder path {folder_path!r}: {exc}")
+            return
+
+        changed = False
+
+        if is_favorite:
+            if normalized not in self.favorite_folders:
+                self.favorite_folders.append(normalized)
+                changed = True
+        else:
+            if normalized in self.favorite_folders:
+                self.favorite_folders.remove(normalized)
+                changed = True
+
+        if changed:
+            self._save_favorites_to_config()
+
+    def _save_favorites_to_config(self) -> None:
+        """Persist favorite folders to config."""
+        # [Created] by openai/gpt-5.1 | 2025-11-15_01
+        self.config["folders_faves"] = list(self.favorite_folders)
+        config_sync.save_config(self.config)
+
+    def _load_favorite_folders(self) -> None:
+        """Load favorite folders into the selected folders list and update UI."""
+        # [Modified] by openai/gpt-5.1 | 2025-11-15_02
+
+        if not self.favorite_folders:
+            messagebox.showinfo(
+                "No Favorites",
+                "No favorite folders are configured in config.txt."
+            )
+            return
+
+        skipped: list[str] = []
+        added_any = False
+
+        for fav in self.favorite_folders:
+            try:
+                normalized = file_path_utils.normalize_path(fav)
+            except Exception as exc:
+                print(f"Error normalizing favorite folder {fav!r}: {exc}")
+                skipped.append(str(fav))
+                continue
+
+            # Validate folder has a .roo directory
+            if not file_path_utils.has_roo_dir(normalized):
+                skipped.append(normalized)
+                continue
+
+            if normalized not in self.selected_folders:
+                self.selected_folders.append(normalized)
+                added_any = True
+
+        if added_any:
+            self._update_folder_list_ui()
+
+        if skipped:
+            msg_lines = ["Some favorites are invalid and were skipped:"] + skipped
+            msg = "\n".join(msg_lines)
+            print(msg)
+            # Optional UX: inform the user once about skipped favorites
+            messagebox.showinfo("Favorites Skipped", msg)
+
+    def _save_current_selection_as_favorites(self) -> None:
+        """Save the current selected_folders as the new favorites and persist."""
+        # [Created-or-Modified] by [LLM model] | 2025-11-15_02
+        favs: list[str] = []
+        for p in self.selected_folders:
+            try:
+                favs.append(file_path_utils.normalize_path(p))
+            except Exception as exc:
+                print(f"Error normalizing selected folder for saving favorites {p!r}: {exc}")
+        # Remove duplicates while preserving order
+        seen = set()
+        unique = []
+        for p in favs:
+            if p not in seen:
+                seen.add(p)
+                unique.append(p)
+        self.favorite_folders = unique
+        self._save_favorites_to_config()
+        messagebox.showinfo("Favorites Saved", "Favorites saved from current selection.")
+
     def _update_dry_run_status(self):
         """Update the dry run status label based on current config."""
         # [Modified] by Claude Sonnet 4.5 | 2025-11-13_06
@@ -557,6 +775,15 @@ class MainApp:
                 )
             else:
                 self.dry_run_label.config(text="")
+    
+    def _on_mousewheel(self, event):
+        """Handle mouse wheel scrolling for the folder canvas.
+        
+        Args:
+            event: The mouse wheel event
+        """
+        # [Created] by Claude Sonnet 4.5 | 2025-11-14_01
+        self.folder_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
     
     def _update_ignore_patterns_display(self):
         """Update the ignore patterns display label based on current config."""

@@ -8,16 +8,21 @@ from tkinter import ttk
 
 class FolderItem:
     """A UI component representing a single folder in the folder list."""
-    # [Modified] by openai/gpt-5.1 | 2025-11-14_01
+    # [Modified] by openai/gpt-5.1 | 2025-11-14_02
     
-    def __init__(self, parent, folder_path: str, remove_callback):
+    def __init__(self, parent, folder_path: str, remove_callback, overwrite_remove_callback=None,
+                 toggle_favorite_callback=None, is_favorite: bool = False):
         """Initialize a folder item widget.
         
         Args:
             parent: The parent tkinter widget
             folder_path: The full path to the folder
             remove_callback: Callback function to call when remove button is clicked
+            overwrite_remove_callback: Callback when an individual planned overwrite is removed
+            toggle_favorite_callback: Callback when favorite star is toggled (receives folder_path, is_favorite)
+            is_favorite: Whether this folder is currently marked as favorite
         """
+        # [Modified] by openai/gpt-5-mini | 2025-11-15_01
         # Create main frame for this folder item
         self.frame = ttk.Frame(parent, relief=tk.FLAT, borderwidth=0)
         
@@ -25,8 +30,21 @@ class FolderItem:
         top_frame = ttk.Frame(self.frame)
         top_frame.pack(fill=tk.X)
         
-        # Store folder path
+        # Store folder path, callbacks, and favorite state
         self.folder_path = folder_path
+        self.overwrite_remove_callback = overwrite_remove_callback
+        self._toggle_favorite_callback = toggle_favorite_callback
+        self.is_favorite = is_favorite
+        
+        # Create favorite toggle button
+        # [Created] by openai/gpt-5-mini | 2025-11-15_01
+        self.favorite_button = ttk.Button(
+            top_frame,
+            text="★" if self.is_favorite else "☆",
+            width=3,
+            command=self._on_favorite_toggle
+        )
+        self.favorite_button.pack(side=tk.LEFT, padx=(5, 2), pady=2)
         
         # Create label showing the folder path
         self.label = ttk.Label(
@@ -34,7 +52,7 @@ class FolderItem:
             text=folder_path,
             anchor=tk.W
         )
-        self.label.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(5, 5), pady=2)
+        self.label.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(2, 5), pady=2)
         
         # Create progress bar
         self.progress_bar = ttk.Progressbar(
@@ -54,7 +72,7 @@ class FolderItem:
         )
         self.status_label.pack(side=tk.LEFT, padx=(0, 5), pady=2)
         
-        # Create remove button
+        # Create remove button for the entire folder
         self.remove_button = ttk.Button(
             top_frame,
             text="X",
@@ -63,16 +81,9 @@ class FolderItem:
         )
         self.remove_button.pack(side=tk.RIGHT, padx=(0, 5), pady=2)
         
-        # Preview label for planned overwrites (shown under the main row)
-        self.preview_label = ttk.Label(
-            self.frame,
-            text="",
-            anchor=tk.W,
-            justify=tk.LEFT,
-            font=("TkDefaultFont", 8),
-            foreground="gray"
-        )
-        self.preview_label.pack(fill=tk.X, padx=(20, 5), pady=(0, 2))
+        # Container for planned overwrite rows (shown under the main row)
+        self.preview_frame = ttk.Frame(self.frame)
+        self.preview_frame.pack(fill=tk.X, padx=(20, 5), pady=(0, 2))
     
     def update_status(self, text: str, color: str = "black"):
         """Update the status label text and color.
@@ -98,18 +109,64 @@ class FolderItem:
         else:
             self.progress_bar["value"] = 0
     
-    def update_preview(self, lines):
-        """Update the planned overwrite preview text for this folder item."""
-        # [Created] by openai/gpt-5.1 | 2025-11-14_01
-        if lines:
-            text = "\n".join(f"- {line}" for line in lines)
-        else:
-            text = ""
-        self.preview_label.config(text=text)
+    def update_preview(self, items):
+        """Update the planned overwrite preview UI for this folder item.
+        
+        Each item in `items` should be a dict with:
+            - relative: Relative file path within the sync scope
+            - timestamp: Human-readable last modified timestamp string
+            - action: The underlying planned action object
+        """
+        # [Modified] by openai/gpt-5.1 | 2025-11-14_02
+        
+        # Clear any existing rows
+        for child in self.preview_frame.winfo_children():
+            child.destroy()
+        
+        if not items:
+            return
+        
+        for item in items:
+            row_frame = ttk.Frame(self.preview_frame)
+            row_frame.pack(fill=tk.X, pady=(0, 1))
+            
+            text = f"- {item.get('relative', '')}  {item.get('timestamp', '')}"
+            label = ttk.Label(
+                row_frame,
+                text=text,
+                anchor=tk.W,
+                justify=tk.LEFT,
+                font=("TkDefaultFont", 8),
+                foreground="gray"
+            )
+            label.pack(side=tk.LEFT, fill=tk.X, expand=True)
+            
+            # Per-file "X" button to remove this planned overwrite from the queue
+            if self.overwrite_remove_callback is not None and "action" in item:
+                remove_button = ttk.Button(
+                    row_frame,
+                    text="X",
+                    width=2,
+                    command=lambda action=item["action"]: self.overwrite_remove_callback(action)
+                )
+                remove_button.pack(side=tk.RIGHT, padx=(5, 0))
     
     def reset_status(self):
-        """Reset the status label and progress bar to initial states."""
-        # [Modified] by openai/gpt-5.1 | 2025-11-14_01
+        """Reset the status label, progress bar, and preview area to initial states."""
+        # [Modified] by openai/gpt-5.1 | 2025-11-14_02
         self.status_label.config(text="", foreground="black")
         self.progress_bar["value"] = 0
-        self.preview_label.config(text="")
+        for child in self.preview_frame.winfo_children():
+            child.destroy()
+    
+    def _on_favorite_toggle(self):
+        """Handle favorite button toggle.
+        
+        Flips the favorite state, updates the button text, and calls the callback if provided.
+        """
+        # [Created] by openai/gpt-5-mini | 2025-11-15_01
+        self.is_favorite = not self.is_favorite
+        self.favorite_button.config(text="★" if self.is_favorite else "☆")
+        
+        if self._toggle_favorite_callback is not None:
+            self._toggle_favorite_callback(self.folder_path, self.is_favorite)

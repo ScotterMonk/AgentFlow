@@ -96,3 +96,85 @@ def test_include_roomodes_behavior(tmp_path):
     cfg_file2.write_text("include_roomodes=false\n", encoding="utf-8")
     cfg2 = config_sync.load_config(str(cfg_file2))
     assert cfg2.get("root_allowlist", []) == []
+
+# [Created-or-Modified] by Claude Sonnet 4.5 | 2025-11-15_01
+def test_folders_faves_parsing_list(tmp_path):
+    """
+    Test that folders_faves config is correctly parsed as a list from config file.
+    """
+    cfg_file = tmp_path / "config_faves_test1.txt"
+    cfg_file.write_text("folders_faves=/one,/two,/three\n", encoding="utf-8")
+    cfg = config_sync.load_config(str(cfg_file))
+    assert isinstance(cfg["folders_faves"], list)
+    assert cfg["folders_faves"] == ["/one", "/two", "/three"]
+
+def test_folders_faves_missing_defaults_to_empty(tmp_path):
+    """
+    Test that folders_faves defaults to empty list when not specified in config.
+    """
+    cfg_file = tmp_path / "no_faves_config.txt"
+    # Point to non-existent file to get defaults
+    cfg = config_sync.load_config(str(cfg_file))
+    assert isinstance(cfg.get("folders_faves"), list)
+    assert cfg.get("folders_faves") == config_sync.DEFAULTS["folders_faves"]
+    assert cfg.get("folders_faves") == []
+
+def test_folders_faves_round_trip(tmp_path):
+    """
+    Test that folders_faves can be saved and loaded correctly (round-trip).
+    """
+    cfg_file = tmp_path / "config_roundtrip.txt"
+    # Create config with folders_faves
+    cfg_in = {
+        "folders_faves": ["/a", "/b"],
+        "ignore_patterns": [],
+        "backup_mode": "none"
+    }
+    # Save config
+    ok = config_sync.save_config(cfg_in, path=str(cfg_file))
+    assert ok is True
+    assert cfg_file.exists()
+    # Reload and verify
+    reloaded = config_sync.load_config(str(cfg_file))
+    assert isinstance(reloaded["folders_faves"], list)
+    assert reloaded["folders_faves"] == ["/a", "/b"]
+def test_comma_space_parsing_for_lists(tmp_path):
+    # [Created-or-Modified] by Claude Sonnet 4.5 | 2025-11-15_02
+    """
+    Config list values should parse correctly when values are separated by ', '.
+    """
+    cfg_file = tmp_path / "config_comma_space.txt"
+    cfg_file.write_text(
+        "ignore_patterns=.git, build, __pycache__\n"
+        "root_allowlist=.roomodes, .gitignore, README.md\n"
+        "folders_faves=/one, /two, /three\n",
+        encoding="utf-8",
+    )
+    cfg = config_sync.load_config(str(cfg_file))
+    assert isinstance(cfg["ignore_patterns"], list)
+    assert isinstance(cfg["root_allowlist"], list)
+    assert isinstance(cfg["folders_faves"], list)
+    assert cfg["ignore_patterns"] == [".git", "build", "__pycache__"]
+    assert cfg["root_allowlist"] == [".roomodes", ".gitignore", "README.md"]
+    assert cfg["folders_faves"] == ["/one", "/two", "/three"]
+
+
+def test_save_config_uses_comma_space_for_lists(tmp_path):
+    # [Created-or-Modified] by Claude Sonnet 4.5 | 2025-11-15_02
+    """
+    save_config should serialize list values using ', ' between items.
+    """
+    cfg_file = tmp_path / "config_pretty_lists.txt"
+    config_in = {
+        "ignore_patterns": [".git", "build", "__pycache__"],
+        "root_allowlist": [".roomodes", "README.md"],
+        "folders_faves": ["/one", "/two"],
+        "backup_mode": "none",
+    }
+    ok = config_sync.save_config(config_in, path=str(cfg_file))
+    assert ok is True
+    text = cfg_file.read_text(encoding="utf-8")
+    assert "ignore_patterns=.git, build, __pycache__" in text
+    assert "root_allowlist=.roomodes, README.md" in text
+    assert "folders_faves=/one, /two" in text
+
