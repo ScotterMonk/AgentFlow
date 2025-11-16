@@ -16,9 +16,13 @@ Tests: `pytest tests/`
 All functions/classes MUST include: `# [Created-or-Modified] by [LLM model] | yyyy-mm-dd_[iteration]`
 
 ### Naming Convention
-Domain-suffix pattern: `{domain}_{specific}` not `{specific}_{domain}`
-- Correct: `utils_sync/`, `sync_core.py`, `config_sync.py`
-- Wrong: `sync_utils/`, `core_sync.py`, `sync_config.py`
+- Use for naming folders, files, functions, variables, classes, db columns, etc.
+    Pattern: {specific}_{domain} -> {domain}_{specific}
+    Examples:
+    - `admin_dashboard_utils.py`, `user_dashboard_utils.py` -> `dashboard_utils_admin.py`, `dashboard_utils_user.py`
+    - `scott_utils.py`, `kim_utils.py` -> `utils_scott.py`, `utils_kim.py`
+    - `scott_core_utils.py`, `kim_core_utils.py` -> `utils_scott_core.py`, `utils_kim_core.py`
+    - `edit_user`, `add_user` -> `user_edit`, `user_add`
 
 ### File Sync Behavior
 - Scans `.roo/` subdirectories ONLY (not entire project folders)
@@ -26,13 +30,18 @@ Domain-suffix pattern: `{domain}_{specific}` not `{specific}_{domain}`
 - Root-level files require explicit `root_allowlist` in config.txt
 - Atomic copy: temp file + rename (not direct copy)
 - Timestamped backups: `filename_YYYYMMDDTHHMMSSZ.bak` format
+- Dry-run mode emits EventType.SKIP events without file operations
 
 ### Configuration
 Settings in `config.txt` (NOT .ini, .json, or .yaml):
 - `root_allowlist`: Comma-separated list of root files to sync (e.g., `.roomodes`)
 - `backup_mode`: "timestamped" or "none"
 - `preserve_mtime`: Must be true to maintain file timestamps
-- `include_roo_only`: Must be true (project requirement)
+
+### Progress Events
+- Thread-safe event queue system for GUI/CLI coordination
+- EventType enum in utils_sync/progress_events.py
+- Workers use SyncWorker.run() on background threads
 
 ### Testing
 - Integration tests use `test_integration/` with project_a and project_b folders

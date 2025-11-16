@@ -117,6 +117,8 @@ Use the interface to:
 - Select multiple folders containing `.roo` directories
 - Configure sync settings via the Settings window (dry-run mode, backup options)
 - Monitor live progress during synchronization
+- Overwrite preview panel that shows planned overwrites before execution.
+- Favorite folder sets (based on folders_faves in config) to quickly re-load common project combinations.
 
 ### CLI Usage
 Run headless synchronization with:

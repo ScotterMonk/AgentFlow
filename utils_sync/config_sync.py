@@ -10,7 +10,6 @@ except ImportError:
 DEFAULTS = {
     "window_width": 800,
     "window_height": 480,
-    "include_roo_only": True,
     "ignore_patterns": [".git", "__pycache__", ".venv", ".idea", ".vscode", "node_modules", "*.pyc"],
     "backup_mode": "timestamped",
     "preserve_mtime": True,
@@ -66,7 +65,7 @@ def load_config(config_path: Optional[str] = None):
     - Lines beginning with '#' or empty lines are skipped.
     - Keys and values are trimmed of whitespace.
     - Integers: window_width, window_height (must be positive).
-    - Booleans: include_roo_only, preserve_mtime, dry_run (true/false, case-insensitive).
+    - Booleans: preserve_mtime, dry_run (true/false, case-insensitive).
     - ignore_patterns: comma-separated list -> list of strings.
     - root_allowlist: comma-separated list -> list of strings.
     - folders_faves: comma-separated list -> list of strings.
@@ -103,7 +102,7 @@ def load_config(config_path: Optional[str] = None):
                     except ValueError:
                         # leave default on invalid int
                         pass
-                elif key in ("include_roo_only", "preserve_mtime", "dry_run"):
+                elif key in ("preserve_mtime", "dry_run"):
                     config[key] = _to_bool(val)
                 elif key == "ignore_patterns":
                     parts: List[str] = [p.strip() for p in val.split(",") if p.strip()]
@@ -132,8 +131,8 @@ def load_config(config_path: Optional[str] = None):
         config["root_allowlist"] = DEFAULTS["root_allowlist"].copy()
     if not isinstance(config.get("folders_faves"), list):
         config["folders_faves"] = DEFAULTS["folders_faves"].copy()
-
-    for b in ("include_roo_only", "preserve_mtime", "dry_run"):
+    
+    for b in ("preserve_mtime", "dry_run"):
         if not isinstance(config.get(b), bool):
             config[b] = bool(config.get(b))
 

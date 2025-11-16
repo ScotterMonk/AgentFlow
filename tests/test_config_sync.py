@@ -12,7 +12,6 @@ def test_load_config_defaults(tmp_path):
     assert isinstance(cfg, dict)
     assert cfg.get("window_width") == config_sync.DEFAULTS["window_width"]
     assert cfg.get("window_height") == config_sync.DEFAULTS["window_height"]
-    assert cfg.get("include_roo_only") is True
     assert isinstance(cfg.get("ignore_patterns"), list)
     assert "node_modules" in cfg.get("ignore_patterns")
 
@@ -22,7 +21,6 @@ def test_save_and_load_config(tmp_path):
     config_in = {
         "window_width": 900,
         "window_height": 700,
-        "include_roo_only": False,
         "ignore_patterns": [".git", "build", "__pycache__"],
         "backup_mode": "none",
         "preserve_mtime": False,
@@ -38,7 +36,6 @@ def test_save_and_load_config(tmp_path):
     loaded = config_sync.load_config(str(cfg_file))
     assert loaded["window_width"] == 900
     assert loaded["window_height"] == 700
-    assert loaded["include_roo_only"] is False
     assert loaded["preserve_mtime"] is False
     assert loaded["dry_run"] is True
     assert loaded["backup_mode"] == "none"
@@ -78,24 +75,6 @@ def test_root_allowlist_parsing(tmp_path):
     assert isinstance(cfg3["root_allowlist"], list)
     assert cfg3["root_allowlist"] == []
 
-@pytest.mark.xfail(reason="include_roomodes feature not yet implemented in config_sync.py")
-def test_include_roomodes_behavior(tmp_path):
-    """
-    Test include_roomodes config behavior (adds .roomodes to root_allowlist).
-    This test documents expected behavior for the include_roomodes feature.
-    """
-    # Test 1: Verify include_roomodes=true adds .roomodes to allowlist
-    cfg_file = tmp_path / "config_test_roomodes1.txt"
-    cfg_file.write_text("include_roomodes=true\n", encoding="utf-8")
-    cfg = config_sync.load_config(str(cfg_file))
-    assert ".roomodes" in cfg.get("root_allowlist", []), \
-        "include_roomodes=true should add .roomodes to root_allowlist"
-    
-    # Test 2: Verify include_roomodes=false does not add .roomodes
-    cfg_file2 = tmp_path / "config_test_roomodes2.txt"
-    cfg_file2.write_text("include_roomodes=false\n", encoding="utf-8")
-    cfg2 = config_sync.load_config(str(cfg_file2))
-    assert cfg2.get("root_allowlist", []) == []
 
 # [Created-or-Modified] by Claude Sonnet 4.5 | 2025-11-15_01
 def test_folders_faves_parsing_list(tmp_path):
