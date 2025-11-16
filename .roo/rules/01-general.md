@@ -86,15 +86,47 @@ Look for the unifying principle that eliminates multiple components.
 Use `jinja-html` language mode.
 
 ### Naming Conventions
-- Use for naming folders, files, functions, variables, classes, db columns, etc.
-    Pattern: {specific}_{domain} -> {domain}_{specific}
-    Examples:
-    - `admin_dashboard_utils.py`, `user_dashboard_utils.py` -> `dashboard_utils_admin.py`, `dashboard_utils_user.py`
-    - `scott_utils.py`, `kim_utils.py` -> `utils_scott.py`, `utils_kim.py`
-    - `scott_core_utils.py`, `kim_core_utils.py` -> `utils_scott_core.py`, `utils_kim_core.py`
-    - `edit_user`, `add_user` -> `user_edit`, `user_add`
-- Snake_case for functions, variables, database tables & columns.
-- PascalCase for classes.
+Rationale: Domain-first naming groups related code, improves IDE autocomplete, and makes file navigation logical.
+Pattern: {specific}_{domain} → {domain}_{specific}
+Definitions:
+- Domain: Core subject area (user, dashboard, config, sync, auth, billing)
+- Specific: Qualifier or action (admin, scott, core, edit, add, delete, list)
+Case Rules:
+- Files, functions, variables, DB tables/columns: snake_case
+- Classes: PascalCase
+Examples by Type:
+Files:
+- `admin_dashboard_utils.py` → `dashboard_utils_admin.py`
+- `scott_core_utils.py` → `utils_scott_core.py`
+Functions/Variables:
+- `edit_user` → `user_edit`
+- `add_user` → `user_add`
+Classes:
+- `AdminPerson` → `PersonAdmin`
+Do NOT rename without approval:
+- Public APIs (HTTP routes, library functions, CLI flags)
+- Database tables/columns (requires migration)
+- Standard Python patterns (`__init__.py`, `setUp()`)
+- Framework conventions (Django's `settings.py`)
+Prefer to:
+- Apply to new code always
+- Refactor internal names when editing that code
+- Keep tests/usage in sync
+Decision checklist:
+1) Public API or DB? → Get approval first
+2) Follows {specific}_{domain}? → Needs change
+3) Actively editing file? → Good time to rename
+4) Can identify domain/specific? → Proceed; otherwise ask
+Edge cases:
+- Multiple words: Use underscores (`utils_admin_user_profile.py`)
+- Ambiguous: Ask user or use most specific grouping
+CRITICAL: When renaming, refactor all references (imports, calls, docs, tests)
+After renaming, verify:
+- All imports updated
+- All function calls updated
+- Tests still pass
+- Documentation references updated
+- No VS Code Problems panel errors
 
 ### Code Standards
 - All functions/classes MUST include: `# [Created-or-Modified] by [LLM model] | yyyy-mm-dd_[iteration]`

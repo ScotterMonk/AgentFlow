@@ -16,13 +16,7 @@ Tests: `pytest tests/`
 All functions/classes MUST include: `# [Created-or-Modified] by [LLM model] | yyyy-mm-dd_[iteration]`
 
 ### Naming Convention
-- Use for naming folders, files, functions, variables, classes, db columns, etc.
-    Pattern: {specific}_{domain} -> {domain}_{specific}
-    Examples:
-    - `admin_dashboard_utils.py`, `user_dashboard_utils.py` -> `dashboard_utils_admin.py`, `dashboard_utils_user.py`
-    - `scott_utils.py`, `kim_utils.py` -> `utils_scott.py`, `utils_kim.py`
-    - `scott_core_utils.py`, `kim_core_utils.py` -> `utils_scott_core.py`, `utils_kim_core.py`
-    - `edit_user`, `add_user` -> `user_edit`, `user_add`
+Follow `Naming Conventions` section in `.roo/rules/01-general.md`
 
 ### File Sync Behavior
 - Scans `.roo/` subdirectories ONLY (not entire project folders)
