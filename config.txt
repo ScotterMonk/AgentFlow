@@ -1,8 +1,8 @@
 window_width=800
 window_height=600
-ignore_patterns=.git, __pycache__, .venv, .idea, .vscode, node_modules, *.pyc, database_schema.md, 02-database.md, useful.md, .roo\docs
+ignore_patterns=.git, __pycache__, .venv, .idea, .vscode, node_modules, *.pyc, database_schema.md, 02-database.md, useful.md, .roo\docs, notes
 backup_mode=timestamped
 preserve_mtime=true
-dry_run=false
+dry_run=true
 root_allowlist=.roomodes
 folders_faves=D:\Dropbox\Projects\_MediaShare\app, D:\Dropbox\Projects\2ndFoundation\app, D:\Dropbox\Projects\AgentFlow

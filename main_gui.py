@@ -38,8 +38,8 @@ class MainApp:
         
         # Set up main window
         self.root.title("Agentflow File Sync")
-        window_width = self.config.get("window_width", 800)
-        window_height = self.config.get("window_height", 600)
+        window_width = self.config["window_width"]
+        window_height = self.config["window_height"]
         self.root.geometry(f"{window_width}x{window_height}")
         
         # Create event queue for progress updates
@@ -107,26 +107,26 @@ class MainApp:
             main_frame,
             text="Synchronize files across multiple folders with intelligent conflict resolution."
         )
-        desc_label.grid(row=1, column=0, pady=(0, 2), sticky=tk.W)
+        desc_label.grid(row=1, column=0, pady=(0, 0), sticky=tk.W)
         
         # Dry run status label
         self.dry_run_label = ttk.Label(main_frame, text="")
-        self.dry_run_label.grid(row=2, column=0, pady=(0, 2), sticky=tk.W)
+        self.dry_run_label.grid(row=2, column=0, pady=(0, 0), sticky=tk.W)
         
         # Ignore patterns label
-        self.ignore_patterns_label = ttk.Label(main_frame, text="")
-        self.ignore_patterns_label.grid(row=3, column=0, pady=(0, 3), sticky=tk.W)
+        #self.ignore_patterns_label = ttk.Label(main_frame, text="")
+        #self.ignore_patterns_label.grid(row=3, column=0, pady=(0, 0), sticky=tk.W)
         
         # Folder list frame
-        folder_frame = ttk.Frame(main_frame, relief=tk.SUNKEN, borderwidth=1)
-        folder_frame.grid(row=4, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), pady=(0, 3))
+        folder_frame = tk.Frame(main_frame, relief=tk.SOLID, borderwidth=1)
+        folder_frame.grid(row=4, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), pady=(1, 7))
         folder_frame.columnconfigure(0, weight=1)
         folder_frame.rowconfigure(0, weight=1)
 
         # Create scrollable canvas + frame for folder list
         self.folder_canvas = tk.Canvas(
             folder_frame,
-            borderwidth=0,
+            borderwidth=1,
             highlightthickness=0
         )
         self.folder_canvas.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
