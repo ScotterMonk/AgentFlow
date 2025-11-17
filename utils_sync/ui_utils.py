@@ -84,6 +84,8 @@ class FolderItem:
         # Container for planned overwrite rows (shown under the main row)
         self.preview_frame = ttk.Frame(self.frame)
         self.preview_frame.pack(fill=tk.X, padx=(20, 5), pady=(0, 2))
+        # Map relative file paths to the label widgets for their preview rows
+        self._preview_rows = {}
     
     def update_status(self, text: str, color: str = "black"):
         """Update the status label text and color.
@@ -118,15 +120,38 @@ class FolderItem:
             - action: The underlying planned action object
         """
         # [Modified] by openai/gpt-5.1 | 2025-11-14_02
+        # [Modified] by openai/gpt-5.1 | 2025-11-16_01
         
-        # Clear any existing rows
+        # Clear any existing rows and label mapping
         for child in self.preview_frame.winfo_children():
             child.destroy()
+        
+        # Reset preview mapping so executed rows can be marked later
+        self._preview_rows = {}
         
         if not items:
             return
         
-        for item in items:
+        # Sort so that:
+        # - Root-level files (no "/") appear first
+        # - Then entries are grouped by their first path segment so "rules" comes before "rules-architect"
+        # - Within each group, paths are sorted lexicographically, giving patterns like:
+        #   "root" → "root/rules" → "root/rules-architect" → "root/rules-ask"
+        def _sort_key(item):
+            rel = item.get("relative", "") or ""
+            rel_str = str(rel)
+            
+            # Root-level: no "/" in path
+            if "/" not in rel_str:
+                return (0, rel_str.lower())
+            
+            # Nested: group by first segment so "rules/..." sorts before "rules-architect/..."
+            first_segment = rel_str.split("/", 1)[0]
+            return (1, first_segment.lower(), rel_str.lower())
+        
+        sorted_items = sorted(items, key=_sort_key)
+        
+        for item in sorted_items:
             row_frame = ttk.Frame(self.preview_frame)
             row_frame.pack(fill=tk.X, pady=(0, 1))
             
@@ -140,6 +165,10 @@ class FolderItem:
                 foreground="gray"
             )
             label.pack(side=tk.LEFT, fill=tk.X, expand=True)
+            
+            # Track label widget by relative path for later updates (e.g., marking as replaced)
+            rel_key = str(item.get("relative", "") or "")
+            self._preview_rows[rel_key] = label
             
             # Per-file "X" button to remove this planned overwrite from the queue
             if self.overwrite_remove_callback is not None and "action" in item:
@@ -158,6 +187,22 @@ class FolderItem:
         self.progress_bar["value"] = 0
         for child in self.preview_frame.winfo_children():
             child.destroy()
+        # Reset preview label mapping as well
+        self._preview_rows = {}
+    
+    def mark_preview_replaced(self, relative_path: str) -> None:
+        """Mark a single preview row as replaced for the given relative path."""
+        # [Created-or-Modified] by openai/gpt-5.1 | 2025-11-16_01
+        if not relative_path:
+            return
+        key = str(relative_path)
+        label = getattr(self, "_preview_rows", {}).get(key)
+        if label is None:
+            return
+        # Prefix with a checkmark once and change color to green to indicate replacement
+        current_text = label.cget("text")
+        if not current_text.startswith("✓ "):
+            label.config(text=f"✓ {current_text}", foreground="green")
     
     def _on_favorite_toggle(self):
         """Handle favorite button toggle.

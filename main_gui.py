@@ -150,9 +150,9 @@ class MainApp:
             lambda e: self.folder_canvas.configure(scrollregion=self.folder_canvas.bbox("all"))
         )
         
-        # Enable mouse wheel scrolling
-        self.folder_canvas.bind("<MouseWheel>", self._on_mousewheel)
-        self.folder_list_frame.bind("<MouseWheel>", self._on_mousewheel)
+        # Enable mouse wheel scrolling anywhere in the main window
+        # Bind at the application level so scroll works even when child widgets have focus
+        self.root.bind_all("<MouseWheel>", self._on_mousewheel)
         
         # Bottom button frame
         button_frame = ttk.Frame(main_frame)
@@ -199,13 +199,22 @@ class MainApp:
         )
         self.save_favorites_button.grid(row=0, column=4, padx=(0, 5))
         
+        # Delete .bak files button (disabled until at least one folder is selected)
+        self.delete_bak_button = ttk.Button(
+            button_frame,
+            text="Delete .bak files",
+            command=self._delete_bak_files,
+            state=tk.DISABLED,
+        )
+        self.delete_bak_button.grid(row=0, column=5, padx=(0, 5))
+        
         # Settings button
         self.settings_button = ttk.Button(
             button_frame,
             text="Settings",
             command=self._open_settings_window
         )
-        self.settings_button.grid(row=0, column=5)
+        self.settings_button.grid(row=0, column=6)
     
     def _open_folder_dialog(self):
         """Open folder selection dialog and add valid folder to list."""
@@ -281,6 +290,13 @@ class MainApp:
             
             # Store widget reference in dictionary
             self.folder_widgets[folder_path] = folder_item
+        
+        # Enable or disable Delete .bak files button based on whether any folders are selected
+        if getattr(self, "delete_bak_button", None) is not None:
+            if self.selected_folders:
+                self.delete_bak_button.config(state=tk.NORMAL)
+            else:
+                self.delete_bak_button.config(state=tk.DISABLED)
     
     def _format_mtime(self, mtime: float) -> str:
         """Format a POSIX mtime value for display in the preview."""
@@ -460,9 +476,9 @@ class MainApp:
         if self.confirm_button:
             self.confirm_button.config(state=tk.DISABLED)
         
-        # Reset folder widget statuses
+        # Indicate execution phase has started without clearing the file preview lists
         for widget in self.folder_widgets.values():
-            widget.reset_status()
+            widget.update_status("Executing...", "orange")
         
         # Start background worker to execute planned actions
         folder_paths = [Path(p) for p in self.selected_folders]
@@ -471,7 +487,7 @@ class MainApp:
     
     def _process_events(self):
         """Process events from the event queue periodically."""
-        # [Modified] by openai/gpt-5.1 | 2025-11-14_01
+        # [Modified] by openai/gpt-5.1 | 2025-11-16_01
         
         # Process all events currently in the queue
         while not self.event_queue.empty():
@@ -480,15 +496,15 @@ class MainApp:
                 
                 # Handle different event types using the current ProgressEvent schema
                 if event.event_type == EventType.SCAN_START:
-                    # Global scan start – mark all folders as scanning
+                    # Global scan start – mark all folders as scanned
                     for widget in self.folder_widgets.values():
-                        widget.update_status("Scanning...", "blue")
+                        widget.update_status("Scanned", "green")
                 
                 elif event.event_type == EventType.SCAN_FILE:
                     # Per-folder scan notification when folder is available
                     folder_widget = self.folder_widgets.get(event.folder)
                     if folder_widget:
-                        folder_widget.update_status("Scanning...", "blue")
+                        folder_widget.update_status("Scanned", "green")
                 
                 elif event.event_type == EventType.COPY:
                     # A file was copied; show generic syncing state
@@ -511,6 +527,22 @@ class MainApp:
                     self.sync_button.config(state=tk.NORMAL)
                     self.browse_button.config(state=tk.NORMAL)
                     
+                    # Update folder statuses to a clear completed state
+                    if self.config.get("dry_run", False):
+                        for widget in self.folder_widgets.values():
+                            widget.update_status("Dry run complete", "blue")
+                    else:
+                        for widget in self.folder_widgets.values():
+                            widget.update_status("Completed", "green")
+                    
+                    # For real executions, mark each listed file as replaced in the preview
+                    if not self.config.get("dry_run", False):
+                        for widget in self.folder_widgets.values():
+                            preview_rows = getattr(widget, "_preview_rows", {})
+                            for rel_key in list(preview_rows.keys()):
+                                if hasattr(widget, "mark_preview_replaced"):
+                                    widget.mark_preview_replaced(rel_key)
+                    
                     # Show completion message
                     if self.config.get("dry_run", False):
                         messagebox.showinfo(
@@ -531,19 +563,19 @@ class MainApp:
     
     def _open_settings_window(self):
         """Open the settings configuration window."""
-        # [Created-or-Modified] by openai/gpt-5.1 | 2025-11-15_01
-        
+        # [Created-or-Modified] by openai/gpt-5.1 | 2025-11-16_01
+
         # Create modal window
         settings_window = tk.Toplevel(self.root)
         settings_window.title("Settings")
-        settings_window.geometry("400x360")
+        settings_window.geometry("600x520")
         settings_window.transient(self.root)
         settings_window.grab_set()
-        
+
         # Main frame with padding
         main_frame = ttk.Frame(settings_window, padding="15")
         main_frame.pack(fill=tk.BOTH, expand=True)
-        
+
         # Title
         title_label = ttk.Label(
             main_frame,
@@ -551,7 +583,7 @@ class MainApp:
             font=("TkDefaultFont", 12, "bold")
         )
         title_label.pack(pady=(0, 10))
-        
+
         # Backup mode
         backup_frame = ttk.Frame(main_frame)
         backup_frame.pack(fill=tk.X, pady=5)
@@ -565,7 +597,7 @@ class MainApp:
             width=15
         )
         backup_combo.pack(side=tk.LEFT, padx=(10, 0))
-        
+
         # Preserve mtime
         preserve_var = tk.BooleanVar(value=self.config.get("preserve_mtime", True))
         preserve_check = ttk.Checkbutton(
@@ -574,7 +606,7 @@ class MainApp:
             variable=preserve_var
         )
         preserve_check.pack(fill=tk.X, pady=5)
-        
+
         # Dry run
         dryrun_var = tk.BooleanVar(value=self.config.get("dry_run", False))
         dryrun_check = ttk.Checkbutton(
@@ -583,7 +615,7 @@ class MainApp:
             variable=dryrun_var
         )
         dryrun_check.pack(fill=tk.X, pady=5)
-        
+
         # Ignore patterns
         ignore_frame = ttk.Frame(main_frame)
         ignore_frame.pack(fill=tk.X, pady=5)
@@ -593,21 +625,41 @@ class MainApp:
             text="(comma-separated; wraps automatically)",
             font=("TkDefaultFont", 8)
         ).pack(anchor=tk.W)
-        
+
         current_patterns = self.config.get("ignore_patterns", [])
         patterns_str = ", ".join(current_patterns) if current_patterns else ""
         ignore_text = tk.Text(
             ignore_frame,
-            height=6,
+            height=5,
             wrap="word"
         )
         ignore_text.insert("1.0", patterns_str)
         ignore_text.pack(fill=tk.X, pady=(5, 0))
-        
+
+        # Favorite folders from config (folders_faves)
+        faves_frame = ttk.Frame(main_frame)
+        faves_frame.pack(fill=tk.X, pady=5)
+        ttk.Label(faves_frame, text="Favorite Folders (config.txt):").pack(anchor=tk.W)
+        ttk.Label(
+            faves_frame,
+            text="(comma-separated folder paths; wraps automatically)",
+            font=("TkDefaultFont", 8)
+        ).pack(anchor=tk.W)
+
+        current_faves = self.config.get("folders_faves", [])
+        faves_str = ", ".join(current_faves) if current_faves else ""
+        faves_text = tk.Text(
+            faves_frame,
+            height=8,
+            wrap="word"
+        )
+        faves_text.insert("1.0", faves_str)
+        faves_text.pack(fill=tk.X, pady=(5, 0))
+
         # Button frame
         button_frame = ttk.Frame(main_frame)
         button_frame.pack(pady=(15, 0))
-        
+
         # Cancel button
         cancel_button = ttk.Button(
             button_frame,
@@ -615,7 +667,7 @@ class MainApp:
             command=settings_window.destroy
         )
         cancel_button.pack(side=tk.LEFT, padx=5)
-        
+
         # Save button
         save_button = ttk.Button(
             button_frame,
@@ -625,12 +677,21 @@ class MainApp:
                 backup_var.get(),
                 preserve_var.get(),
                 dryrun_var.get(),
-                ignore_text.get("1.0", "end")
+                ignore_text.get("1.0", "end"),
+                faves_text.get("1.0", "end")
             )
         )
         save_button.pack(side=tk.LEFT, padx=5)
     
-    def _save_settings(self, window, backup_mode, preserve_mtime, dry_run, ignore_patterns_str):
+    def _save_settings(
+        self,
+        window,
+        backup_mode,
+        preserve_mtime,
+        dry_run,
+        ignore_patterns_str,
+        folders_faves_str,
+    ):
         """Save settings to config and persist to file.
         
         Args:
@@ -639,28 +700,44 @@ class MainApp:
             preserve_mtime: Whether to preserve modification times
             dry_run: Whether to run in dry-run mode
             ignore_patterns_str: Comma-separated ignore patterns
+            folders_faves_str: Comma-separated favorite folder paths
         """
-        # [Created-or-Modified] by openai/gpt-5.1 | 2025-11-15_01
-        
+        # [Created-or-Modified] by openai/gpt-5.1 | 2025-11-16_01
+
         # Parse ignore patterns
         patterns = [p.strip() for p in ignore_patterns_str.split(",") if p.strip()]
-        
+
+        # Parse favorite folders (folders_faves)
+        raw_faves = [p.strip() for p in folders_faves_str.split(",") if p.strip()]
+        normalized_faves = []
+        for fav in raw_faves:
+            try:
+                normalized_faves.append(file_path_utils.normalize_path(fav))
+            except Exception as exc:
+                # Fail soft on bad paths; keep original string
+                print(f"Error normalizing favorite folder from settings {fav!r}: {exc}")
+                normalized_faves.append(fav)
+
         # Update config
         self.config["backup_mode"] = backup_mode
         self.config["preserve_mtime"] = preserve_mtime
         self.config["dry_run"] = dry_run
         self.config["ignore_patterns"] = patterns
-        
+        self.config["folders_faves"] = normalized_faves
+
+        # Keep in-memory favorites in sync with config
+        self.favorite_folders = list(normalized_faves)
+
         # Persist to file
         config_sync.save_config(self.config)
-        
+
         # Update status displays
         self._update_dry_run_status()
         self._update_ignore_patterns_display()
-        
+
         # Close window
         window.destroy()
-        
+
         # Show confirmation
         messagebox.showinfo(
             "Settings Saved",
@@ -761,6 +838,81 @@ class MainApp:
         self.favorite_folders = unique
         self._save_favorites_to_config()
         messagebox.showinfo("Favorites Saved", "Favorites saved from current selection.")
+        
+    def _delete_bak_files(self) -> None:
+        """Delete all .bak backup files in the listed folders."""
+        # [Created-or-Modified] by openai/gpt-5.1 | 2025-11-16_02
+        if not self.selected_folders:
+            messagebox.showinfo(
+                "Delete .bak Files",
+                "No folders are selected. Select folders before deleting backups."
+            )
+            return
+        
+        confirm = messagebox.askyesno(
+            "Delete .bak Files",
+            "This will permanently delete all backup (.bak) files\n"
+            "in the listed folders.\n\nProceed?"
+        )
+        if not confirm:
+            return
+        
+        deleted_count = 0
+        errors: list[str] = []
+        
+        for folder in self.selected_folders:
+            base_path = Path(folder)
+            if not base_path.exists():
+                continue
+            
+            # Delete all .bak files anywhere under this base folder
+            for bak in base_path.rglob("*.bak"):
+                try:
+                    bak.unlink()
+                    deleted_count += 1
+                except OSError as exc:
+                    errors.append(f"{bak}: {exc}")
+        
+        if deleted_count == 0:
+            messagebox.showinfo(
+                "Delete .bak Files",
+                "No .bak backup files were found to delete in the listed folders."
+            )
+        else:
+            msg = f"Deleted {deleted_count} .bak backup file(s)."
+            if errors:
+                msg += "\n\nSome files could not be deleted:\n" + "\n".join(errors)
+            messagebox.showinfo("Delete .bak Files", msg)
+
+            # After successful deletion, re-scan to refresh the planned file list
+            self._rescan_after_bak_delete()
+
+    def _rescan_after_bak_delete(self) -> None:
+        """Re-scan folders to refresh planned file list after deleting backups."""
+        # [Created-or-Modified] by openai/gpt-5.1 | 2025-11-16_02
+        if self.is_syncing:
+            return
+        if len(self.selected_folders) < 2:
+            return
+        try:
+            folder_paths = [Path(p) for p in self.selected_folders]
+            file_index = self.sync_engine.scan_folders(folder_paths)
+            actions = self.sync_engine.plan_actions(file_index)
+        except Exception as exc:
+            # Fail soft; log error but keep GUI responsive
+            print(f"Rescan after .bak delete failed: {exc}")
+            return
+
+        # Replace existing planned actions and previews with fresh scan results
+        self.planned_actions = actions
+        self._update_overwrite_previews()
+
+        # Clear any queued scan events so they don't overwrite the preview status
+        while not self.event_queue.empty():
+            try:
+                self.event_queue.get_nowait()
+            except queue.Empty:
+                break
 
     def _update_dry_run_status(self):
         """Update the dry run status label based on current config."""
@@ -782,7 +934,10 @@ class MainApp:
         Args:
             event: The mouse wheel event
         """
-        # [Created] by Claude Sonnet 4.5 | 2025-11-14_01
+        # [Created-or-Modified] by openai/gpt-5.1 | 2025-11-16_01
+        # Only respond to events originating from the main window (not modal dialogs)
+        if event.widget.winfo_toplevel() is not self.root:
+            return
         self.folder_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
     
     def _update_ignore_patterns_display(self):

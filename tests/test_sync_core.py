@@ -50,6 +50,38 @@ def test_scan_folders_indexes_only_roo_files_respects_ignore_patterns(tmp_path):
     assert any(e.event_type == EventType.SCAN_START for e in events)
     assert any(e.event_type == EventType.SCAN_FILE for e in events)
 
+
+# [Created-or-Modified] by openai/gpt-5.1 | 2025-11-16_01
+def test_scan_folders_ignores_roo_docs_when_config_uses_roo_prefix(tmp_path):
+    """
+    When ignore_patterns contains ".roo/docs" or ".roo\\docs", the .roo/docs folder
+    and all files beneath it should be skipped during scanning.
+    """
+    q = queue.Queue()
+    config = {"ignore_patterns": [".roo/docs", r".roo\docs"]}
+    engine = SyncEngine(config, q)
+
+    base = tmp_path / "proj"; base.mkdir()
+    roo = base / ".roo"; roo.mkdir()
+
+    # File under .roo/docs should be ignored
+    docs_dir = roo / "docs"; docs_dir.mkdir()
+    ignored_file = docs_dir / "ignored.md"
+    ignored_file.write_text("to be ignored")
+
+    # File under a different subfolder should still be indexed
+    keep_dir = roo / "keep"; keep_dir.mkdir()
+    kept_file = keep_dir / "keep.md"
+    kept_file.write_text("to be kept")
+
+    index = engine.scan_folders([base])
+
+    # Ensure the kept file is present
+    assert any(str(k).endswith("keep/keep.md") for k in index.keys())
+
+    # Ensure nothing from docs/ is present in the index
+    assert not any("docs/" in str(k) or str(k).endswith("docs") for k in index.keys())
+
 def test_plan_actions_picks_newest_source(tmp_path):
     q = queue.Queue()
     config = {"ignore_patterns": []}

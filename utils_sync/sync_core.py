@@ -67,7 +67,19 @@ class SyncEngine:
         file_index: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
         
         # Get ignore patterns from config
-        ignore_patterns = self.config.get("ignore_patterns", [])
+        raw_ignore_patterns = self.config.get("ignore_patterns", [])
+        # Normalize patterns so entries like ".roo/docs" or ".roo\docs" behave as
+        # "docs" relative to the .roo/ directory. This allows users to copy/paste
+        # subpaths directly from their editor while still matching our internal
+        # .roo-scoped relative paths.
+        ignore_patterns = []
+        for pattern in raw_ignore_patterns:
+            if not pattern:
+                continue
+            norm = str(pattern).replace("\\", "/")
+            if norm.startswith(".roo/"):
+                norm = norm[len(".roo/"):]
+            ignore_patterns.append(norm)
         
         # Scan each folder
         for folder in folders:
@@ -143,7 +155,7 @@ class SyncEngine:
         return file_index
     
     def plan_actions(self, file_index: Dict[str, List[Dict[str, Any]]]) -> List[Dict[str, Any]]:
-        # [Modified] by google/gemini-2.5-pro | 2025-11-13_01
+        # [Modified] by openai/gpt-5.1 | 2025-11-16_01
         """
         Plan copy actions based on file index.
         
@@ -151,34 +163,56 @@ class SyncEngine:
         to be synchronized. Uses modification time (mtime) to determine the source
         file (most recently modified) and identifies destinations that need updating.
         
+        In addition to updating existing peers, this method will also plan copy
+        actions for folders that are missing a given file (including root-level
+        allowlisted files such as ".roomodes") so that new files are created
+        where needed.
+        
         Args:
             file_index: File index from scan_folders(), mapping relative paths to
-                       lists of file metadata dictionaries
+                        lists of file metadata dictionaries.
         
         Returns:
             List of action dictionaries. Each action contains:
             - action: 'copy'
             - source_path: Path object of the source file
             - destination_path: Path object of the destination file
-            - relative_path: Relative path within .roo directory
+            - relative_path: Relative path within .roo directory or synthetic key
             - source_mtime: Modification time of source file
-            - destination_mtime: Modification time of destination file
+            - destination_mtime: Modification time of destination file (or None
+              when the destination did not previously exist)
         """
         actions: List[Dict[str, Any]] = []
         
+        # Collect all base folders that participated in the scan. This lets us
+        # create actions for folders that are missing a given file entirely.
+        all_base_folders = set()
+        for group in file_index.values():
+            for meta in group:
+                base_folder = meta.get("base_folder")
+                if base_folder is not None:
+                    all_base_folders.add(base_folder)
+        
         # Iterate through each file group in the index
         for relative_path, file_group in file_index.items():
-            # Skip if only one file exists (nothing to sync)
-            if len(file_group) <= 1:
+            # Skip if only one file exists and there are no other folders to sync to
+            if len(file_group) <= 1 and len(all_base_folders) <= 1:
                 continue
             
             # Find the file with the maximum mtime (most recently modified)
             source_file = max(file_group, key=lambda f: f["mtime"])
             
-            # Get all other files as potential destinations
-            destination_files = [f for f in file_group if f != source_file]
+            # Get all other files as potential destinations (existing peers)
+            destination_files = [f for f in file_group if f is not source_file]
             
-            # Create copy actions for destinations that need updating
+            # Track which base folders already have this file
+            present_base_folders = {
+                f["base_folder"] for f in file_group if "base_folder" in f
+            }
+            # Folders that were scanned but do not yet have this file
+            missing_base_folders = all_base_folders - present_base_folders
+            
+            # Create copy actions for existing destinations that need updating
             for dest_file in destination_files:
                 # Only create action if source is newer than destination
                 if source_file["mtime"] > dest_file["mtime"]:
@@ -188,9 +222,33 @@ class SyncEngine:
                         "destination_path": dest_file["path"],
                         "relative_path": relative_path,
                         "source_mtime": source_file["mtime"],
-                        "destination_mtime": dest_file["mtime"]
+                        "destination_mtime": dest_file["mtime"],
                     }
                     actions.append(action)
+            
+            # Create copy actions for folders that are missing this file entirely.
+            # This applies both to .roo-relative paths and root-level allowlisted
+            # files (which use a synthetic key such as ".roomodes").
+            for base_folder in missing_base_folders:
+                # Determine destination path:
+                # - If the relative path contains a '/', treat it as under .roo/.
+                # - Otherwise, treat it as a root-level allowlisted file.
+                rel_str = str(relative_path)
+                if "/" in rel_str:
+                    destination_path = base_folder / ".roo" / Path(rel_str)
+                else:
+                    destination_path = base_folder / rel_str
+                
+                action = {
+                    "action": "copy",
+                    "source_path": source_file["path"],
+                    "destination_path": destination_path,
+                    "relative_path": relative_path,
+                    "source_mtime": source_file["mtime"],
+                    # Destination did not previously exist in the index
+                    "destination_mtime": None,
+                }
+                actions.append(action)
         
         return actions
     
