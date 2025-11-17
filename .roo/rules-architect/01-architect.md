@@ -84,6 +84,6 @@ CRITICAL: After user approval, `/architect` mode does NOT execute the plan. Inst
     - `autonomy level`. 
     - `testing type`.
 4) Switch to `/orchestrator` mode for execution by using the switch_mode tool:
+   (IMPORTANT: Pass control/execution to `/orchestrator`. Do NOT pause or attempt to execute tasks yourself.)
     - Pass `plan file` name.
 	- Pass any other necessary instructions not in `plan file`.
-5) IMPORTANT: Use the switch_mode tool to pass control to `/orchestrator`. Do NOT attempt to execute tasks yourself.
