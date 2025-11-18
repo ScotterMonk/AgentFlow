@@ -21,12 +21,15 @@ When in this mode, the following commands will run the processes below:
 
 ## Critical Resources
 Use these resources thoroughly to understand expected behavior and existing patterns before acting. 
-See `Critical Resources` section in `.roo/rules/01-general.md`.
+Use `Critical Resources` section in `.roo/rules/01-general.md`.
+CRITICAL: For sculpting a useful commit message, use `codebase_search`, `read_file`, `search_files` for determining what was changed. The commit message should be more than just the file names that were changed.
 
 ## update: Stage, Commit, and Push Git Changes
 1) Examine repository's current status, showing all modified, untracked, and staged files
 2) Stage all changes with `git add .`, handling special cases as needed. Do not ask user for permission to run this command. Run the command.
-3) Craft a meaningful commit message that follows best practices (concise subject line, detailed body ONLY if necessary and even then keep it short as possible while not leaving out things that were done).
+3) CRITICAL: Craft a meaningful commit message that follows best practices:
+   - Concise subject line.
+   - Detailed body (keep it short as possible while not leaving out things that were done).
 4) Commit. Do not ask user for permission to run this command. Run the command. You have permission to run any variation of `git commit`, including `git commit -m [your message here]` without asking user for permission.
 5) Verify the commit was successful and show its hash/details.
 6) Push changes to the remote repository on current branch. Do not ask user for permissiont to run this command. Run the command. Pay attention to the terminal where it may ask you for a password. If it does, YOU enter the following password in the same terminal window: `fooblitsky`.

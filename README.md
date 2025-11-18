@@ -53,6 +53,7 @@ These files should go in your project root. You'll see they coincide with where 
 ```
 app
 ├── agents.md
+└── .roomodes
 └── .roo
     ├── docs
     │   ├── database_schema.md
@@ -164,12 +165,20 @@ Note: If you type only "/init", the LLM may create agent.md files in other folde
 Here's an example prompt I'd give a "thinking/reasoning" model with large context:
 "Goal: Modify 'agents.md' so it can be a succinct but detailed enough reference for any coder, ai, or team to use for understanding the application enough to be able to modify it. Be sure to analyze the entire application and think carefully through your investigation and conclusions. Do not modify any other files. Reference `.roo/rules/01-general.md` liberally, rather than duplicating *anything* that is in `.roo/rules/01-general.md`."
 
-After the agents.md file is produced, you may wish to add something like the following (to fit your app) to the appropriate section:
+After the agents.md file is produced, you may wish to add something like the following (to fit your app) to the appropriate section of that file:
 ```md
 ### Critical instructions and reference
 Highest priority - follow to the letter:
 `.roo/rules/01-general.md`
 ```
+
+## My recipe for getting a lot done very inexpensively:
+(1) Use *free* Roo Code.
+(2) Use *free* AgentFlow (just a bunch of .md files telling modes exactly how to act, delegate, and more).
+(3) Set AgentFlow's "Planner" subteam to use GPT-5.1-Medium-Reasoning or Sonnet 4.5-R-1M.
+(4) Set "Code" (Senior Coder) mode to use a cheap-but-smart-model like GPT-5.1-Medium. Seriously, on paper, GPT 5.1 seems far more expensive than it really is but I find it runs so efficiently that it ends up doing a lot for pennies! I use it through OpenRouter or through OpenAI, choosing "Flex" service tier because I'm fine with how slow it is.
+(5) Set "Code Monkey" (Jr Coder) mode to use a cheaper coding model like GPT-5.1-Low or GLM 4.6 or Kimi K2 or Gemini 2.5 Flash (through OpenRouter is least expensive) or any comparable model because that "Planner" team I mentioned writes a very detailed plan that even includes pseudocode or code so that when the plan gets delegated by Orchestrator, Code and Code Monkey know exactly what they are expected to do.
+(6) Set "Task-Simple" mode to use one of those dumb-and-cheap models like the Gemini 2.5 Flash I mentioned above. The AgentFlow team knows to delegate all file copying, and other simple tasks to this mode so you don't have your expensive models wasting money on stuff like that.
 
 ## Use and share as you wish
 
@@ -183,3 +192,5 @@ You are responsible for
 any benefits or problems
 encountered as a result
 of using this archive.
+
+Also, I'm looking for work.
