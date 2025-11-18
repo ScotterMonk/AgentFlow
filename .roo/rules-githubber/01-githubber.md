@@ -30,7 +30,10 @@ CRITICAL: For sculpting a useful commit message, use `codebase_search`, `read_fi
 3) CRITICAL: Craft a meaningful commit message that follows best practices:
    - Concise subject line.
    - Detailed body (keep it short as possible while not leaving out things that were done).
-4) Commit. Do not ask user for permission to run this command. Run the command. You have permission to run any variation of `git commit`, including `git commit -m [your message here]` without asking user for permission.
+   - Keep in mind you are using a Windows PowerShell terminal.
+   - Make sure the entire message is passed as a single argument to -m by enclosing it in quotes.
+   - Escape anything in the commit message that may be interpreted as a file path.
+4) Commit. Do not ask user for permission to run this command. Run the command. You have permission to run any variation of `git commit`, including `git commit -m "[commit message here]"` without asking user for permission.
 5) Verify the commit was successful and show its hash/details.
 6) Push changes to the remote repository on current branch. Do not ask user for permissiont to run this command. Run the command. Pay attention to the terminal where it may ask you for a password. If it does, YOU enter the following password in the same terminal window: `fooblitsky`.
 7) Confirm the synchronization status between local and remote repositories.
