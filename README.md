@@ -173,15 +173,31 @@ Highest priority - follow to the letter:
 ```
 
 ## My recipe for getting a lot done very inexpensively:
-(1) Use *free* Roo Code.
-(2) Use *free* AgentFlow (just a bunch of .md files telling modes exactly how to act, delegate, and more).
-(3) Set AgentFlow's "Planner" subteam to use GPT-5.1-Medium-Reasoning or Sonnet 4.5-R-1M.
-(4) Set "Code" (Senior Coder) mode to use a cheap-but-smart-model like GPT-5.1-Medium. Seriously, on paper, GPT 5.1 seems far more expensive than it really is but I find it runs so efficiently that it ends up doing a lot for pennies! I use it through OpenRouter or through OpenAI, choosing "Flex" service tier because I'm fine with how slow it is.
-(5) Set "Code Monkey" (Jr Coder) mode to use a cheaper coding model like GPT-5.1-Low or GLM 4.6 or Kimi K2 or Gemini 2.5 Flash (through OpenRouter is least expensive) or any comparable model because that "Planner" team I mentioned writes a very detailed plan that even includes pseudocode or code so that when the plan gets delegated by Orchestrator, Code and Code Monkey know exactly what they are expected to do.
-(6) Set "Task-Simple" mode to use one of those dumb-and-cheap models like the Gemini 2.5 Flash I mentioned above. The AgentFlow team knows to delegate all file copying, and other simple tasks to this mode so you don't have your expensive models wasting money on stuff like that.
+1) Use *free* Roo Code.
+2) Use *free* AgentFlow (just a bunch of .md files telling modes exactly how to act, delegate, and more).
+3) Set AgentFlow's "Planner" subteam to use GPT-5.1-Medium-Reasoning or Sonnet 4.5-R-1M.
+4) Set "Code" (Senior Coder) mode to use a cheap-but-smart-model like GPT-5.1-Medium. Seriously, on paper, GPT 5.1 seems far more expensive than it really is but I find it runs so efficiently that it ends up doing a lot for pennies! I use it through OpenRouter or through OpenAI, choosing "Flex" service tier because I'm fine with how slow it is.
+5) Set "Code Monkey" (Jr Coder) mode to use a cheaper coding model like GPT-5.1-Low or GLM 4.6 or Kimi K2 or Gemini 2.5 Flash (through OpenRouter is least expensive) or any comparable model because that "Planner" team I mentioned writes a very detailed plan that even includes pseudocode or code so that when the plan gets delegated by Orchestrator, Code and Code Monkey know exactly what they are expected to do.
+6) Set "Task-Simple" mode to use one of those dumb-and-cheap models like the Gemini 2.5 Flash I mentioned above. The AgentFlow team knows to delegate all file copying, and other simple tasks to this mode so you don't have your expensive models wasting money on stuff like that.
+
+## Markdown vs XML
+For LLM instruction following, which should you choose?
+
+### If Roo Code, your choice is clear
+Roo Code's native architecture employs Markdown files (.md or .txt) stored in `.roo/rules/` directories for all custom instructions. After reviewing 171+ community-created custom modes, zero use XML formatting. Roo Coderoocode The platform concatenates these Markdown files directly into Claude's system prompt in alphabetical order. YAML or JSON handle mode configuration, while instruction content remains plain Markdown.
+
+This universal adoption of Markdown isn't documented as a deliberate choice over XML—the official Roo Code documentation simply doesn't address XML at all. The format appears to be selected for developer experience and ecosystem compatibility rather than AI performance optimization. Markdown files integrate seamlessly with version control, text editors, and documentation workflows that developers already use.
+
+### If not Roo Code, model preferences
+GPT-5.1, Sonnet 4.5, Gemini 3 all prefer XML and will score a few percentage points higher in prompt adherence when XML is used but understand MD.
+
+### The human factor
+Why I still use and prefer markdown:
+- Ease of human read/write.
+- Roo Code (my current favorite framework) prefers it.
+- I find that no matter what model I'm using, they follow the rules I've created in markdown format.
 
 ## Use and share as you wish
-
 Created in 2025 by
 Scott Howard Swain
 https://OceanMedia.net
