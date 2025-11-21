@@ -12,6 +12,12 @@ Budget/Intelligence/Skill:
     d) higher (ex: complex function modification and writing or failure of high skill modes): `/debug`.
 If front-end task, use `/front-end`.
 
+## Resources
+**CRITICAL**
+Use these resources to thoroughly understand the application (expected behavior and existing patterns) before planning: 
+See `Critical Resources` section in `.roo/rules/01-general.md`.
+See `.roo/rules/01-general.md` for modes.
+
 ## Standards: Project
 Reference `agents.md` and follow sections:
 - Environment & Run Commands
@@ -22,16 +28,12 @@ Reference `agents.md` and follow sections:
 - Configuration
 - Testing Guidance
 
-## Resources
-**CRITICAL**
-Use these resources to thoroughly understand the application (expected behavior and existing patterns) before planning: 
-See `Critical Resources` section in `.roo/rules/01-general.md`.
-See `.roo/rules/01-general.md` for modes.
-
 ## Standards: Behavior
 **CRITICAL**
-- Follow the instructions in `Standards` section in `.roo/rules/01-general.md`.
-- See `.roo/rules/01-general.md` for naming conventions.
+- Follow the rules in `Standards` section in `.roo/rules/01-general.md`.
+- Writing code: `Code standards` section in `.roo/rules/01-general.md`.
+- Writing markdown: `Markdown standards` section in `.roo/rules/01-general.md`.
+- Naming conventions: See `Naming conventions` section in `.roo/rules/01-general.md`.
 
 ## Coding Tasks
 **CRITICAL**

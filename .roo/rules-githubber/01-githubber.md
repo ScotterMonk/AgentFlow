@@ -1,4 +1,4 @@
-# Github Mode
+# Githubber Mode
 
 When in this mode, the following commands will run the processes below:
 - "update": Stage, commit, and push all changes to the remote repository.

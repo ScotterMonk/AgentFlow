@@ -3,19 +3,18 @@
 Your customizable AI coding team!
 Use it to create apps or make changes/additions to existing ones. 
 
-This set of instructions (markdown files) enhances and extends the modes/agents that come with many coding agents/asisstants (or make your own). The instructions are tailored to work with Roo Code (free highly customizable VS Code extension) but will work with many others, including Github Copilot and CLine.
+This set of instructions (markdown files) enhances and extends the modes/agents that come with many coding agents/assistants. The instructions are tailored to work with Roo Code (free highly customizable VS Code extension) but will work with many others, including Cursor, CLine, Kilo,Github Copilot, etc.
 
-Using the built-in-to-Roo ability to use rules files, this archive is a set of custom instructions for the built-in modes and some new ones, including:
-- Supercharged alternative to "Architect": a 4-step "Planner" process (planner-a, planner-b, planner-c, planner-d).
-- Modified Architect mode to be more detailed and for smaller tasks than full on "Planner" process.
-- Designed both Architect and Planner modes  to "front load" spend on high "intelligence" thinking models to create a plan that is so detailed, the "Workers" like "Code", "Code Monkey", etc. can be faster/cheaper models. Overall, I'm finding this method burns far less tokens, has far less errors, and runs longer without human intervention.
-- Supplemented "Code" with a tightly controlled budget-friendly "Code Monkey" created to work with the short, detailed tasks created for it by Planner.
-- Added "Front-end", "Debugger", "Tester", "GitHubber", "Docs Writer", etc.
-- While planning and while working, creates detailed files to keep track of its goals, progress, and lessons learned.
-
-Notes: 
-- This set of instructions is ever-evolving. 
-- The author, Scott Howard Swain, is always eager to hear ideas to improve this.
+Using the built-in-to-Roo ability to use "rules" files, this archive is a set of custom instructions for the built-in modes/agents and some new ones, including:
+- **Architect Super Team**: a 4-step "Planner" process (planner-a, planner-b, planner-c, planner-d). While planning and while working, creates detailed files to keep track of its goals, progress, and lessons learned.
+- **Architect Quick**: a 1-step "Planner" process; modified Roo's built-in Architect mode to be more detailed but for smaller tasks than full on 4-step "Planner" process.
+- **Coder on Crack**: Juiced up "Code" mode to follow The Plan, whether created by the new superpowered Architect or hastily typed out by a user running 3 days on caffeine.
+- **Code Monkey** (Junior coder): Supplemented "Code" with a tightly controlled budget-friendly "Code Monkey" created to work with the short, detailed tasks created for it by Planner.
+- **Other new modes**: Added "Front-end", "Debugger", "Tester", "GitHubber", "Docs Writer", etc.
+Notes:
+- **Smart but cheap**: Designed both Architect and Planner modes  to "front load" spend on high "intelligence" thinking models to create a plan that is so detailed, the "Workers" like "Coder", "Code Monkey", etc. can be faster/cheaper models. Overall, I'm finding this method burns *far less* tokens, has *far less* errors, and runs longer without a need for human intervention.
+- **Look how fast they grow up**: This set of instructions is ever-evolving. 
+- **Virtuous circle**: The author, Scott Howard Swain, is always eager to hear ideas to improve this.
 
 ## When/how to use?
 
@@ -36,10 +35,10 @@ Scenario: Building a new dashboard screen from scratch.
 - Start with "planner-a" mode. For this mode, I choose a model with high reasoning and large-as-possible context window.
 - Tell it what you want.
 - It will brainstorm with you, asking questions, including:
-    - How do you want the work plan to be structured in terms of phase(s) and task(s)?
-        - It will automatically create tasks so they are "bite-size" chunks so you can use a less smart/lower-cost LLM model for the actual work.
-    - What level of autonomy do you want it to have when it starts the work?
-    - What type of testing (browser, pytest, custom, none) do you want it to do as it completes tasks?
+    - How do you want the work plan to be structured in terms of size, phase(s), and task(s)?
+        - It will automatically create tasks so they are "bite-size" chunks less smart/lower-cost LLM models can more easily do the actual work.
+    - What level of autonomy do you want it to have when it does the work?
+    - What type of testing (browser, unit tests, custom, none) do you want it to do as it completes tasks?
 - It will create a high level plan and ask you if you want to modify it or approve.
 - It will also create plan and log files to help itself and you keep track of goals, progress, and lessons learned.
 - Once you approve the plan, it will pass on to the other planner modes to flesh out and add detail to the plan.
@@ -47,8 +46,7 @@ Scenario: Building a new dashboard screen from scratch.
 - Note: This workflow sets the plan to prefer "code monkey" mode (lower budget than "code" mode) for the coding parts. If "code monkey" gets confused because a task is too difficult or complex, it has instructions to pass the task on to "code" mode which I assign a "smarter" LLM to.
 
 ## Folder structure
-
-These files should go in your project root. You'll see they coincide with where your current .roo folder is.
+These files go in your project root. You'll see they coincide with where your current .roo folder is.
 
 ```
 app
@@ -103,14 +101,14 @@ app
 
 ## Agentflow File Sync Utility
 
-A Python utility for synchronizing `.roo` directories across multiple project folders based on file modification times.
+**Helpful utility included**: A Python utility for synchronizing `.roo` directories across multiple project folders based on file modification times.
 
 ### Overview
-The Agentflow File Sync Utility scans `.roo` subdirectories in multiple project folders, identifies files that need updating based on modification times, and performs intelligent file synchronization with atomic operations and backup support.
+The Agentflow File Sync Utility scans `.roo` subdirectories in multiple project folders (you designate), identifies files that need updating based on modification times, and performs intelligent file synchronization with atomic operations and backup support.
 
 ### GUI Usage
 Launch the graphical interface with:
-```
+```bash
 python main_gui.py
 ```
 
@@ -125,45 +123,49 @@ Use the interface to:
 
 ### CLI Usage
 Run headless synchronization with:
-```
+```bash
 python cli_sync.py <folder1> <folder2> ...
 ```
 
 Example:
-```
+```bash
 python cli_sync.py /path/to/project1 /path/to/project2 /path/to/project3
 ```
 
 ### Configuration
-Settings are stored in `config.txt` with options for:
-- `dry_run`: Enable/disable dry-run mode
-- `backup_mode`: Configure backup behavior (none, timestamped)
+Settings are stored in `config.txt` See `README-file-sync.MD` for details.
+
 
 ## Fit to you
-Be sure to modify the content of files you see in the .roo/docs folder to fit your project. Especially:
+Be sure to modify the content of files to fit your project. Especially:
 - "agents.md" (In root, "above" .roo folder)
 - ".roo/docs/database_schema.md"
 - ".roo/rules/01-general.md"
 - ".roo/rules/02-database.md"
 - ".roo/rules-front-end/02-design-patterns.md"
-and really, I'd look through all the rules files to modify to YOUR style.
+Really, I'd look through all the rules files to modify to YOUR preferences.
 
 ### Misc
-- I've added "Orchestrator" to .roomodes local mode file so that I can give it read, edit, and command permissions.
+- I've added "Orchestrator" to .roomodes local mode file so that I can give it read, edit, and command permissions. Without those permissions, it can sometimes have issues, depending on what LLM model you have it using. Example: I've seen it find an issue with The Plan and spend extra tokens to delegate minor textual changes to The Plan when it could have more quickly done the changes itself.
 
-### IMPORTANT agents.md
-If your agentic assistant has an /init command, use it. 
-Roo Code has /init. 
-If not, skip down to "No Init" section.
+### IMPORTANT: agents.md
+If your agentic assistant has an /init or other command that analyzes your codebase and creates tailored configuration files, use it. Roo Code uses /init. 
 
 #### Init
 Optimally, use a high reasoning, large context-window model.
 Type into chat: "/init note: only create agents.md file in project root. Do not create any other agents.md files or modify any rules files."
-Note: If you type only "/init", the LLM may create agent.md files in other folders (like within the various rules subfolders in the .roo folder). I talked with a few different LLMs about how useful those extra agents.md files are. Came to the conclusion it's better to fold all into the one agents.md file in app root.
+Note: If you type only "/init", the LLM may create agent.md files in other folders (like within the various rules subfolders in the .roo folder). I don't know if that was a bug or feature. I researched how useful those extra agents.md files are. Came to the conclusion it's better to fold all into the one agents.md file in app root.
 
-#### No init
-Here's an example prompt I'd give a "thinking/reasoning" model with large context:
-"Goal: Modify 'agents.md' so it can be a succinct but detailed enough reference for any coder, ai, or team to use for understanding the application enough to be able to modify it. Be sure to analyze the entire application and think carefully through your investigation and conclusions. Do not modify any other files. Reference `.roo/rules/01-general.md` liberally, rather than duplicating *anything* that is in `.roo/rules/01-general.md`."
+Here's a prompt I give a "thinking/reasoning" model with large context:
+"
+/init Goal: Modify `agents.md` so it can be a succinct but detailed enough reference for any coder, ai, or team to use for understanding the application enough to be able to modify it. Be sure to analyze the entire application and think carefully through your investigation and conclusions. Do not modify any other files. 
+
+CRITICAL: Reference `.roo/rules/01-general.md` liberally with section references, rather than duplicating *anything* that is in `.roo/rules/01-general.md`.
+Example: 
+"
+### Naming Convention
+Follow `Naming Conventions` section in `.roo/rules/01-general.md`
+"
 
 After the agents.md file is produced, you may wish to add something like the following (to fit your app) to the appropriate section of that file:
 ```md
@@ -187,6 +189,8 @@ For LLM instruction following, which should you choose?
 Roo Code's native architecture employs Markdown files (.md or .txt) stored in `.roo/rules/` directories for all custom instructions. After reviewing 171+ community-created custom modes, zero use XML formatting. Roo Coderoocode The platform concatenates these Markdown files directly into Claude's system prompt in alphabetical order. YAML or JSON handle mode configuration, while instruction content remains plain Markdown.
 
 This universal adoption of Markdown isn't documented as a deliberate choice over XML—the official Roo Code documentation simply doesn't address XML at all. The format appears to be selected for developer experience and ecosystem compatibility rather than AI performance optimization. Markdown files integrate seamlessly with version control, text editors, and documentation workflows that developers already use.
+
+2025-11-19: Talked with a Roo Code dev. He said he uses XML and - from within the Roo Code extension - download "Mode Writer" from the Marketplace. It's now part of this repo. I used it to make an XML version of my custom version of the Architect mode. So, according to him, you *can* use XML instead of MD for your custom mode instructions. Because I find XML to be so wordy and ugly, I'll stick with MD until I see a clear problem with models getting confused by or ignoring my instructions. 
 
 ### If not Roo Code, model preferences
 GPT-5.1, Sonnet 4.5, Gemini 3 all prefer XML and will score a few percentage points higher in prompt adherence when XML is used but understand MD.

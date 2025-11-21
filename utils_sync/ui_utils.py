@@ -204,6 +204,30 @@ class FolderItem:
         if not current_text.startswith("✓ "):
             label.config(text=f"✓ {current_text}", foreground="green")
     
+    def show_backup_files(self, relative_paths: list[str]) -> None:
+        """Append rows for .bak backup files under this folder."""
+        # [Created-or-Modified] by openai/gpt-5.1 | 2025-11-21_01
+        if not relative_paths:
+            return
+
+        # Keep display ordering stable and case-insensitive
+        for rel in sorted(relative_paths, key=lambda p: str(p).lower()):
+            row_frame = ttk.Frame(self.preview_frame)
+            row_frame.pack(fill=tk.X, pady=(0, 1))
+
+            text = f"  .bak: {rel}"
+            label = ttk.Label(
+                row_frame,
+                text=text,
+                anchor=tk.W,
+                justify=tk.LEFT,
+                font=("TkDefaultFont", 8),
+                foreground="gray",
+            )
+            label.pack(side=tk.LEFT, fill=tk.X, expand=True)
+        # Note: we intentionally do not add these labels to _preview_rows so they
+        # are not affected by checkmarks or per-file removal controls.
+    
     def _on_favorite_toggle(self):
         """Handle favorite button toggle.
         

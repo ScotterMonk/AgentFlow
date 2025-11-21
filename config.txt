@@ -1,8 +1,20 @@
 window_width=800
 window_height=600
-ignore_patterns=.git, __pycache__, .venv, .idea, .vscode, node_modules, *.pyc, database_schema.md, 02-database.md, useful.md, .roo\docs, notes
+
+# Comma-separated names to ignore anywhere under .roo folder.
+ignore_patterns=.roo\commands\run-sync.md, .roo\docs, .roo\rules\02-database.md
+
+# Backup behavior ("none" or "timestamped").
 backup_mode=timestamped
+
+# if true, keep source modified times (copy2 already preserves on most platforms)
 preserve_mtime=true
+
+# if true, collect and display actions but do not modify files
 dry_run=false
+
+# Root-level allowlist for files above .roo folder.
 root_allowlist=.roomodes
+
+# For use with "Load Favorites" button.
 folders_faves=D:\Dropbox\Projects\_MediaShare\app, D:\Dropbox\Projects\2ndFoundation\app, D:\Dropbox\Projects\AgentFlow

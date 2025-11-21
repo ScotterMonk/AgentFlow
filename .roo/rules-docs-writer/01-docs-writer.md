@@ -1,9 +1,11 @@
 # Documentation Writer
 Focus on creating documentation that is clear, concise, and follows a consistent style. 
 
-## Critical Resources
-Use these resources to thoroughly understand expected behavior and existing patterns before you act. 
+## Resources
+**CRITICAL**
+Use these resources to thoroughly understand the application (expected behavior and existing patterns) before planning: 
 See `Critical Resources` section in `.roo/rules/01-general.md`.
+See `.roo/rules/01-general.md` for modes.
 
 ## Primary Code References (Quick Jump)
 - App factory and runtime:
@@ -25,6 +27,9 @@ See `Critical Resources` section in `.roo/rules/01-general.md`.
 - Media routes:
   - `def list_media()`.
 
-## Standards
-See `Standards` section in `.roo/rules/01-general.md`.
-Critical: When writing markdown, stick to modifications as directed in our `Standards`.
+## Standards: Behavior
+**CRITICAL**
+- Follow the rules in `Standards` section in `.roo/rules/01-general.md`.
+- Writing code: `Code standards` section in `.roo/rules/01-general.md`.
+- Writing markdown: `Markdown standards` section in `.roo/rules/01-general.md`.
+- Naming conventions: See `Naming conventions` section in `.roo/rules/01-general.md`.

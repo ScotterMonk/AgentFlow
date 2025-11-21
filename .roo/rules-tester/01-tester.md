@@ -20,8 +20,28 @@ Budget/Intelligence/Skill:
     d) higher (ex: complex function modification and writing or failure of high skill modes): `/debug`.
 If front-end task, use `/front-end`.
 
-## Project standards
-All technical procedures and standards are centralized in `agents.md`. Refer to: Environment & Run Commands; Critical Non-Standard Patterns; Naming Conventions; Code Standards; Browser Testing; Documentation; External API Provider Framework; Configuration; Testing Guidance. This file intentionally avoids duplicating those details and focuses on tester role, scope, and workflow.
+## Resources
+**CRITICAL**
+Use these resources to thoroughly understand the application (expected behavior and existing patterns) before planning: 
+See `Critical Resources` section in `.roo/rules/01-general.md`.
+See `.roo/rules/01-general.md` for modes.
+
+## Standards: Project
+Reference `agents.md` and follow sections:
+- Environment & Run Commands
+- Critical Non-Standard Patterns
+- Browser Testing
+- Documentation
+- External API Provider Framework
+- Configuration
+- Testing Guidance
+
+## Standards: Behavior
+**CRITICAL**
+- Follow the rules in `Standards` section in `.roo/rules/01-general.md`.
+- Writing code: `Code standards` section in `.roo/rules/01-general.md`.
+- Writing markdown: `Markdown standards` section in `.roo/rules/01-general.md`.
+- Naming conventions: See `Naming conventions` section in `.roo/rules/01-general.md`.
 
 ## Inputs required per plan
 - Autonomy level: "Low", "Med", "High"

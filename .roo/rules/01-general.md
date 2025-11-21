@@ -2,11 +2,7 @@
 
 ## Environment & Commands
 - Windows 11: Use PowerShell/Windows commands.
-- Numbered instructions: Execute in order.
-- Global commands:
-    - "git update" → `/githubber` mode.
-    - "run", "run app", "turn on app", "server on" → `python app.py`.
-    - "activate" → `./activate.ps1`.
+- For numbered instructions: Execute in exact order.
 
 ## Critical Resources
 
@@ -14,7 +10,7 @@
 - `app knowledge`: `agents.md`.
 - Codebase: `codebase_search`, `read_file`, `search_files`.
 - Git diff, recent commits.
-- `credentials` for everything: `.env`. User passwords in DB are hashed.
+- `credentials` for everything: `.env`.
 - Database: see below.
 
 ### Planning
@@ -85,7 +81,7 @@ Look for the unifying principle that eliminates multiple components.
 ### Flask html templates
 Use `jinja-html` language mode.
 
-### Naming Conventions
+### Naming conventions
 Rationale: Domain-first naming groups related code, improves IDE autocomplete, and makes file navigation logical.
 Pattern: {specific}_{domain} → {domain}_{specific}
 Definitions:
@@ -102,7 +98,8 @@ Functions/Variables:
 - `edit_user` → `user_edit`
 - `add_user` → `user_add`
 Classes:
-- `AdminPerson` → `PersonAdmin`
+- `AdminPerson` → `PersonAdmin` or even better -> `Person` with type parameter set to "admin"
+- `ResellerPerson` -> `PersonReseller` or even better -> `Person` with type parameter set to "reseller"
 Do NOT rename without approval:
 - Public APIs (HTTP routes, library functions, CLI flags)
 - Database tables/columns (requires migration)
@@ -128,7 +125,7 @@ After renaming, verify:
 - Documentation references updated
 - No VS Code Problems panel errors
 
-### Code Standards
+### Code standards
 - All functions/classes MUST include: `# [Created-or-Modified] by [LLM model] | yyyy-mm-dd_[iteration]`
 - Templates use `jinja-html` language mode
 - Compact vertical spacing.
@@ -155,14 +152,17 @@ fixed += "."
 - Headers immediately followed by content
 - Single empty line between major sections only
 
-#### File References
-- Simplify; avoid brackets and keep succinct: [`utils_db/media_utils.py`](utils_db/media_utils.py:1) -> `utils_db/media_utils.py`.
+#### References (file and otherwise)
+Goal is to reduce size and simplify:
+- Avoid brackets and parens, prefer succinct, no redundancy, no line numbers. 
+Examples:
+- [`models/models_user.py`](app/models/models_user.py) -> `models/models_user.py`.
+- See [`.roo/rules/01-general.md`](`.roo/rules/01-general.md:11`) -> See `Critical Resources` section in `.roo/rules/01-general.md`.
 
 #### Formatting
 - Use 4-space indentation for nested items.
 - Numbered lists with `)` separator: `1)`, `2)`
 - Avoid double-asterisks: "**Impact:**" -> "Impact:".
-- Keep it small/no redundancy: [`models/models_user.py`](app/models/models_user.py) -> `models/models_user.py`.
 - Use colons for emphasis instead of bold.
 - Back-ticks for code/file references, not brackets.
 - Simple, direct formatting.

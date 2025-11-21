@@ -5,9 +5,9 @@ Sync the `.roo/` rules/docs folders across multiple project directories safely a
 ## What this is
 
 A small, focused app inside this repo to keep your `.roo/` directory consistent across projects. Use the desktop GUI or the CLI:
-- GUI: [main_gui.py](main_gui.py)
-- CLI: [cli_sync.py](cli_sync.py)
-- Core engine: [utils_sync/sync_core.py](utils_sync/sync_core.py)
+- GUI: `main_gui.py`
+- CLI: `cli_sync.py`
+- Core engine: `utils_sync/sync_core.py`
 
 ## Key features
 
@@ -18,24 +18,24 @@ A small, focused app inside this repo to keep your `.roo/` directory consistent 
 - Atomic writes (temp file + rename) to avoid partial copies
 - Ignore patterns for files/folders you do not want to sync
 - Threaded worker for responsive GUI with progress events
-- Simple, human-editable [config.txt](config.txt)
+- Simple, human-editable `config.txt`
 - Cross-platform (Windows/macOS/Linux)
 
 ## How it works
 
 The engine orchestrates a scan → plan → execute workflow:
-- Scan: [SyncEngine.scan_folders()](utils_sync/sync_core.py:50) builds an index of files under each folder's `.roo/`
-- Plan: [SyncEngine.plan_actions()](utils_sync/sync_core.py:123) decides copy operations using newest mtime as source
-- Execute: [SyncEngine.execute_actions()](utils_sync/sync_core.py:175) performs safe, atomic copies with optional backups
+- Scan: `SyncEngine.scan_folders()` in `utils_sync/sync_core.py` builds an index of files under each folder's `.roo/`
+- Plan: `SyncEngine.plan_actions()` in `utils_sync/sync_core.py` decides copy operations using newest mtime as source
+- Execute: `SyncEngine.execute_actions()` in `utils_sync/sync_core.py` performs safe, atomic copies with optional backups
 
 ## Main components
 
-- Engine: [SyncEngine.__init__()](utils_sync/sync_core.py:36) in [utils_sync/sync_core.py](utils_sync/sync_core.py) holds config and an event queue and emits progress
-- Worker: [SyncWorker.run()](utils_sync/sync_worker.py:40) coordinates scan/plan/execute on a background thread for the GUI
-- Events: [EventType](utils_sync/progress_events.py:15), [ProgressEvent](utils_sync/progress_events.py:25), and [make_event()](utils_sync/progress_events.py:44) standardize messages shown in the UI and CLI
-- Paths: [file_path_utils.has_roo_dir()](utils_sync/file_path_utils.py:85) and [file_path_utils.get_roo_relative_path()](utils_sync/file_path_utils.py:109) ensure only real `.roo/` directories are synced and compute relative paths
-- Config I/O: [config_sync.save_config()](utils_sync/config_sync.py:95) persists settings atomically; defaults are loaded automatically
-- Logging: [logger.init_logger()](utils_sync/logger.py:47) and [logger.log_event()](utils_sync/logger.py:236) write a rolling JSONL log and a human-readable plan log
+- Engine: `SyncEngine.__init__()` in `utils_sync/sync_core.py` holds config and an event queue and emits progress
+- Worker: `SyncWorker.run()` in `utils_sync/sync_worker.py` coordinates scan/plan/execute on a background thread for the GUI
+- Events: `EventType`, `ProgressEvent`, and `make_event()` in `utils_sync/progress_events.py` standardize messages shown in the UI and CLI
+- Paths: `file_path_utils.has_roo_dir()` and `file_path_utils.get_roo_relative_path()` in `utils_sync/file_path_utils.py` ensure only real `.roo/` directories are synced and compute relative paths
+- Config I/O: `config_sync.save_config()` in `utils_sync/config_sync.py` persists settings atomically; defaults are loaded automatically
+- Logging: `logger.init_logger()` and `logger.log_event()` in `utils_sync/logger.py` write a rolling JSONL log and a human-readable plan log
 
 ## Installation
 
@@ -96,49 +96,45 @@ Priority order: CLI flag > environment variable > default
 ### Config File Format
 
 Example `config.txt`:
+```t
+window_width=800
+window_height=600
 
-```
-# window size for GUI (pixels)
-window_width=1000
-window_height=720
+# Comma-separated names to ignore anywhere under .roo folder.
+ignore_patterns=.roo\commands\run-sync.md, .roo\docs, .roo\rules\02-database.md
 
-# root-level allowlist for files above .roo (for example: .roomodes)
-root_allowlist=.roomodes
-ignore_patterns=.git,__pycache__,.venv,.idea,.vscode,node_modules,*.pyc,database_schema.md,useful.md
-
-# comma-separated names to ignore anywhere under .roo
-# typical: .git,__pycache__,node_modules,build
-ignore_patterns=.git,__pycache__,node_modules
-
-# "none" or "timestamped"
+# Backup behavior ("none" or "timestamped").
 backup_mode=timestamped
-
-# if true, collect and display actions but do not modify files
-dry_run=true
 
 # if true, keep source modified times (copy2 already preserves on most platforms)
 preserve_mtime=true
-```
 
-- Root-level allowlist example (`config.txt`):
-  - root_allowlist=.roomodes
+# if true, collect and display actions but do not modify files
+dry_run=false
+
+# Root-level allowlist for files above .roo folder.
+root_allowlist=.roomodes
+
+# For use with "Load Favorites" button.
+folders_faves=D:\Dropbox\Projects\_MediaShare\app, D:\Dropbox\Projects\2ndFoundation\app, D:\Dropbox\Projects\AgentFlow
+```
 
 ## Behavior and guarantees
 
-- Scope: By default, only the `.roo/` subtree of each folder is scanned and synced, but `.roomodes` will be included if folder "above" `.roo/` is picked and `.roomodes` is present in `root_allowlist`.
+- Scope: By default, only the `.roo/` subtree of each folder is scanned and synced, but `.roomodes` will be included if `.roomodes` is present in `root_allowlist` in `config.txt`.
 - Default (root-level files): No root-level scanning occurs unless opted-in via `root_allowlist`.
-- Conflict resolution: The newest mtime wins; the latest copy becomes the source for all older peers
-- Backups: If `backup_mode=timestamped` and a destination exists, it is renamed with an ISO timestamp suffix before copy
-- Atomicity: Copies write to a temp file in the destination directory then rename into place to avoid partial writes
-- Safety rails: only include regular files (no symlinks), require a real `.roo/` folder, recommended size cap ~256 KB, and always respect `ignore_patterns`
-- Symlinks: A symlinked `.roo/` is treated as absent by `utils_sync/file_path_utils.has_roo_dir()`
-- Non-destructive: The current implementation copies newer files to older ones and does not delete files
+- Conflict resolution: The newest mtime wins; the latest copy becomes the source for all older peers.
+- Backups: If `backup_mode=timestamped` and a destination exists, it is renamed with an ISO timestamp suffix before copy.
+- Atomicity: Copies write to a temp file in the destination directory then rename into place to avoid partial writes.
+- Safety rails: only includes regular files (no symlinks), requires a real `.roo/` folder, and always respect `ignore_patterns`.
+- Symlinks: A symlinked `.roo/` is treated as absent by `utils_sync/file_path_utils.has_roo_dir()`.
+- Non-destructive: The current implementation copies newer files to older ones and does not delete files.
 
 ## Tips
 
-- Start with `dry_run=true` to verify actions
-- Add noisy or large folders to `ignore_patterns`
-- Keep one canonical project as your "source of truth" and run sync from it first
+- Start with `dry_run=true` to verify actions.
+- Add private, noisy, or large folders to `ignore_patterns`.
+- Keep one canonical project (AgentFlow) as your "source of truth" and run sync from it first.
 
 ## Troubleshooting
 
@@ -150,7 +146,7 @@ preserve_mtime=true
 ## Developing and tests
 
 - Core logic and unit tests live under `utils_sync/` and `tests/`
-- Example: [tests/test_sync_core.py](tests/test_sync_core.py) verifies newest-wins planning
+- Example: `tests/test_sync_core.py` verifies newest-wins planning
 - Contribute improvements by keeping modules small and functions documented
 - Run tests with pytest tests/
 

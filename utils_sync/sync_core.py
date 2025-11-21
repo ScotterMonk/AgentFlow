@@ -66,20 +66,41 @@ class SyncEngine:
         # Initialize file index - maps relative paths to list of file metadata
         file_index: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
         
-        # Get ignore patterns from config
+        # Get ignore patterns from config and categorize them.
+        # We support three kinds of ignore rules:
+        # - Simple names (".git", "__pycache__"): skip any path component with that name.
+        # - .roo-scoped folder paths (".roo/docs", ".roo/docs/"): skip everything under that folder.
+        # - .roo-scoped file paths (".roo/commands/run-sync.md"): skip exactly that file.
         raw_ignore_patterns = self.config.get("ignore_patterns", [])
-        # Normalize patterns so entries like ".roo/docs" or ".roo\docs" behave as
-        # "docs" relative to the .roo/ directory. This allows users to copy/paste
-        # subpaths directly from their editor while still matching our internal
-        # .roo-scoped relative paths.
-        ignore_patterns = []
+        name_ignores = set()
+        folder_path_ignores = set()
+        file_path_ignores = set()
+        
         for pattern in raw_ignore_patterns:
             if not pattern:
                 continue
-            norm = str(pattern).replace("\\", "/")
+            norm = str(pattern).replace("\\", "/").strip()
+            
+            # Treat .roo-prefixed patterns as paths relative to the .roo/ directory
             if norm.startswith(".roo/"):
-                norm = norm[len(".roo/"):]
-            ignore_patterns.append(norm)
+                rel = norm[len(".roo/"):].rstrip("/")
+                if not rel:
+                    continue
+                last_seg = rel.split("/")[-1]
+                # Heuristic: if the last segment contains a dot, treat as a file; otherwise a folder
+                if "." in last_seg:
+                    file_path_ignores.add(rel)
+                else:
+                    folder_path_ignores.add(rel)
+            else:
+                # Backwards-compatible behavior for simple names like ".git" or "__pycache__"
+                if "/" in norm:
+                    # For non-.roo paths with slashes, fall back to matching on the last component
+                    last_seg = norm.rstrip("/").split("/")[-1]
+                    if last_seg:
+                        name_ignores.add(last_seg)
+                else:
+                    name_ignores.add(norm)
         
         # Scan each folder
         for folder in folders:
@@ -97,9 +118,29 @@ class SyncEngine:
             
             # Recursively scan all files in .roo directory
             for item_path in scan_root.rglob("*"):
-                # Check if any part of relative path matches ignore patterns
-                relative_parts = item_path.relative_to(scan_root).parts
-                if any(pattern in relative_parts for pattern in ignore_patterns):
+                # Compute .roo-relative path once for all ignore checks
+                relative_path_roo = item_path.relative_to(scan_root)
+                relative_str = relative_path_roo.as_posix()
+                relative_parts = relative_path_roo.parts
+                
+                # 1) Simple name ignores: match any component (e.g., ".git", "__pycache__")
+                if any(part in name_ignores for part in relative_parts):
+                    continue
+                
+                # 2) .roo-scoped folder path ignores: match direct prefix under .roo
+                #    Example: ".roo/docs" ignores ".roo/docs" and everything beneath it,
+                #    but does not ignore unrelated ".../docs" directories elsewhere.
+                skip_for_folder = False
+                for folder_rel in folder_path_ignores:
+                    if relative_str == folder_rel or relative_str.startswith(folder_rel + "/"):
+                        skip_for_folder = True
+                        break
+                if skip_for_folder:
+                    continue
+                
+                # 3) .roo-scoped file path ignores: match exact relative path under .roo
+                #    Example: ".roo/commands/run-sync.md" ignores only that one file.
+                if relative_str in file_path_ignores:
                     continue
                 
                 # Process only files (skip directories)

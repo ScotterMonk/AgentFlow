@@ -358,10 +358,34 @@ class MainApp:
         else:
             if self.confirm_button:
                 self.confirm_button.config(state=tk.DISABLED)
-            messagebox.showinfo(
-                "Nothing to Sync",
-                "All selected folders are already up to date. No files will be overwritten."
-            )
+    
+    def _update_bak_previews(self) -> None:
+        """Append .bak backup files under each selected folder into folder previews."""
+        # [Created-or-Modified] by openai/gpt-5.1 | 2025-11-21_01
+        if not self.selected_folders or not self.folder_widgets:
+            return
+    
+        for folder_path, widget in self.folder_widgets.items():
+            base_path = Path(folder_path)
+            if not base_path.exists():
+                continue
+    
+            bak_relatives: list[str] = []
+            try:
+                for bak in base_path.rglob("*.bak"):
+                    try:
+                        rel = bak.relative_to(base_path)
+                    except ValueError:
+                        # Should not happen for descendants, but fail soft
+                        continue
+                    bak_relatives.append(str(rel))
+            except OSError as exc:
+                # Fail soft; log error and continue with other folders
+                print(f"Error scanning for .bak files under {base_path!s}: {exc}")
+                continue
+    
+            if bak_relatives and hasattr(widget, "show_backup_files"):
+                widget.show_backup_files(bak_relatives)
     
     def _remove_planned_action(self, action_to_remove: dict) -> None:
         """Remove a single planned action from the queue and refresh previews."""
@@ -542,6 +566,9 @@ class MainApp:
                             for rel_key in list(preview_rows.keys()):
                                 if hasattr(widget, "mark_preview_replaced"):
                                     widget.mark_preview_replaced(rel_key)
+    
+                        # Also show any .bak backup files that now exist on disk
+                        self._update_bak_previews()
                     
                     # Show completion message
                     if self.config.get("dry_run", False):
