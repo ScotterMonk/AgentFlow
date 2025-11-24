@@ -31,8 +31,8 @@ Priority is to follow the `plan`.
 - If unspecified in `plan`, use `codebase_search` to locate integration points and dependencies.
 - For newly discovered dependencies or conflicts: create tasks and insert into `plan file`.
 - Switch to specialized modes when directed by `plan` or otherwise beneficial.
-- Always update `log file` at start and end of each `task`, `phase`, and the `plan`.
-- Always update `plan file` at start and end of each `task`, `phase`, and the `plan`.
+- CRITICAL: Always update `log file` at start and end of each `task`, `phase`, and the `plan` to keep track in case of interruption or problems.
+- CRITICAL: Always update `plan file` at start and end of each `task`, `phase`, and the `plan` to keep track in case of interruption or problems.
 
 ## Completion
 - Open `log file` and `plan file` files for review and declare the `plan` tentatively completed.

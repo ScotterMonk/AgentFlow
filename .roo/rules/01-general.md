@@ -157,6 +157,7 @@ Goal is to reduce size and simplify:
 - Avoid brackets and parens, prefer succinct, no redundancy, no line numbers. 
 Examples:
 - [`models/models_user.py`](app/models/models_user.py) -> `models/models_user.py`.
+- [`models/models_user.py`](app/models/models_user.py:22) -> `models/models_user.py`.
 - See [`.roo/rules/01-general.md`](`.roo/rules/01-general.md:11`) -> See `Critical Resources` section in `.roo/rules/01-general.md`.
 
 #### Formatting
@@ -308,7 +309,7 @@ Steps:
 			[High level description of goal for the plan.]
 			[Some notes.]
 			- Task 01: [Task description.]
-				Mode hint: /task-simple.
+				Mode hint: /task-simple. Pass `path` param
 				[Notes relevant to this task.]
 				[Potential code or pseudocode.]
 				[Potential test.]

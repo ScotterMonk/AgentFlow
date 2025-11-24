@@ -119,7 +119,7 @@ For each `task`, take your time and think carefully as you do the following Q/A:
 		[High level description of goal for the plan.]
 		[Some notes.]
 		- Task 01: [Task description.]
-			Mode hint: /task-simple.
+			Mode hint: /task-simple. Pass `path` param
 			[Notes relevant to this task.]
 			[Potential code or pseudocode.]
 			[Potential test.]
