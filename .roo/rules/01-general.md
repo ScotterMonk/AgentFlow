@@ -79,7 +79,8 @@ Reference `.roo/docs/simplification.md` when:
 Look for the unifying principle that eliminates multiple components.
 
 ### Flask html templates
-Use `jinja-html` language mode.
+When you modify any .html file:
+If it is a Flask template, use VS Code's `jinja-html` language mode.
 
 ### Naming conventions
 Rationale: Domain-first naming groups related code, improves IDE autocomplete, and makes file navigation logical.
@@ -126,7 +127,7 @@ After renaming, verify:
 - No VS Code Problems panel errors
 
 ### Code standards
-- All functions/classes MUST include: `# [Created-or-Modified] by [LLM model] | yyyy-mm-dd_[iteration]`
+- All functions/classes MUST include: `# [Created-or-Modified] by [LLM model ("GPT-5.1", "Grok-4-fast", "Sonnet 4.5", etc)] | yyyy-mm-dd_[iteration]`
 - Templates use `jinja-html` language mode
 - Compact vertical spacing.
 - Multi-line strings for complex SQL queries.
@@ -136,8 +137,8 @@ After renaming, verify:
 fixed += "."
 ```
 - Simple solutions.
-- Preserve existing comments.
-- Comment liberally.
+- Prefer: Preserve existing comments.
+- CRITICAL: Comment liberally.
 - File operations
     - On name collisions, append _[timestamp].
 - Tool preference for web:
@@ -299,6 +300,7 @@ Steps:
 			Use all of the following methods:
             - Use `codebase_search`.
             - Use `agents.md`.
+            - Look in `utils/` and `utils_db\` folders for similar or same functionality.
         - Add mode hints, integration points, and acceptance criteria.
 		- Q/A mode hints. 
             CRITICAL that this is done accurately. Consult user if unsure which mode to assign for a task.

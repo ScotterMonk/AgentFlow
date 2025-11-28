@@ -119,8 +119,7 @@ class FolderItem:
             - timestamp: Human-readable last modified timestamp string
             - action: The underlying planned action object
         """
-        # [Modified] by openai/gpt-5.1 | 2025-11-14_02
-        # [Modified] by openai/gpt-5.1 | 2025-11-16_01
+        # [Created-or-Modified] by openai/gpt-5.1 | 2025-11-28_01
         
         # Clear any existing rows and label mapping
         for child in self.preview_frame.winfo_children():
@@ -131,6 +130,18 @@ class FolderItem:
         
         if not items:
             return
+        
+        # Header row to clearly indicate the planned updates for this folder
+        header_frame = ttk.Frame(self.preview_frame)
+        header_frame.pack(fill=tk.X, pady=(0, 1))
+        header_label = ttk.Label(
+            header_frame,
+            text="These files will be updated:",
+            anchor=tk.W,
+            justify=tk.LEFT,
+            font=("TkDefaultFont", 8, "bold"),
+        )
+        header_label.pack(side=tk.LEFT, fill=tk.X, expand=True)
         
         # Sort so that:
         # - Root-level files (no "/") appear first
