@@ -11,7 +11,7 @@ class FolderItem:
     # [Modified] by openai/gpt-5.1 | 2025-11-14_02
     
     def __init__(self, parent, folder_path: str, remove_callback, overwrite_remove_callback=None,
-                 toggle_favorite_callback=None, is_favorite: bool = False):
+                toggle_favorite_callback=None, is_favorite: bool = False):
         """Initialize a folder item widget.
         
         Args:
