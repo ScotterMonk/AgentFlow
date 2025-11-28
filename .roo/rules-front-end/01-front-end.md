@@ -21,7 +21,7 @@ From `.roo/rules/01-general.md`:
 3) `Naming conventions`
 4) `Code standards`
 5) `Markdown syntax`
-6) `Default Workflow`
+6) `Default Workflow` (CRITICAL: do NOT use this workflow when given a specific task by `/orchestrator`)
 7) `Testing`
 8) `Error Handling and QA`
 9) `Best mode for job`

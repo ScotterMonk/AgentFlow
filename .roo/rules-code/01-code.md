@@ -20,7 +20,7 @@ Before doing any coding work in Code mode, conceptually load and obey the follow
 3) `Naming conventions`
 4) `Code standards`
 5) `Markdown syntax`
-6) `Default Workflow`
+6) `Default Workflow` (CRITICAL: do NOT use this workflow when given a specific task by `/orchestrator`)
 7) `Testing`
 8) `Error Handling and QA`
 
