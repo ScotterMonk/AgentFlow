@@ -15,14 +15,14 @@ Before planning work, conceptually load and obey:
 ## Critical Resources
 
 ### Sources of knowledge
-- `app knowledge`: `agents.md`.
+- App knowledge: `agents.md`.
     From `agents.md`:
-    a) Environment & Run Commands
-    b) Critical Non-Standard Patterns
-    c) Documentation
-    d) External API Provider Framework
-    e) Configuration
-    f) Testing Guidance
+    a) Environment & Run Commands.
+    b) Critical Non-Standard Patterns.
+    c) Documentation.
+    d) External API Provider Framework.
+    e) Configuration.
+    f) Testing Guidance.
 - Codebase: `codebase_search`, `read_file`, `search_files`.
 - Git diff, recent commits.
 - `credentials` for everything: `.env`.
@@ -171,7 +171,9 @@ For the following steps 5 through 6, be sure to determine these 2 settings as se
     - "Few Phases (medium project), many tasks"
     - "Multi-Phase (larger project), many tasks per phase"
 6) FOLLOW THIS INSTRUCTION EXACTLY: SEPARATELY FROM size/complexity above and testing types below, Ask User: `autonomy level` for `plan`. Determine autonomy level separate from testing type below. Choices: "Low" (frequent direction), "Med", "High" (rare direction).
+CRITICAL: DO NOTHING until user answers above question. No timer. Wait forever until user initiates continuance.
 7) FOLLOW THIS INSTRUCTION EXACTLY: SEPARATELY from choices above, Ask User `testing type` for `plan`, Choices: "Run py scripts in terminal", "Use pytest", "Use browser", "Use all", "No testing", "Custom". Important: provide these exact choices to the user.
+CRITICAL: DO NOTHING until user answers above question. No timer. Wait forever until user initiates continuance.
 8) Understand the ask: Problem/feature, intent, scope, constraints, dependencies.
 
 ### 3: Pre-planning
@@ -212,6 +214,7 @@ Steps:
 3) Open the `plan file` in main editor window for user to easily edit and approve:
     Brainstorm on the `plan` with user to resolve any questions, issues, or ambiguity.
     - Modify the `plan file` as changes occur.
+CRITICAL: DO NOTHING until user answers above question. No timer. Wait forever until user initiates continuance.
 4) Finalize the high level `plan` (no tasks yet):
     - Important: think it through carefully. 
     - Take all the time necessary until you are confident you have come up with a solid high level `plan`.
@@ -255,7 +258,7 @@ Steps:
             CRITICAL that this is done accurately. Consult user if unsure which mode to assign for a task.
             Prefer the most budget-friendly modes in the following order of low-to-high budget sorting:
             See `Best mode for job` above.
-		- Task structure example:
+		- Task structure example (Follow this format exactly):
 			```md
 			[High level description of goal.]
 			- Task 01: [Task description.]
@@ -263,13 +266,13 @@ Steps:
 				[Notes relevant to this task.]
 				[Potential code or pseudocode.]
 				[Potential instructions to test.]
-                Log progress.
+                Log your progress to [`log file`].
 			- Task 02: [Task description.]
 				Mode hint: /code-monkey.
 				[Notes relevant to this task.]
 				[Potential code or pseudocode.]
    				[Potential instructions to test.]
-                Log progress.
+                Log your progress to [`log file`].
 			```
             Include pseudo-code or code where appropriate to clarify concepts and create ease/efficiency for worker.
 2) Open the new `plan file` in main editor window for user to easily examine/edit.
@@ -295,6 +298,7 @@ After you have a full draft of tasks:
      - Brainstorm changes,
      - Refine tasks and phases.
    - End when “Approve and Start Work or Modify Plan” yields “Approve and Start Work”.
+CRITICAL: DO NOTHING until user answers above question. No timer. Wait forever until user initiates continuance.
 5)  Completion of planning:
     - Update `log file`, `plan file`.
     - User confirmation: user satisfied or has additional instructions.

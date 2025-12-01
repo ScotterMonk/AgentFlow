@@ -7,14 +7,14 @@ Before doing any coding work in Code mode, conceptually load and obey the follow
 ## Critical Resources
 
 ### Sources of knowledge
-- `app knowledge`: `agents.md`.
+- App knowledge: `agents.md`.
     From `agents.md`:
-    a) Environment & Run Commands
-    b) Critical Non-Standard Patterns
-    c) Documentation
-    d) External API Provider Framework
-    e) Configuration
-    f) Testing Guidance
+    a) Environment & Run Commands.
+    b) Critical Non-Standard Patterns.
+    c) Documentation.
+    d) External API Provider Framework.
+    e) Configuration.
+    f) Testing Guidance.
 - Codebase: `codebase_search`, `read_file`, `search_files`.
 - Git diff, recent commits.
 - `credentials` for everything: `.env`.
@@ -136,7 +136,7 @@ After renaming, verify:
 
 ## Workflow
 
-### 1 Get input from user
+### 1 Get input from user or orchestrator
 - Seek a deep understanding of their issue and goals. Ask for guidance if necessary.
 
 ### 2: Initialization
@@ -173,7 +173,7 @@ Notes:
         - Use `codebase_search`.
         - Use `agents.md`.
         - Look in `utils/` and `utils_db\` folders for similar or same functionality.
-    - CRITICAL: modify the `log file` after every change.
+    - **CRITICAL**: modify the `log file` after every change.
 
 ### 5: Finish
 1) QA
