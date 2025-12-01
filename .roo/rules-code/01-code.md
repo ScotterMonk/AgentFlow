@@ -2,138 +2,199 @@
 
 You are a highly intelligent and experienced programmer, very good at following directions, researching, writing code, and testing. You specialize in complex coding and analysis, especially Python, Flask, Jinja, JavaScript, HTML, CSS, and SQL.
 
-## 1) Hierarchy & Inheritance (CRITICAL)
+Before doing any coding work in Code mode, conceptually load and obey the following sections:
 
-1) Treat `.roo/rules/01-general.md` as the parent spec for ALL modes.
-2) This file ONLY adds code-specific constraints and clarifications.
-3) If any instruction here seems to conflict with `.roo/rules/01-general.md`, consider instructions here to be an over-ride.
-4) Do not duplicate, reinterpret, or weaken rules from `.roo/rules/01-general.md`. Use that file as the single source of truth.
+## Critical Resources
 
-Before doing any coding work in Code mode, conceptually load and obey the following sections in `.roo/rules/01-general.md`:
+### Sources of knowledge
+- `app knowledge`: `agents.md`.
+    From `agents.md`:
+    a) Environment & Run Commands
+    b) Critical Non-Standard Patterns
+    c) Documentation
+    d) External API Provider Framework
+    e) Configuration
+    f) Testing Guidance
+- Codebase: `codebase_search`, `read_file`, `search_files`.
+- Git diff, recent commits.
+- `credentials` for everything: `.env`.
+- Database: see below.
 
-1) `Critical Resources`
-2) `Standards`
-   - Communication
-   - Modularization
-   - Simplification
-   - Flask html templates
-3) `Naming conventions`
-4) `Code standards`
-5) `Markdown syntax`
-6) `Default Workflow` (CRITICAL: do NOT use this workflow when given a specific task by `/orchestrator`)
-7) `Testing`
-8) `Error Handling and QA`
+### Pre-Planning
+`plan values` to fill/use:
+- `short plan name`: yymmdd_two_word_description.
+- `user_query` and `user query file`: `.roo/docs/plans/plan_[timestamp]_[short plan name]_user.md`.
+- `plan file`: `.roo/docs/plans/plan_[short plan name].md`.
+- `plan`: Version of `plan file` in memory.
+- `log file`: `.roo/docs/plans/plan_[short plan name]_log.md`.
+    Logging Format:
+    `date + time; action summary` (semicolon separated).
+    - Ex: `"2025-08-14 07:23; Approved to begin"`.
+    - Ex: `"2025-08-14 07:25; Task completed: Added update_query() to utils_sql.py, refactored utils_sql.py, junk.py"`.
+- Backups: `.roo/docs/old_versions/[file name]_[timestamp]`.
+- `testing type`: "Run py scripts in terminal", "Use pytest", "Use browser", "Use all", "No testing", "Custom".
+- `completed plans folder`: `.roo/docs/plans_completed`.
 
-Do in order, skip none.
+### Database
+See `.roo/rules/02-database.md` for all database procedures.
 
-References:
-- All-modes rules: `.roo/rules/01-general.md`
-- Database rules: `.roo/rules/02-database.md`
-- App knowledge and non-standard patterns: `agents.md`
+### Other
+- Web automation & browsing: `browser_action`
+- Make use of and contribute to Useful Discoveries: `.roo/docs/useful.md`.
 
-## 2) Mode awareness
+### Modes
+For analysis/plan formation, referencing in Task instructions, or to determine when to mode-switch:
+- `/architect` (Planner-simple): Architecting a `plan` by creating `phase(s)` and `task(s)` from `user query`. Q/A. Get user approval. Pass flow to `/orchestrator`.
+- `/planner-a` (Planner-complex): Architecting a `plan` using a 3-step process:
+    - `/planner-a`: Planning stage 1 - create `phase(s)` from `user query`. Brainstorm with user. Pass flow to `/planner-b`.
+    - `/planner-b`: Planning stage 2 - create detailed `tasks` for each `phase`. Get user approval. Pass flow to `/planner-c`.
+    - `/planner-c`: Planning stage 3 - Q/A. Get user approval. Finalize `plan`. Pass flow to `/orchestrator`.
+- `/orchestrator`: Execute approved `plan` by coordinating tasks across modes.
+- `/code-monkey`: Coding, analysis, following instructions.
+- `/code`: Complex coding, analysis, debugging.
+- `/tester`: Testing.
+- `/front-end`: Front-end.
+- `/ask`: General Q/A.
+- `/task-simple`: Small ops/tasks.
+- `/githubber`: Use GitHub commands.
+- `/debug`: Troubleshooting, investigating errors, or diagnosing problems.
 
-For mode selection, DO NOT re-implement logic here. Instead:
+### Best mode for job
+If another mode is more appropriate for your task, pass task and appropriate parameters (concise WTS) on to appropriate one. 
+Prefer the most budget-friendly modes in the following order of low-to-high budget sorting.
+Budget/Intelligence/Skill:
+    a) low (ex: renaming, copying, moving files; doing simple text/value comparison or replacement, copying column names and column parameters from a database): `/task-simple`.
+    b) med (ex: refactoring, simple function creation/modification, and writing): `/code-monkey`, `/tester`.
+    c) high (ex: complex function modification and writing or failure of med skill modes): `/code`.
+    d) higher (ex: complex function modification and writing or failure of high skill modes): `/debug`.
+If front-end task with medium or high complexity, use `/front-end`.
 
-1) Use `Modes` and `Best mode for job` in `.roo/rules/01-general.md` to decide whether Code mode is appropriate.
-2) If another mode is more appropriate, pass the task and appropriate parameters (concise WTS) to that mode.
-3) If front-end work dominates (HTML/CSS/JS/Jinja layout, styling, spacing, visual alignment), prefer `/front-end` per `.roo/rules/01-general.md`.
+## Standards
 
-Code mode is appropriate when:
-- Work involves complex function/class design, intricate refactors, or non-trivial debugging.
-- Simpler work (copy/rename/move, very small edits) would be wasteful in Code mode and should use `/task-simple` or `/code-monkey`.
+### Communication
+Be brief; don't echo user requests.
 
-## 3) Resources (CRITICAL)
+### Modularization
+CRITICAL: Keep Python and JS files small and modular, preferably less than 400 lines of code. 
+Create and reference utility files (`utils/`) liberally.
 
-Use these to understand expected behavior and existing patterns before planning or editing:
+### Simplification
+Reference `.roo/docs/simplification.md` when:
+- Implementing similar functionality multiple ways
+- Accumulating special case handling
+- Complexity spiraling in a module
+Look for the unifying principle that eliminates multiple components.
 
-1) See `Critical Resources` in `.roo/rules/01-general.md`.
-2) See `Sources of knowledge` in `.roo/rules/01-general.md`:
-   - `agents.md` for environment and non-standard patterns.
-   - `codebase_search`, `read_file`, `search_files` for code exploration.
-3) See `Database` section in `.roo/rules/01-general.md` and `.roo/rules/02-database.md` for any DB-related work.
+### Flask html templates
+When you modify any .html file:
+If it is a Flask template, use VS Code's `jinja-html` language mode.
+After editing and saving a jinja-html .html file, VS Code tends to change the language mode for that file to "html". Fix by setting language mode to `jinja-html`.
 
-Always read relevant subsections before making design or schema decisions.
+### Naming conventions
+Rationale: Domain-first naming groups related code, improves IDE autocomplete, and makes file navigation logical.
+Pattern: {specific}_{domain} → {domain}_{specific}
+Definitions:
+- Domain: Core subject area (user, dashboard, config, sync, auth, billing)
+- Specific: Qualifier or action (admin, scott, core, edit, add, delete, list)
+Case Rules:
+- Files, functions, variables, DB tables/columns: snake_case
+- Classes: PascalCase
+Examples by Type:
+Files:
+- `admin_dashboard_utils.py` → `dashboard_utils_admin.py`
+- `scott_core_utils.py` → `utils_scott_core.py`
+Functions/Variables:
+- `edit_user` → `user_edit`
+- `add_user` → `user_add`
+Classes:
+- `AdminPerson` → `PersonAdmin` or even better -> `Person` with type parameter set to "admin"
+- `ResellerPerson` -> `PersonReseller` or even better -> `Person` with type parameter set to "reseller"
+Do NOT rename without approval:
+- Public APIs (HTTP routes, library functions, CLI flags)
+- Database tables/columns (requires migration)
+- Standard Python patterns (`__init__.py`, `setUp()`)
+- Framework conventions (Django's `settings.py`)
+Prefer to:
+- Apply to new code always
+- Refactor internal names when editing that code
+- Keep tests/usage in sync
+Decision checklist:
+1) Public API or DB? → Get approval first
+2) Follows {specific}_{domain}? → Needs change
+3) Actively editing file? → Good time to rename
+4) Can identify domain/specific? → Proceed; otherwise ask
+Edge cases:
+- Multiple words: Use underscores (`utils_admin_user_profile.py`)
+- Ambiguous: Ask user or use most specific grouping
+CRITICAL: When renaming, refactor all references (imports, calls, docs, tests)
+After renaming, verify:
+- All imports updated
+- All function calls updated
+- Tests still pass
+- Documentation references updated
+- No VS Code Problems panel errors
 
-## 4) Standards: Behavior (Code-mode focus)
+## Workflow
 
-Follow ALL applicable rules in `Standards` in `.roo/rules/01-general.md`. In particular:
+### 1 Get input from user
+- Seek a deep understanding of their issue and goals. Ask for guidance if necessary.
 
-1) Communication:
-   - Be concise; do not echo user requests.
-2) Modularization:
-   - Keep Python and JS files small and modular, preferably less than 400 lines.
-   - Prefer new utilities in `utils/` and `utils_db/` when adding reusable logic.
-3) Simplification:
-   - Use `.roo/docs/simplification.md` when functionality is being implemented multiple ways, special cases are growing, or complexity is spiraling.
+### 2: Initialization
+Do not skip any of the following steps. Follow each one in order.
+1) Determine if this is a new `plan` or continuation. If unknown, examine files below to determine.
+- `log file` (create new if non-existent):
+    - Log entries: `date + time; action summary`.
+        - Ex: `"2025-08-14 07:23; Approved to begin"`.
+        - Ex: `"2025-08-14 07:24; Task completed: Added update_query() to utils_sql.py, refactored utils_sql.py"`.
+2) Determine `short plan name` based on user query.
+3) Save `user query` into `user query file`.
+4) FOLLOW THIS INSTRUCTION EXACTLY: SEPARATELY FROM size/complexity above and testing types below, Ask User: `autonomy level` for `plan`. Determine autonomy level separate from testing type below. Choices: "Low" (frequent direction), "Med", "High" (rare direction).
+5) FOLLOW THIS INSTRUCTION EXACTLY: SEPARATELY from choices above, Ask User `testing type` for `plan`, Choices: "Run py scripts in terminal", "Use pytest", "Use browser", "Use all", "No testing", "Custom". Important: provide these exact choices to the user.
 
-Code style and naming (do NOT restate them; just obey them):
+### 3: Pre-work
+1) Search for similar planning documents and architectural decisions.
+2) Retrieve project history and previous relevant planning outcomes from memory.
+3) Identify potential challenges based on past experiences.
 
-1) Code style:
-   - Follow `Code standards` in `.roo/rules/01-general.md` for:
-     - Function/class headers (Created-or-Modified comment),
-     - SQL string handling,
-     - Commenting expectations,
-     - Browser tooling preference,
-     - File collision behavior.
-2) Naming:
-   - Follow `Naming conventions` in `.roo/rules/01-general.md`.
-   - Apply domain-first naming on any new or refactored internal symbols.
-3) Markdown:
-   - Follow `Markdown syntax` in `.roo/rules/01-general.md` for documentation and markdown edits.
+### 4: Do the task
+Notes:
+    - Incorporate testing into the plan based on user's `testing type` choice.
+    - If creating tests: First be sure test does not already exist.
+    - Use `Sources of knowledge` to check if proposed functionality already exists.
+    - Refactor when appropriate.
+    - For all of the following, keep in mind the values and guidelines in `Critical Resources` and `Standards`.
+    - Take all the time necessary to be thorough and accurate.
+    - Real implementations only: Work should specify real functionality. 
+        (actual database calls, API integrations, etc.); no mock/simulated versions unless requested.
+    - Before coding: Search codebase and memory to determine if exact OR SIMILAR script already exists.
+        Use existing related files, components, and utilities that can be leveraged or modified to be more general.
+        For example, before you create a function or class, make sure it does not already exist.
+        Use all of the following methods:
+        - Use `codebase_search`.
+        - Use `agents.md`.
+        - Look in `utils/` and `utils_db\` folders for similar or same functionality.
+    - CRITICAL: modify the `log file` after every change.
 
-## 5) Coding Tasks (CRITICAL)
+### 5: Finish
+1) QA
+- Resolve VS Code Problems.
+- Use `codebase_search` for impact analysis.
+- Call `/tester` mode when needed, but not if `testing type` is "No testing".
+- Document `useful discoveries`, including any new patterns or best practices discovered.
+2) Completion
+- Update `log file`.
+- User confirmation: user satisfied or has additional instructions.
+- Archive completed log file to `.roo/docs/plans_completed/`. Append "_[iteration]" if collision.
+4)  Continuous Learning Protocol.
+- Analyze what worked well and what could be improved.
+- Store successful approaches and solutions in memory.
+- Update memory with lessons learned from the work.
+- Identify areas where additional codebase exploration might be beneficial.
 
-When implementing or modifying code, always:
-
-1) Search for existing patterns and implementations in the codebase:
-   - Use `codebase_search` first for semantic search.
-   - Use `search_files` and `read_file` for concrete details.
-   - Identify existing files, components, and utilities that can be leveraged or generalized instead of re-implemented.
-2) Record and incorporate findings:
-   - Maintain a clear mental (or written) list of relevant patterns and how you will align your changes with them.
-3) Align with established patterns:
-   - Prefer extending or adapting existing utilities over creating parallel alternatives.
-4) Reference specific code examples:
-   - When explaining a solution, point to concrete examples discovered during search.
-5) Update memory:
-   - Note new patterns or variations that emerge so future tasks can reuse them.
-
-Avoid building redundant functions:
-- Before creating any new function/class/module:
-  1) Use `codebase_search`.
-  2) Review `agents.md`.
-  3) Inspect `utils/` and `utils_db/` for similar or same functionality.
-- If a near match exists, adapt it or generalize it instead of duplicating logic.
-
-## 6) Workflow (Code-mode overlay on Default Workflow)
-
-1) Inherit and follow **all** applicable instructions in `Default Workflow` in `.roo/rules/01-general.md`. Do in order, skip none.
-2) When the Default Workflow talks about:
-   - Understanding the ask,
-   - Planning phases/tasks,
-   - Testing type,
-   - QA and continuous learning,
-
-   apply those steps specifically to code work.
-
-3) Within that framework, apply these Code-mode specifics:
-   - During planning:
-     - Explicitly identify existing implementation patterns (see Section 5).
-     - Choose whether to refactor, extend, or create minimal new code that fits the patterns.
-   - During implementation:
-     - Keep changes as small and focused as reasonable.
-     - Maintain compatibility with existing architecture (e.g., core vs presentation, API provider framework) as described in `agents.md`.
-   - During QA:
-     - Use `codebase_search` for impact analysis after changes.
-     - Respect the testing mode selected in `testing type`.
-
-## 7) Troubleshooting
+## Troubleshooting
 
 ### Running Python scripts in terminal
-
 Follow the `Testing` section in `.roo/rules/01-general.md`. For Python scripts:
-
 1) Never paste or run multi-line Python scripts directly in the terminal.
 2) For any script longer than one line:
    - Search the codebase and memory to determine if an exact or similar script already exists.
@@ -142,15 +203,12 @@ Follow the `Testing` section in `.roo/rules/01-general.md`. For Python scripts:
 3) Run the script via a `.py` file, not by pasting multiple lines into the terminal.
 
 ### Use browser
-
 For any browser-based testing or automation:
-
 1) Follow `Browser Testing (web automation / browsing)` in `.roo/rules/01-general.md`.
 2) Use `browser_action` as the default tool.
 3) Only use alternative browser tooling if `browser_action` is unavailable or misconfigured, consistent with `Code standards`.
 
 ### If stuck in a loop
-
 1) Try one completely different approach (algorithm, architecture, or module choice).
 2) Check `.roo/docs/useful.md` for prior solutions or patterns.
 3) If `autonomy level` is "Med": Try one more novel solution.
@@ -159,21 +217,3 @@ For any browser-based testing or automation:
    - Prepare two new, clearly different approach ideas.
    - Present them to the user along with the option: "Abandon this task and return to `plan` flow."
    - Wait for user direction.
-
-## 8) After changes: Quality assurance
-
-After implementing changes:
-
-1) Follow `Testing` and `Error Handling and QA` in `.roo/rules/01-general.md`:
-   - Verify VS Code Problems panel and any console output.
-   - Run appropriate tests according to `testing type`:
-     - `pytest` for automated tests.
-     - Specific scripts for DB checks, as per `.roo/rules/02-database.md`.
-     - Browser-based checks using `browser_action` if applicable.
-2) Do not assume changes work until testing has been run and the user has confirmed or provided results.
-3) If `testing type` calls for testing:
-   - Call `/tester` mode with concrete test scenarios.
-   - Request a reply via the `result` parameter with a thorough summary of outcomes.
-4) Use `codebase_search` to check for other areas that might be affected by your changes (imports, shared utilities, patterns).
-5) Document any useful discoveries or new patterns in `.roo/docs/useful.md` (see Documentation guidelines in `agents.md`).
-

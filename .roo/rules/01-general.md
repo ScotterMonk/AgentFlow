@@ -33,15 +33,15 @@ See `.roo/rules/02-database.md` for all database procedures.
 
 ### Other
 - Web automation & browsing: `browser_action`
-- Make use of Useful Discoveries: `.roo/docs/useful.md`.
+- Make use of and contribute to Useful Discoveries: `.roo/docs/useful.md`.
 
 ### Modes
 For analysis/plan formation, referencing in Task instructions, or to determine when to mode-switch:
-- Planner - Architecting a `plan`, a 4-step process:
-    - `/planner-a`: Planning stage 1 - create `phase(s)` from `user query`. Pass flow to `/planner-b`.
-    - `/planner-b`: Planning stage 2 - refine output from `/planner-a`. Q/A. Pass flow to `/planner-c`.
-    - `/planner-c`: Planning stage 3 - create `tasks` for each `phase`. Get user approval. Pass flow to `/planner-d`.
-    - `/planner-d`: Planning stage 4 - Q/A. Get user approval. Pass flow to `/orchestrator`.
+- `/architect` (Planner-simple): Architecting a `plan` by creating `phase(s)` and `task(s)` from `user query`. Q/A. Get user approval. Pass flow to `/orchestrator`.
+- `/planner-a` (Planner-complex): Architecting a `plan` using a 3-step process:
+    - `/planner-a`: Planning stage 1 - create `phase(s)` from `user query`. Brainstorm with user. Pass flow to `/planner-b`.
+    - `/planner-b`: Planning stage 2 - create detailed `tasks` for each `phase`. Get user approval. Pass flow to `/planner-c`.
+    - `/planner-c`: Planning stage 3 - Q/A. Get user approval. Finalize `plan`. Pass flow to `/orchestrator`.
 - `/orchestrator`: Execute approved `plan` by coordinating tasks across modes.
 - `/code-monkey`: Coding, analysis, following instructions.
 - `/code`: Complex coding, analysis, debugging.
@@ -60,7 +60,7 @@ Budget/Intelligence/Skill:
     b) med (ex: refactoring, simple function creation/modification, and writing): `/code-monkey`, `/tester`.
     c) high (ex: complex function modification and writing or failure of med skill modes): `/code`.
     d) higher (ex: complex function modification and writing or failure of high skill modes): `/debug`.
-If front-end task, use `/front-end`.
+If front-end task with medium or high complexity, use `/front-end`.
 
 ## Standards
 
@@ -81,6 +81,7 @@ Look for the unifying principle that eliminates multiple components.
 ### Flask html templates
 When you modify any .html file:
 If it is a Flask template, use VS Code's `jinja-html` language mode.
+After editing and saving a jinja-html .html file, VS Code tends to change the language mode for that file to "html". Fix by setting language mode to `jinja-html`.
 
 ### Naming conventions
 Rationale: Domain-first naming groups related code, improves IDE autocomplete, and makes file navigation logical.
@@ -260,6 +261,7 @@ Steps:
     - Explore relevant values in `Critical Resources`;
     - Ask clarifying questions of user.
     - Move on when you have full confidence.
+    - CRITICAL: At start of `phase` instructions, put "Backup [files in this phase that will be changed] to `.roo/docs/old_versions/[file name]_[timestamp]`."
     Modify the `plan file` when you are confident in the draft high level `plan`.
 4) Open the `plan file` in main editor window for user to easily edit and approve:
     Brainstorm on the `plan` with user to resolve any questions, issues, or ambiguity.
@@ -276,13 +278,14 @@ Steps:
 
 ### 6: Add detailed tasks
 Notes:
-    - Incorporate (or not) testing into the plan based on user's `testing type` choice.
+    - Incorporate testing into the plan based on user's `testing type` choice.
     - If creating tests: First be sure test does not already exist.
     - Remember you are creating a plan for another mode to build, not building.
     - Use `Sources of knowledge` to check if proposed functionality already exists.
     - Explicitely add refactoring to appropriate stages as tasks.
-You MUST complete each step below before proceeding to the next.
-- Take all the time necessary until you are confident each task meets all task criteria detailed below.
+    - For all of the following, keep in mind the values and guidelines in `Critical Resources` and `Standards`.
+    - You MUST complete each step below before proceeding to the next.
+    - Take all the time necessary until you are confident each task meets all task criteria detailed below.
 Steps:
 1) Modify `plan` to have detailed `task(s)`:
     - Real implementations only: Tasks should specify real functionality 
@@ -308,20 +311,21 @@ Steps:
             See `Best mode for job` above.
 		- Task structure example:
 			```md
-			[High level description of goal for the plan.]
-			[Some notes.]
+			[High level description of goal.]
 			- Task 01: [Task description.]
 				Mode hint: /task-simple. Pass `path` param
 				[Notes relevant to this task.]
 				[Potential code or pseudocode.]
-				[Potential test.]
+				[Potential instructions to test.]
+                Log progress.
 			- Task 02: [Task description.]
 				Mode hint: /code-monkey.
 				[Notes relevant to this task.]
 				[Potential code or pseudocode.]
-				[Potential test.]
+   				[Potential instructions to test.]
+                Log progress.
 			```
-        - Include pseudo-code or code where appropriate to clarify concepts and create ease/efficiency for worker.
+            Include pseudo-code or code where appropriate to clarify concepts and create ease/efficiency for worker.
 2) Open the new `plan file` in main editor window for user to easily examine/edit.
 3) Brainstorm on the `plan` with user to resolve any questions, issues, or ambiguity.
     Loop through the following until you have a clear understanding of the user's need (keeping aware of `autonomy level`):

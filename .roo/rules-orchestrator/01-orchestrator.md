@@ -48,10 +48,10 @@ Your primary role:
 
 Typical upstream:
 
-- You are usually called by `/planner-d` (or `/architect`) after the plan is approved.
+- You are usually called by `/planner-c` (or `/architect`) after the plan is approved.
 - You assume:
   - `plan file` is present and describes phases and tasks.
-  - `log file` exists or is defined.
+  - `log file` exists or is defined. CRITICAL to use it to log all progress and issues.
   - `short plan name`, `autonomy level`, and `testing type` are known.
 
 ## 3) Critical Resources

@@ -6,8 +6,8 @@ Use it to create apps or make changes/additions to existing ones.
 This set of instructions (markdown files) enhances and extends the modes/agents that come with many coding agents/assistants. The instructions are tailored to work with Roo Code (free highly customizable VS Code extension) but will work with many others, including Cursor, CLine, Kilo,Github Copilot, etc.
 
 Using the built-in-to-Roo ability to use "rules" files, this archive is a set of custom instructions for the built-in modes/agents and some new ones, including:
-- **Architect Super Team**: a 4-step "Planner" process (planner-a, planner-b, planner-c, planner-d). While planning and while working, creates detailed files to keep track of its goals, progress, and lessons learned.
-- **Architect Quick**: a 1-step "Planner" process; modified Roo's built-in Architect mode to be more detailed but for smaller tasks than full on 4-step "Planner" process.
+- **Architect Super Team**: a 3-step "Planner" process (planner-a, planner-b, planner-c). Brainstorms with user. While planning and working, creates detailed files to keep track of its goals, progress, and lessons learned.
+- **Architect Quick**: a 1-step "Planner" process; modified Roo's built-in Architect mode to be more detailed but for smaller tasks than full on 3-step "Planner" process.
 - **Coder on Crack**: Juiced up "Code" mode to follow The Plan, whether created by the new superpowered Architect or hastily typed out by a user running 3 days on caffeine.
 - **Code Monkey** (Junior coder): Supplemented "Code" with a tightly controlled budget-friendly "Code Monkey" created to work with the short, detailed tasks created for it by Planner.
 - **Other new modes**: Added "Front-end", "Debugger", "Tester", "GitHubber", "Docs Writer", etc.
@@ -89,8 +89,6 @@ app
     │   └── 01-planner-b.md
     ├── rules-planner-c
     │   └── 01-planner-c.md
-    ├── rules-planner-d
-    │   └── 01-planner-d.md
     ├── rules-project-mgr
     │   └── 01-project-mgr.md
     ├── rules-task-simple
@@ -163,6 +161,7 @@ Here's a prompt I give a "thinking/reasoning" model with large context:
 CRITICAL: Reference `.roo/rules/01-general.md` liberally with section references, rather than duplicating *anything* that is in `.roo/rules/01-general.md`.
 Example: 
 "
+
 ### Naming Convention
 Follow `Naming Conventions` section in `.roo/rules/01-general.md`
 "
@@ -175,9 +174,10 @@ Highest priority - follow to the letter:
 ```
 
 ## My recipe for getting a lot done very inexpensively:
+Some of the tips below are subject to change often, especially which models to use for which mode.
 1) Use *free* Roo Code.
 2) Use *free* AgentFlow (just a bunch of .md files telling modes exactly how to act, delegate, and more).
-3) Set AgentFlow's "Planner" subteam to use GPT-5.1-Medium-Reasoning or Sonnet 4.5-R-1M.
+3) Set Architect or AgentFlow's "Planner" subteam to use GPT-5.1-Medium-Reasoning or Sonnet 4.5-R-1M.
 4) Set "Code" (Senior Coder) mode to use a cheap-but-smart-model like GPT-5.1-Medium. Seriously, on paper, GPT 5.1 seems far more expensive than it really is but I find it runs so efficiently that it ends up doing a lot for pennies! I use it through OpenRouter or through OpenAI, choosing "Flex" service tier because I'm fine with how slow it is.
 5) Set "Code Monkey" (Jr Coder) mode to use a cheaper coding model like GPT-5.1-Low or GLM 4.6 or Kimi K2 or Gemini 2.5 Flash (through OpenRouter is least expensive) or any comparable model because that "Planner" team I mentioned writes a very detailed plan that even includes pseudocode or code so that when the plan gets delegated by Orchestrator, Code and Code Monkey know exactly what they are expected to do.
 6) Set "Task-Simple" mode to use one of those dumb-and-cheap models like the Gemini 2.5 Flash I mentioned above. The AgentFlow team knows to delegate all file copying, and other simple tasks to this mode so you don't have your expensive models wasting money on stuff like that.
