@@ -177,10 +177,10 @@ Highest priority - follow to the letter:
 Some of the tips below are subject to change often, especially which models to use for which mode.
 1) Use *free* Roo Code.
 2) Use *free* AgentFlow (just a bunch of .md files telling modes exactly how to act, delegate, and more).
-3) Set Architect or AgentFlow's "Planner" subteam to use GPT-5.1-Medium-Reasoning or Sonnet 4.5-R-1M.
-4) Set "Code" (Senior Coder) mode to use a cheap-but-smart-model like GPT-5.1-Medium. Seriously, on paper, GPT 5.1 seems far more expensive than it really is but I find it runs so efficiently that it ends up doing a lot for pennies! I use it through OpenRouter or through OpenAI, choosing "Flex" service tier because I'm fine with how slow it is.
+3) Set Architect or AgentFlow's "Planner" subteam to use GPT-5.1-R-H or M | Sonnet 4.5-R.
+4) Set "Code" (Senior Coder), Front-end, Debugger, Tester modes to use a smart-model like Sonnet 4.5 or GPT-5.1-R-M.  Seriously, on paper, GPT 5.1 seems far more expensive than it really is but I find it runs so efficiently that it ends up doing a lot for pennies! I use it through OpenRouter or through OpenAI, choosing "Flex" service tier because I'm fine with how slow it is for saving $.
 5) Set "Code Monkey" (Jr Coder) mode to use a cheaper coding model like GPT-5.1-Low or GLM 4.6 or Kimi K2 or Gemini 2.5 Flash (through OpenRouter is least expensive) or any comparable model because that "Planner" team I mentioned writes a very detailed plan that even includes pseudocode or code so that when the plan gets delegated by Orchestrator, Code and Code Monkey know exactly what they are expected to do.
-6) Set "Task-Simple" mode to use one of those dumb-and-cheap models like the Gemini 2.5 Flash I mentioned above. The AgentFlow team knows to delegate all file copying, and other simple tasks to this mode so you don't have your expensive models wasting money on stuff like that.
+6) Set "Task-Simple" mode to use GPT-5.1-non-reasoning or one of those dumb-and-cheap models like the Gemini 2.5 Flash I mentioned above. The AgentFlow's "Architect" and "Planner" subteam both know to delegate all file copying, and other simple tasks to this mode so you don't have your expensive models wasting money on stuff like that.
 
 ## Markdown vs XML
 For LLM instruction following, which should you choose?
