@@ -1,15 +1,4 @@
-# Planner Level A (planner-a)
-
-You are an experienced and inquisitive technical leader, architect, and excellent planner skilled at seeing the big picture. 
-You are the first part of a 4-part plan-making process.
-Summary of your goals:
-1) Capture the `user_query`.
-2) Identify the core objective, key entities (eg, data classes, functions), and constraints. This initial analysis determines the scope of context gathering.
-3) Gather information and get context to create a plan of high level phase(s) for accomplishing the user's request.
-4) Brainstorm with user until approval.
-5) **CRITICAL: Pass the approved `plan` to `/planner-b` for execution. Do NOT execute tasks yourself.**
-
-Every one of the rules below is important. Follow them carefully, skip nothing.
+# Planning
 
 ## Critical Resources
 
@@ -25,9 +14,9 @@ Every one of the rules below is important. Follow them carefully, skip nothing.
 - Codebase: `codebase_search`, `read_file`, `search_files`.
 - Git diff, recent commits.
 - `credentials` for everything: `.env`.
-- Database: see below.
+- Database: `.roo/rules/02-database.md` for all database procedures.
 
-### Pre-Planning
+### Planning
 `plan values` to fill/use:
 - `short plan name`: yymmdd_two_word_description.
 - `user_query` and `user query file`: `.roo/docs/plans/plan_[timestamp]_[short plan name]_user.md`.
@@ -41,13 +30,6 @@ Every one of the rules below is important. Follow them carefully, skip nothing.
 - Backups: `.roo/docs/old_versions/[file name]_[timestamp]`.
 - `testing type`: "Run py scripts in terminal", "Use pytest", "Use browser", "Use all", "No testing", "Custom".
 - `completed plans folder`: `.roo/docs/plans_completed`.
-
-### Database
-See `.roo/rules/02-database.md` for all database procedures.
-
-### Other
-- Web automation & browsing: `browser_action`
-- Make use of and contribute to Useful Discoveries: `.roo/docs/useful.md`.
 
 ### Modes
 For analysis/plan formation, referencing in Task instructions, or to determine when to mode-switch:
@@ -67,7 +49,7 @@ For analysis/plan formation, referencing in Task instructions, or to determine w
 - `/debug`: Troubleshooting, investigating errors, or diagnosing problems.
 
 ### Best mode for job
-When planning mode hints for tasks: prefer the most budget-friendly modes in the following order of low-to-high budget sorting.
+If another mode is more appropriate for your task, pass task and appropriate parameters (concise WTS) on to appropriate one. 
 Prefer the most budget-friendly modes in the following order of low-to-high budget sorting.
 Budget/Intelligence/Skill:
     a) low (ex: renaming, copying, moving files; doing simple text/value comparison or replacement, copying column names and column parameters from a database): `/task-simple`.
@@ -82,7 +64,7 @@ If front-end task with medium or high complexity, use `/front-end`.
 Be brief; don't echo user requests.
 
 ### Modularization
-CRITICAL: Keep Python and JS files small and modular, preferably less than 400 lines of code. 
+CRITICAL: Keep Python and JS files small and modular, prefer less than 400 lines of code. 
 Create and reference utility files (`utils/`) liberally.
 
 ### Simplification
@@ -141,8 +123,76 @@ After renaming, verify:
 - Documentation references updated
 - No VS Code Problems panel errors
 
-## Workflow
-Do in order, skip none.
+### Code standards
+- All functions/classes MUST include: `# [Created-or-Modified] by [LLM model ("GPT-5.1", "Grok-4-fast", "Sonnet 4.5", etc)] | yyyy-mm-dd_[iteration]`
+- Templates use `jinja-html` language mode
+- Compact vertical spacing.
+- Multi-line strings for complex SQL queries.
+- Prioritize readable code over compact syntax.
+- Prioritize quotes over semi-quotes. Ex:
+```python
+fixed += "."
+```
+- Simple solutions.
+- Prefer: Preserve existing comments.
+- CRITICAL: Comment liberally.
+- File operations
+    - On name collisions, append _[timestamp].
+- Tool preference for web:
+    - Default: `browser_action`.
+    - Fallback: Use any other browser tooling only if `browser_action` is unavailable or misconfigured.
+
+### Markdown syntax
+
+#### Vertical Spacing
+- Minimal empty lines between sections
+- No empty lines between related list items
+- Headers immediately followed by content
+- Single empty line between major sections only
+
+#### References (file and otherwise)
+Goal is to reduce size and simplify:
+- Avoid brackets and parens, prefer succinct, no redundancy, no line numbers. 
+Examples:
+- [`models/models_user.py`](app/models/models_user.py) -> `models/models_user.py`.
+- [`models/models_user.py`](app/models/models_user.py:22) -> `models/models_user.py`.
+- See [`.roo/rules/01-general.md`](`.roo/rules/01-general.md:11`) -> See `Critical Resources` section in `.roo/rules/01-general.md`.
+
+#### Formatting
+- Use 4-space indentation for nested items.
+- Numbered lists with `)` separator: `1)`, `2)`
+- Avoid double-asterisks: "**Impact:**" -> "Impact:".
+- Use colons for emphasis instead of bold.
+- Back-ticks for code/file references, not brackets.
+- Simple, direct formatting.
+- Compact bullet points without extra spacing.
+- Related items grouped tightly.
+- Clear section breaks with single empty line.
+- Immediate content after headers.
+
+#### Examples
+Good:
+```
+## Section
+Content immediately follows.
+- Item one
+- Item two
+- Item three
+```
+
+Avoid:
+```
+## Section
+
+Content with extra spacing.
+
+- Item one
+
+- Item two
+```
+
+## Default Workflow
+Do in order, skip none:
 
 ### 1 Input
 From user:
@@ -171,9 +221,7 @@ For the following steps 5 through 6, be sure to determine these 2 settings as se
     - "Few Phases (medium project), many tasks"
     - "Multi-Phase (larger project), many tasks per phase"
 6) FOLLOW THIS INSTRUCTION EXACTLY: SEPARATELY FROM size/complexity above and testing types below, Ask User: `autonomy level` for `plan`. Determine autonomy level separate from testing type below. Choices: "Low" (frequent direction), "Med", "High" (rare direction).
-CRITICAL: DO NOTHING until user answers above question. No timer. Wait forever until user initiates continuance.
 7) FOLLOW THIS INSTRUCTION EXACTLY: SEPARATELY from choices above, Ask User `testing type` for `plan`, Choices: "Run py scripts in terminal", "Use pytest", "Use browser", "Use all", "No testing", "Custom". Important: provide these exact choices to the user.
-CRITICAL: DO NOTHING until user answers above question. No timer. Wait forever until user initiates continuance.
 8) Understand the ask: Problem/feature, intent, scope, constraints, dependencies.
 
 ### 3: Pre-planning
@@ -195,48 +243,109 @@ CRITICAL: DO NOTHING until user answers above question. No timer. Wait forever u
 
 ### 5: Create plan phase(s)
 Notes:
-    - Outline `phase(s)`, depending on user's "one-phase or multi-phase" choice above.
-    - For all of the following, keep in mind the values and guidelines in `Critical Resources` and `Standards`.
-    - You MUST complete each step below before proceeding to the next.
+- Outline `phase(s)`, depending on user's "one-phase or multi-phase" choice above.
+You MUST complete each step below before proceeding to the next.
 Steps:
 1) Add `phase(s)` to `plan`.
     Draft a high level `plan` based on `user query` with no tasks yet:
     - Real implementations only: Phases should specify real functionality (actual database calls, API integrations, etc.); 
         no mock/simulated versions unless requested.
     - Identify existing functionality that can be copied, leveraged, or modified to be more general. 
-2) Think through the draft `plan`, step-by-step, looking specifically for ways it could be improved.
+3) Think through the draft `plan`, step-by-step, looking specifically for ways it could be improved.
     Loop through each `phase` to:
     - Explore relevant values in `Critical Resources`;
     - Ask clarifying questions of user.
     - Move on when you have full confidence.
     - CRITICAL: At start of `phase` instructions, put "Backup [files in this phase that will be changed] to `.roo/docs/old_versions/[file name]_[timestamp]`" into `plan`.
     Modify the `plan file` when you are confident in the draft high level `plan`.
-3) Open the `plan file` in main editor window for user to easily edit and approve:
+4) Open the `plan file` in main editor window for user to easily edit and approve:
     Brainstorm on the `plan` with user to resolve any questions, issues, or ambiguity.
     - Modify the `plan file` as changes occur.
-4) Finalize the high level `plan` (no tasks yet):
+5) Finalize the high level `plan` (no tasks yet):
     - Important: think it through carefully. 
     - Take all the time necessary until you are confident you have come up with a solid high level `plan`.
     - Do not offer a time estimate.
-5) Modify the `plan file` to be in sync with latest `plan`.
-6) Open the `plan file` in main editor window for user to easily edit and approve.
+6) Modify the `plan file` to be in sync with latest `plan`.
+7) Open the `plan file` in main editor window for user to easily edit and approve.
     Loop through until user approves:
     - Brainstorm with user: refine and converge on the final approved high level `plan`.
     - End loop when "'Approve and pass to next planner level' or 'Modify this high level plan'" yields "Approve and pass to next planner level".
-CRITICAL: DO NOTHING until user answers above question. No timer. Wait forever until user initiates continuance.
 
-### 6: Pass Plan on for detailed tasks creation
-After user approval, this `planner-a` Mode must **not** execute the plan.
-Instead:
-1) Ensure the `plan file` includes:
-   - `short plan name`.
-   - `log file` name.
-   - `user query` and `user query file` name.
-   - `autonomy level`.
-   - `testing type`.
-2) Switch to `/planner-b` mode:
-    - Pass the `plan file` name to `/planner-b`.
-    - Pass any additional instructions that are **not** already in the `plan file` but are needed for correct execution.
-    - CRITICAL: Pass control/execution fully to `/planner-b`.
-    - Do NOT pause to run tasks or start implementing anything yourself.
-    - Do NOT attempt to execute tasks yourself.
+### 6: Add detailed tasks
+Notes:
+    - Incorporate testing into the plan based on user's `testing type` choice.
+    - If creating tests: First be sure test does not already exist.
+    - Remember you are creating a plan for another mode to build, not building.
+    - Use `Sources of knowledge` to check if proposed functionality already exists.
+    - Explicitely add refactoring to appropriate stages as tasks.
+    - For all of the following, keep in mind the values and guidelines in `Critical Resources` and `Standards`.
+    - You MUST complete each step below before proceeding to the next.
+    - Take all the time necessary until you are confident each task meets all task criteria detailed below.
+Steps:
+1) Modify `plan` to have detailed `task(s)`:
+    - Real implementations only: Tasks should specify real functionality 
+        (actual database calls, API integrations, etc.); no mock/simulated versions unless requested.
+    - CRITICAL: Task structure. Tasks must follow these rules:
+        - Each task = ONE atomic action only. Use "Action:" instead of "Steps:" to reinforce this. 
+        - NO multi-step instructions within tasks.
+        - Avoid numbered sub-steps within tasks.
+        - NO complex dependencies between tasks.
+        - Tasks must be self-contained and executable independently.
+        - **Avoid building redundant functions.**
+            Search codebase and memory to determine if exact OR SIMILAR script already exists.
+            Use existing related files, components, and utilities that can be leveraged or modified to be more general.
+            For example, before you create a function or class, make sure it does not already exist.
+			Use all of the following methods:
+            - Use `codebase_search`.
+            - Use `agents.md`.
+            - Look in `utils/` and `utils_db\` folders for similar or same functionality.
+        - Add mode hints, integration points, and acceptance criteria.
+		- Q/A mode hints. 
+            CRITICAL that this is done accurately. Consult user if unsure which mode to assign for a task.
+            Prefer the most budget-friendly modes in the following order of low-to-high budget sorting:
+            See `Best mode for job` above.
+		- Task structure example (Follow this format exactly):
+			```md
+			[High level description of goal.]
+			- Task 01: [Task description.]
+				Mode hint: /task-simple. Pass `path` param
+				[Notes relevant to this task.]
+				[Potential code or pseudocode.]
+				[Potential instructions to test.]
+                CRITICAL: Log your progress to [`log file`].
+			- Task 02: [Task description.]
+				Mode hint: /code-monkey.
+				[Notes relevant to this task.]
+				[Potential code or pseudocode.]
+   				[Potential instructions to test.]
+                CRITICAL: Log your progress to [`log file`].
+			```
+            Include pseudo-code or code where appropriate to clarify concepts and create ease/efficiency for worker.
+2) Open the new `plan file` in main editor window for user to easily examine/edit.
+3) Brainstorm on the `plan` with user to resolve any questions, issues, or ambiguity.
+    Loop through the following until you have a clear understanding of the user's need (keeping aware of `autonomy level`):
+    - Explore values in `Critical Resources & Standards`;
+    - Ask clarifying questions of user.
+    - Modify the `plan file` and `log file` as changes occur.
+
+### 7: Refine the plan
+Loop through until user approves:
+Notes:
+- Brainstorm with user: refine and converge on the final approved `plan`.
+- End loop when "Approve and Start Work or Modify Plan" yields "Approve and Start Work".
+- Follow each step below in order, with precision, skip none.
+1) Do the work.
+2) QA
+- Resolve VS Code Problems.
+- Use `codebase_search` for impact analysis.
+- Call `/tester` mode when needed, but not if `testing type` is "No testing".
+- Document `useful discoveries`, including any new patterns or best practices discovered.
+3)  Completion
+- Update `log file`, `plan file`.
+- User confirmation: user satisfied or has additional instructions.
+- Archive completed plan/log files to `.roo/docs/plans_completed/`. Append "_[iteration]" if collision.
+4)  Continuous Learning Protocol.
+- Analyze what worked well and what could be improved.
+- Store successful approaches and solutions in memory.
+- Update memory with lessons learned from the work.
+- Identify areas where additional codebase exploration might be beneficial.

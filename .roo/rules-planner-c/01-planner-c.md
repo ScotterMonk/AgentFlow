@@ -170,6 +170,7 @@ Notes:
     - Step through the `plan`, one `task` at a time.
     - CRITICAL to complete each step below. Do not skip any.
     - For each `task`, take your time and think carefully as you do the Q/A.
+    - CRITICAL: Make sure at the end of a task's instructions, it has "CRITICAL: Log your progress to [`log file`]."
 Steps:
 1) Q/A task structure to be sure task follows these rules:
     - Real implementations only: Tasks should specify real functionality 

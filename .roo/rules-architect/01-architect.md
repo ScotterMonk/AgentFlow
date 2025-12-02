@@ -127,7 +127,7 @@ Prefer to:
 - Keep tests/usage in sync
 Decision checklist:
 1) Public API or DB? → Get approval first
-2) Follows {specific}_{domain}? → Needs change
+2) Follows {specific}_{domain}? → Needs change to {domain}_{specific}
 3) Actively editing file? → Good time to rename
 4) Can identify domain/specific? → Proceed; otherwise ask
 Edge cases:
@@ -209,7 +209,7 @@ Steps:
     - Explore relevant values in `Critical Resources`;
     - Ask clarifying questions of user.
     - Move on when you have full confidence.
-    - CRITICAL: At start of `phase` instructions, put "Backup [files in this phase that will be changed] to `.roo/docs/old_versions/[file name]_[timestamp]`."
+    - CRITICAL: At start of `phase` instructions, put "Backup [files in this phase that will be changed] to `.roo/docs/old_versions/[file name]_[timestamp]`" into `plan`.
     Modify the `plan file` when you are confident in the draft high level `plan`.
 3) Open the `plan file` in main editor window for user to easily edit and approve:
     Brainstorm on the `plan` with user to resolve any questions, issues, or ambiguity.
@@ -266,13 +266,13 @@ Steps:
 				[Notes relevant to this task.]
 				[Potential code or pseudocode.]
 				[Potential instructions to test.]
-                Log your progress to [`log file`].
+                CRITICAL: Log your progress to [`log file`].
 			- Task 02: [Task description.]
 				Mode hint: /code-monkey.
 				[Notes relevant to this task.]
 				[Potential code or pseudocode.]
    				[Potential instructions to test.]
-                Log your progress to [`log file`].
+                CRITICAL: Log your progress to [`log file`].
 			```
             Include pseudo-code or code where appropriate to clarify concepts and create ease/efficiency for worker.
 2) Open the new `plan file` in main editor window for user to easily examine/edit.
@@ -289,6 +289,7 @@ After you have a full draft of tasks:
      - Simulate what the delegated worker mode will do.
      - Predict effects on DB, routes, utils, templates, external APIs, and tests.
      - Modify the task if necessary to remove ambiguity or risk.
+     - CRITICAL: Make sure at the end of a task's instructions, it has "CRITICAL: Log your progress to [`log file`]."
 2) Take your time:
    - Depth and persistence here do **not** depend on `autonomy level`.
    - Continue until you are confident the `plan` is coherent, minimal, and executable.

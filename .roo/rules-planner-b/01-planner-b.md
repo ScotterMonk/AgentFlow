@@ -209,7 +209,7 @@ Steps:
         - Add mode hints, integration points, and acceptance criteria.
 		- Q/A mode hints. 
             CRITICAL that this is done accurately. Consult user if unsure which mode to assign for a task.
-            Prefer the most budget-friendly modes in the following order of low-to-high budget sorting:
+            Prefer the most budget-friendly modes:
             See `Best mode for job` above.
 		- Task structure example (Follow this format exactly):
 			```md
@@ -219,13 +219,13 @@ Steps:
 				[Notes relevant to this task.]
 				[Potential code or pseudocode.]
 				[Potential instructions to test.]
-                Log your progress to [`log file`].
+                CRITICAL: Log your progress to [`log file`].
 			- Task 02: [Task description.]
 				Mode hint: /code-monkey.
 				[Notes relevant to this task.]
 				[Potential code or pseudocode.]
    				[Potential instructions to test.]
-                Log your progress to [`log file`].
+                CRITICAL: Log your progress to [`log file`].
 			```
             Include pseudo-code or code where appropriate to clarify concepts and create ease/efficiency for worker.
 2) Open the new `plan file` in main editor window for user to easily examine/edit.
