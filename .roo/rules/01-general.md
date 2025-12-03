@@ -18,7 +18,6 @@
 - Codebase: `codebase_search`, `read_file`, `search_files`.
 - Git diff, recent commits.
 - `credentials` for everything: `.env`.
-- Database: see below.
 
 ### Database
 See `.roo/rules/02-database.md` for all database procedures.

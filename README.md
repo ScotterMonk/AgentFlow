@@ -182,7 +182,7 @@ The following tips are based on the way AgentFlow "front loads" the heavy-liftin
 - **Architect** and **Planner (team)**: GPT-5.1-R-H or M | Sonnet 4.5-R.
 - **Code (Senior Coder)**, **Front-end**, **Debugger**, **Tester**: Sonnet 4.5 | GPT-5.1-R-M. Note: On paper, GPT 5.1 seems far more expensive than it really is but I find it runs so efficiently that it ends up doing a lot for pennies! I use it through OpenRouter or through OpenAI, choosing "Flex" service tier because I'm fine with how slow it is for saving $.
 - **Code Monkey (Jr Coder)**: GPT-5.1-Low | GLM 4.6 | Kimi K2 | Gemini 2.5 Flash (through OpenRouter is least expensive) or any comparable model because "Architect" (AgentFlow's version) and "Planner" team write a very detailed plan that even includes pseudocode or code so that when the plan gets delegated by Orchestrator, Code and Code Monkey know *exactly* what they are expected to do.
-- **Task-Simple**: GPT-5.1-non-reasoning or one of those dumb-and-cheap models mentioned above. The AgentFlow's "Architect" and "Planner" subteam both know to delegate all file copying, and other simple tasks to this mode so your expensive models aren't wasting money on stuff like that.
+- **Task-Simple** and **Githubber**: GPT-5.1-non-reasoning or one of those dumb-and-cheap models mentioned above. The AgentFlow's "Architect" and "Planner" subteam both know to delegate all file copying, and other simple tasks to this mode so your expensive models aren't wasting money on stuff like that.
 
 ## Markdown vs XML
 For LLM instruction following, which should you choose?
