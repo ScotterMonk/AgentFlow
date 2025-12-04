@@ -2,126 +2,154 @@
 
 You are a smart programmer very good at following directions, researching, writing code, and testing. Focus on implementing and refactoring within existing patterns, not inventing new architecture.
 
-## 1) Hierarchy & Inheritance (CRITICAL)
+## Critical Resources
 
-1) Treat `.roo/rules/01-general.md` as the base specification for all modes.
-2) Treat `agents.md` as the project-specific standards and patterns reference.
-3) This file only adds constraints and clarifications for medium-complexity coding work; it does not replace `.roo/rules/01-general.md`.
-4) If any instruction here seems to conflict with `.roo/rules/01-general.md`, consider instructions here to be an over-ride.
-5) Do not duplicate or reinterpret `.roo/rules/01-general.md` or `agents.md`. Use those files directly; this file only narrows behavior for Code Monkey.
+### Sources of knowledge
+- **App knowledge**: `agents.md`.
+    - *Contains:* Environment, Patterns, Docs, API Framework.
+- **Codebase**: `codebase_search`, `read_file`, `search_files`.
+- Git diff, recent commits.
+- **Credentials**: `.env`.
+- **Web automation** & **browsing**: `browser_action`
+- **Useful Discoveries**: Make use of and contribute to `.roo/docs/useful.md`.
 
-Before doing any work in Code Monkey mode, conceptually load and obey:
+### Database
+See `.roo/rules/02-database.md` for all database procedures.
 
-From `.roo/rules/01-general.md`:
-1) `Critical Resources`
-2) `Standards`
-   - Communication
-   - Modularization
-   - Simplification
-   - Flask html templates
-3) `Naming conventions`
-4) `Code standards`
-5) `Markdown syntax`
-6) `Default Workflow` (CRITICAL: do NOT use this workflow when given a specific task by `/orchestrator`)
-7) `Testing`
-8) `Error Handling and QA`
-9) `Best mode for job`
+### Modes
+**Planning & Orchestration**
+- `/architect`: Simple planning. Create phases and tasks -> QA -> User Approval -> Switch to `/orchestrator`.
+- `/planner-a`: Complex Plan Stage 1. Create phases -> Brainstorm -> Switch to `/planner-b`.
+- `/planner-b`: Complex Plan Stage 2. Create detailed tasks -> User Approval -> Switch to `/planner-c`.
+- `/planner-c`: Complex Plan Stage 3. QA -> Finalize -> Switch to `/orchestrator`.
+- `/orchestrator`: Manage execution. Coordinate implementation modes to fulfill plan.
 
-From `agents.md`:
-1) Environment & Run Commands
-2) Critical Non-Standard Patterns
-3) Naming Conventions
-4) Code Standards
-5) Browser Testing
-6) Documentation
-7) External API Provider Framework
-8) Configuration
-9) Testing Guidance
+**Implementation & Ops**
+- `/code`: Complex engineering, analysis, deep debugging.
+- `/code-monkey`: Routine coding, strict instruction adherence.
+- `/front-end`: UI implementation.
+- `/tester`: Test creation and execution.
+- `/debug`: Error investigation and diagnosis.
+- `/githubber`: GitHub CLI operations.
+- `/task-simple`: Small, isolated operations.
+- `/ask`: General inquiries.
 
-Do in order, skip none.
+### Mode selection strategy
+**Evaluate** the current `task`. If another mode is more appropriate, **pass** the `task` and parameters (concise WTS) to that mode.
 
-## 2) Mode awareness
+**Prioritize** budget-friendly modes in this order (Low to High):
 
-Use `Modes` and `Best mode for job` in `.roo/rules/01-general.md` to decide whether Code Monkey mode is appropriate.
+1.  **Low Budget** (Renaming, moving files, simple text replacement, DB column copying)
+    - Use `/task-simple`
+2.  **Medium Budget** (Refactoring, simple function creation, writing)
+    - Use `/code-monkey` or `/tester`
+3.  **High Budget** (Complex modification, or if Medium fails)
+    - Use `/code`
+4.  **Highest Budget** (Debugging, or if High fails)
+    - Use `/debug`
 
-Code Monkey is appropriate when:
-- The task is implementation-focused and of medium complexity, such as:
-  - Small to moderate refactors.
-  - Simple function or class creation/modification inside an existing module.
-  - Straightforward bug fixes that do not require new architecture.
-- The design/architecture has already been decided (by the user, planners, `/code`, or existing patterns).
+**Special Exception:**
+- **Front-End Tasks** (Medium or High complexity): **Always use** `/front-end`
 
-Prefer other modes when:
-- `/task-simple`: trivial operations (rename, copy, move files; simple text/value replacements).
-- `/front-end`: tasks dominated by layout, styling, or front-end UX.
-- `/code`: complex, cross-cutting refactors, new architecture, or hard debugging.
-- `/debug`: when the root cause is unknown and requires systematic investigation.
-- `/tester`: dedicated test design or execution beyond what is inherent to your coding changes.
+---
 
-If another mode is more appropriate:
-1) Prepare a concise WTS (What To Solve) summary including:
-   - The user request.
-   - Current code context.
-   - What you have done so far (if anything).
-2) Pass the task and WTS to the appropriate mode.
+## Standards
 
-## 3) Resources
+### Communication
+Be brief; don't echo user requests.
 
-Use these resources to thoroughly understand expected behavior and patterns before editing:
+### Modularization
+**Scope**: Critical for Python, JS, and logic files.
+- **Exception**: Do NOT apply this to CSS.
 
-- `Critical Resources` in `.roo/rules/01-general.md`.
-- Project standards and non-standard patterns in `agents.md`.
-- Database procedures in `.roo/rules/02-database.md` for any DB-related work.
-- Recent commits, diffs, and tests to infer current behavior.
+**Hard Limit**:
+- **Enforce** a maximum of **450 lines of code** per file.
+- **Split** larger files: Create more files with fewer functions rather than exceeding this limit.
 
-Always consult relevant sections before making design or schema-related changes.
+**Utility Strategy**:
+- **Extract** logic liberally into utility folders.
+- **Naming Convention**: Use `utils/` or `utils_db/`.
 
-## 4) Standards: Behavior (Code Monkey focus)
+### Simplification
+Triggers: Redundancy, special cases, complexity.
+Action: Consult `.roo/docs/simplification.md`. Refactor to unifying principles.
 
-Follow ALL applicable rules in `Standards` in `.roo/rules/01-general.md`.
+### Flask HTML Templates
+Constraint: Use `jinja-html` language mode for Flask templates.
+Enforcement: Re-apply `jinja-html` mode immediately after every save to prevent reversion.
 
-Key focus areas:
+### Naming Conventions: Domain-First
+**Rationale**: Group related code by **Domain** (Subject) first, then **Specific** (Action/Qualifier).
 
-- Communication:
-  - Be brief; do not echo user requests.
-- Modularization:
-  - Keep Python and JS files small and modular (preferably < 400 lines).
-  - Use and extend existing utilities in `utils/` and `utils_db/` instead of writing new one-off logic.
-- Simplification:
-  - Use `.roo/docs/simplification.md` when you see repeated patterns, accumulating special cases, or complexity creep.
+#### 1. The Core Pattern
+**Invert the standard naming order:**
+- **Bad**: `{specific}_{domain}` (e.g., `edit_user`)
+- **Good**: `{domain}_{specific}` (e.g., `user_edit`)
 
-Code style and naming:
-- Obey `Code standards` and `Naming conventions` in `.roo/rules/01-general.md`.
-- Do not override or restate them here; just follow them exactly.
+**Casing Rules**:
+- **snake_case**: Files, functions, variables, DB tables/columns.
+- **PascalCase**: Classes.
 
-Markdown:
-- Follow `Markdown syntax` in `.roo/rules/01-general.md` for any documentation or markdown edits.
+#### 2. Transformation Examples
+| Type | Old Pattern | **New Pattern (Target)** | Note |
+| :--- | :--- | :--- | :--- |
+| **Files** | `admin_dashboard_utils.py` | `dashboard_utils_admin.py` | Domain is `dashboard` |
+| **Functions** | `edit_user` | `user_edit` | Domain is `user` |
+| **Classes** | `AdminPerson` | `PersonAdmin` | Better: Use `Person` w/ type param |
 
-## 5) Coding Tasks (CRITICAL)
+#### 3. Scope & Restrictions
+**When to Apply**:
+- **New Code**: **Always** apply this pattern.
+- **Existing Code**: Apply **only** if you are already actively editing the file.
 
-When implementing or modifying code:
+**STOP! Do NOT rename without explicit approval:**
+- **Public APIs**: HTTP routes, library exports, CLI flags.
+- **Database**: Tables and columns (requires migration).
+- **Standards**: `__init__.py`, `setUp()`, `settings.py` (Django).
 
-1) Search for existing patterns and implementations:
-   - Use `codebase_search` first to find related modules, utilities, and functions.
-   - Use `search_files` and `read_file` for detailed inspection.
-2) Identify reusables:
-   - Look for existing files, components, and utilities that can be copied, adapted, or generalized.
-3) Align with established patterns:
-   - Prefer extending or refactoring existing utilities over creating new ones with overlapping behavior.
-4) Reference specific examples:
-   - When reasoning or explaining, point to concrete functions or modules you found via search.
-5) Update memory:
-   - Note any new or clarified patterns so later tasks can reuse them.
+---
 
-Avoid building redundant functions:
-- Before adding *any* new function, class, or module:
-  1) Use `codebase_search`.
-  2) Check `agents.md` for existing patterns and utilities.
-  3) Inspect `utils/` and `utils_db/` for similar or same functionality.
-- If a near match exists:
-  - Prefer to generalize or slightly adapt it rather than build a parallel version.
+#### 4. CRITICAL: Refactoring Checklist
+**If you rename a symbol, you MUST fix all references.**
+Before finishing, verify:
+1.  [ ] **Imports**: Updated in all other files?
+2.  [ ] **Calls**: Function/Class usage updated everywhere?
+3.  [ ] **Tests**: Do tests still pass?
+4.  [ ] **Docs**: Updated docstrings/comments?
+5.  [ ] **VS Code**: No errors in the Problems panel?
 
-## 6) Workflow (Code Monkey overlay on Default Workflow)
+### Code Standards
+
+#### 1. Mandatory Metadata
+**Every** function or class you touch MUST have this comment header:
+```python
+# [Created-or-Modified] by [Model_Name] | YYYY-MM-DD_[Iteration]
+# Example: # Modified by Claude-3.5-Sonnet | 2024-10-27_01
+```
+#### 2. Syntax & Style
+Quotes: Enforce Double Quotes (") over Single Quotes (').
+Good: x += "."
+Bad: x += '.'
+SQL: Always use Multi-line strings (""") for complex queries.
+Templates: Set language mode to jinja-html.
+Spacing: Keep vertical spacing compact (no excessive blank lines).
+Readability: Prioritize Readable Code over "clever" one-liners.
+
+#### 3. Comments
+Preserve: Do NOT delete existing comments.
+Add: Comment liberally. Explain why, not just what.
+
+#### 4. Logic & Operations
+File Collisions: If a file exists, append _[timestamp] to the new filename.
+Simplicity: Choose the simplest working solution.
+
+#### 5. Tooling Preference (Web)
+Primary: browser_action (ALWAYS try this first).
+Fallback: Other browser tools (Only if browser_action fails).
+
+---
+
+## 1) Workflow (Code Monkey overlay on Default Workflow)
 
 1) Inherit and follow **all** instructions in `Default Workflow` in `.roo/rules/01-general.md`. Do in order, skip none.
 2) Apply those steps to implementation work:
@@ -149,7 +177,7 @@ Within that framework, Code Monkey specifics:
   - Run appropriate tests according to `testing type`.
   - If tests or complexity exceed Code Monkey’s scope, escalate to `/code` or `/tester`.
 
-## 7) Troubleshooting
+## 2) Troubleshooting
 
 ### Running Python scripts in terminal
 
@@ -162,12 +190,6 @@ Use the `Testing` rules in `.roo/rules/01-general.md`:
      - If similar: create or modify a `.py` script in an appropriate location (often under `utils_db/` for DB-related tasks), following `.roo/rules/02-database.md`.
 3) Run the script from its `.py` file instead of pasting multiple lines.
 
-### Use browser
-
-- Follow browser testing procedures in `agents.md`.
-- Use `browser_action` as the default tool for web interactions, per `Code standards` in `.roo/rules/01-general.md`.
-- Only fall back to other browser tooling if `browser_action` is unavailable or misconfigured.
-
 ### If stuck in a loop
 
 1) Try one clearly different approach (different algorithm, different module to extend, or different data flow).
@@ -179,7 +201,7 @@ Use the `Testing` rules in `.roo/rules/01-general.md`:
      - The concrete implementation attempts you made.
      - The specific failure modes or loops you encountered.
 
-## 8) After changes: Quality assurance
+## 3) After changes: Quality assurance
 
 After implementing changes:
 

@@ -5,8 +5,8 @@ Sync the `.roo/` rules/docs folders across multiple project directories safely a
 ## What this is
 
 A small, focused app inside this repo to keep your `.roo/` directory consistent across projects. Use the desktop GUI or the CLI:
-- GUI: `main_gui.py`
-- CLI: `cli_sync.py`
+- GUI: `python main_gui.py`
+- CLI: `python cli_sync.py`
 - Core engine: `utils_sync/sync_core.py`
 
 ## Key features
@@ -199,3 +199,7 @@ flowchart LR
 - This module’s engine: `utils_sync/sync_core.py`
 - CLI wrapper: `cli_sync.py`
 - GUI app: `main_gui.py`
+
+## Prompt stem to assist in changing file-sync app
+
+Typical user path through main_gui.py: Load Favorites -> Scan -> Execute -> Confirmation dialog -> "Synchronization completed successfully" dialog -> List of files updated in green with checkmarks -> Delete .bak files -> Confirmation dialog -> Yes -> Deleted x .bak files dialog -> OK -> [Continue here with what you want to add or change about the file-sync app.] and feed the prompt to `/code` mode. If it's a big change, feed it to `/planner-a` or `/architect` to get a detailed plan created.

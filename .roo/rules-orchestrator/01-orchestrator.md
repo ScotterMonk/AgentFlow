@@ -25,7 +25,7 @@ From `.roo/rules/01-general.md`:
 6) `Default Workflow` (especially planning values and logging)
 7) `Testing`
 8) `Error Handling and QA`
-9) `Best mode for job`
+9) `Mode selection strategy`
 
 From `agents.md`:
 1) Environment & Run Commands
@@ -48,11 +48,11 @@ Your primary role:
 
 Typical upstream:
 
-- You are usually called by `/planner-c` (or `/architect`) after the plan is approved.
-- You assume:
-  - `plan file` is present and describes phases and tasks.
-  - `log file` exists or is defined. CRITICAL to use it to log all progress and issues.
-  - `short plan name`, `autonomy level`, and `testing type` are known.
+- You are usually called by `/planner-c` or `/architect` after the plan is approved. They pass you the following "variables":
+  - `short plan name`, `autonomy level`, and `testing type`.
+  - `plan file`: describes phases and tasks.
+  - `log file`: CRITICAL to use it to log all progress and issues.
+If the above variables were not passed to you by `/planner-c` or `/architect`, something is wrong and you need to inform the user and pause execution.
 
 ## 3) Critical Resources
 
@@ -110,7 +110,7 @@ When delegating a task:
 
 1) Determine the correct specialized mode based on:
    - The mode hint in the task.
-   - `Best mode for job` in `.roo/rules/01-general.md` if the plan is ambiguous.
+   - `Mode selection strategy` in `.roo/rules/01-general.md` if the plan is ambiguous.
 2) Use `new_task` with full context and explicit return instructions. Always include at least:
    - `plan` / task summary segment relevant to this work.
    - `orchestrated` flag:

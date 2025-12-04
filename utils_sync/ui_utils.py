@@ -6,6 +6,12 @@ Provides reusable tkinter widgets and UI helpers.
 import tkinter as tk
 from tkinter import ttk
 
+# Global UI colors tuned for the main dark-mode GUI
+GREEN_BRIGHT = "#00ff5f"
+GRAY_PREVIEW = "#b0b0b0"  # lighter gray for after-scan file list
+GRAY_BAK = "#9a9a9a"      # slightly darker gray for .bak rows
+FG_PRIMARY = "#e0e0e0"    # default light text on dark background
+
 class FolderItem:
     """A UI component representing a single folder in the folder list."""
     # [Modified] by openai/gpt-5.1 | 2025-11-14_02
@@ -22,7 +28,7 @@ class FolderItem:
             toggle_favorite_callback: Callback when favorite star is toggled (receives folder_path, is_favorite)
             is_favorite: Whether this folder is currently marked as favorite
         """
-        # [Modified] by openai/gpt-5-mini | 2025-11-15_01
+        # [Created-or-Modified] by openai/gpt-5.1 | 2025-12-04_01
         # Create main frame for this folder item
         self.frame = ttk.Frame(parent, relief=tk.FLAT, borderwidth=0)
         
@@ -42,7 +48,8 @@ class FolderItem:
             top_frame,
             text="★" if self.is_favorite else "☆",
             width=3,
-            command=self._on_favorite_toggle
+            command=self._on_favorite_toggle,
+            style="AFMini.TButton",
         )
         self.favorite_button.pack(side=tk.LEFT, padx=(5, 2), pady=2)
         
@@ -55,10 +62,15 @@ class FolderItem:
         self.label.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(2, 5), pady=2)
         
         # Create progress bar
+        # Use the dark-mode progressbar style defined in main_gui so that:
+        # - the trough matches the dark background and is effectively invisible at 0%
+        # - the progressing bar is a bright neon green that fits the app's theme
         self.progress_bar = ttk.Progressbar(
             top_frame,
             mode="determinate",
-            length=100
+            length=100,
+            style="AF.Progressbar",
+            maximum=100,
         )
         self.progress_bar.pack(side=tk.LEFT, padx=(0, 5), pady=2)
         self.progress_bar["value"] = 0
@@ -77,7 +89,8 @@ class FolderItem:
             top_frame,
             text="X",
             width=3,
-            command=lambda: remove_callback(folder_path)
+            command=lambda: remove_callback(folder_path),
+            style="AFMini.TButton",
         )
         self.remove_button.pack(side=tk.RIGHT, padx=(0, 5), pady=2)
         
@@ -86,6 +99,8 @@ class FolderItem:
         self.preview_frame.pack(fill=tk.X, padx=(20, 5), pady=(0, 2))
         # Map relative file paths to the label widgets for their preview rows
         self._preview_rows = {}
+        # Track row frames for .bak backup file display so we can clear only those
+        self._backup_rows = []
     
     def update_status(self, text: str, color: str = "black"):
         """Update the status label text and color.
@@ -94,8 +109,13 @@ class FolderItem:
             text: The status text to display
             color: The text color (default: "black")
         """
-        # [Created] by Claude Sonnet 4.5 | 2025-11-13_02
-        self.status_label.config(text=text, foreground=color)
+        # [Created-or-Modified] by openai/gpt-5.1 | 2025-12-04_02
+        # Brighten specific colors for dark background while keeping API simple.
+        if color == "green":
+            fg = GREEN_BRIGHT
+        else:
+            fg = color
+        self.status_label.config(text=text, foreground=fg)
     
     def update_progress(self, current: int, total: int):
         """Update the progress bar value.
@@ -119,7 +139,7 @@ class FolderItem:
             - timestamp: Human-readable last modified timestamp string
             - action: The underlying planned action object
         """
-        # [Created-or-Modified] by openai/gpt-5.1 | 2025-11-28_01
+        # [Created-or-Modified] by Sonnet 4.5 | 2025-12-04_03
         
         # Clear any existing rows and label mapping
         for child in self.preview_frame.winfo_children():
@@ -131,17 +151,17 @@ class FolderItem:
         if not items:
             return
         
-        # Header row to clearly indicate the planned updates for this folder
+        # Header row showing planned updates (before execution)
         header_frame = ttk.Frame(self.preview_frame)
         header_frame.pack(fill=tk.X, pady=(0, 1))
-        header_label = ttk.Label(
+        self._preview_header_label = ttk.Label(
             header_frame,
             text="These files will be updated:",
             anchor=tk.W,
             justify=tk.LEFT,
             font=("TkDefaultFont", 8, "bold"),
         )
-        header_label.pack(side=tk.LEFT, fill=tk.X, expand=True)
+        self._preview_header_label.pack(side=tk.LEFT, fill=tk.X, expand=True)
         
         # Sort so that:
         # - Root-level files (no "/") appear first
@@ -173,7 +193,7 @@ class FolderItem:
                 anchor=tk.W,
                 justify=tk.LEFT,
                 font=("TkDefaultFont", 8),
-                foreground="gray"
+                foreground=GRAY_PREVIEW,
             )
             label.pack(side=tk.LEFT, fill=tk.X, expand=True)
             
@@ -187,23 +207,32 @@ class FolderItem:
                     row_frame,
                     text="X",
                     width=2,
-                    command=lambda action=item["action"]: self.overwrite_remove_callback(action)
+                    command=lambda action=item["action"]: self.overwrite_remove_callback(action),
+                    style="AFMini.TButton",
                 )
                 remove_button.pack(side=tk.RIGHT, padx=(5, 0))
     
     def reset_status(self):
         """Reset the status label, progress bar, and preview area to initial states."""
-        # [Modified] by openai/gpt-5.1 | 2025-11-14_02
-        self.status_label.config(text="", foreground="black")
+        # [Created-or-Modified] by openai/gpt-5.1 | 2025-12-04_02
+        self.status_label.config(text="", foreground=FG_PRIMARY)
         self.progress_bar["value"] = 0
         for child in self.preview_frame.winfo_children():
             child.destroy()
         # Reset preview label mapping as well
         self._preview_rows = {}
+        # Reset backup rows tracking
+        self._backup_rows = []
+    
+    def update_preview_header_to_completed(self) -> None:
+        """Update the preview header from 'will be' to 'are now' after execution completes."""
+        # [Created] by Sonnet 4.5 | 2025-12-04_03
+        if hasattr(self, "_preview_header_label") and self._preview_header_label:
+            self._preview_header_label.config(text="These files are now updated:")
     
     def mark_preview_replaced(self, relative_path: str) -> None:
         """Mark a single preview row as replaced for the given relative path."""
-        # [Created-or-Modified] by openai/gpt-5.1 | 2025-11-16_01
+        # [Created-or-Modified] by Sonnet 4.5 | 2025-12-04_03
         if not relative_path:
             return
         key = str(relative_path)
@@ -217,7 +246,16 @@ class FolderItem:
     
     def show_backup_files(self, relative_paths: list[str]) -> None:
         """Append rows for .bak backup files under this folder."""
-        # [Created-or-Modified] by openai/gpt-5.1 | 2025-11-21_01
+        # [Created-or-Modified] by openai/gpt-5.1 | 2025-12-04_01
+        # First remove any existing backup rows so this call fully refreshes the .bak display
+        for row in getattr(self, "_backup_rows", []):
+            try:
+                row.destroy()
+            except Exception:
+                # Fail soft; stale widgets should not break the GUI
+                pass
+        self._backup_rows = []
+
         if not relative_paths:
             return
 
@@ -233,9 +271,11 @@ class FolderItem:
                 anchor=tk.W,
                 justify=tk.LEFT,
                 font=("TkDefaultFont", 8),
-                foreground="gray",
+                foreground=GRAY_BAK,
             )
             label.pack(side=tk.LEFT, fill=tk.X, expand=True)
+            # Track backup rows so they can be cleared independently of main preview rows
+            self._backup_rows.append(row_frame)
         # Note: we intentionally do not add these labels to _preview_rows so they
         # are not affected by checkmarks or per-file removal controls.
     

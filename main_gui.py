@@ -15,6 +15,17 @@ from utils_sync.sync_worker import SyncWorker
 from utils_sync.progress_events import ProgressEvent, EventType
 from utils_sync.ui_utils import FolderItem
 
+# Global UI colors for dark mode
+DARK_BG = "#000000"
+DARK_BG_ALT = "#111111"
+FG_PRIMARY = "#e0e0e0"
+
+# Button colors for dark mode
+BUTTON_BG = "#000000"
+BUTTON_BG_HOVER = "#111111"
+BUTTON_BORDER = "#00ff5f"
+BUTTON_TEXT = FG_PRIMARY
+
 class MainApp:
     """Main application window for Agentflow File Sync."""
     # [Created] by Claude Sonnet 4.5 | 2025-11-13_01
@@ -41,6 +52,8 @@ class MainApp:
         window_width = self.config["window_width"]
         window_height = self.config["window_height"]
         self.root.geometry(f"{window_width}x{window_height}")
+        # Apply base dark background to root window
+        self.root.configure(bg=DARK_BG)
         
         # Create event queue for progress updates
         self.event_queue = queue.Queue()
@@ -82,7 +95,115 @@ class MainApp:
     
     def _create_widgets(self):
         """Create and layout all UI widgets."""
-        # [Modified] by openai/gpt-5.1 | 2025-11-15_01
+        # [Modified] by openai/gpt-5.1 | 2025-12-04_02
+        
+        # Configure a basic dark theme for ttk widgets
+        style = ttk.Style()
+        try:
+            style.theme_use("clam")
+        except tk.TclError:
+            # Fall back to current theme if clam is unavailable
+            pass
+
+        # Dark background for frames and labels
+        style.configure("TFrame", background=DARK_BG)
+        style.configure("TLabel", background=DARK_BG, foreground=FG_PRIMARY)
+
+        # Base button style (fallback)
+        style.configure(
+            "TButton",
+            background=BUTTON_BG,
+            foreground=BUTTON_TEXT,
+        )
+
+        # Primary app button style: black background, green outline, hover highlight
+        style.configure(
+            "AF.TButton",
+            background=BUTTON_BG,
+            foreground=BUTTON_TEXT,
+            bordercolor=BUTTON_BORDER,
+            focusthickness=1,
+            focuscolor=BUTTON_BORDER,
+        )
+        style.map(
+            "AF.TButton",
+            background=[("active", BUTTON_BG_HOVER)],
+            bordercolor=[("active", BUTTON_BORDER)],
+            foreground=[
+                ("active", BUTTON_BORDER),
+                ("disabled", "#555555"),
+            ],
+        )
+ 
+        # Danger style (for destructive actions like Delete .bak)
+        style.configure(
+            "AFDanger.TButton",
+            background=BUTTON_BG,
+            foreground="#ff6666",
+            bordercolor="#ff6666",
+            focusthickness=1,
+            focuscolor="#ff6666",
+        )
+        style.map(
+            "AFDanger.TButton",
+            background=[("active", BUTTON_BG_HOVER)],
+            bordercolor=[("active", "#ff6666")],
+            foreground=[
+                ("active", BUTTON_BORDER),
+                ("disabled", "#555555"),
+            ],
+        )
+ 
+        # Compact button style for small icon buttons (used in folder rows)
+        style.configure(
+            "AFMini.TButton",
+            background=BUTTON_BG,
+            foreground=BUTTON_TEXT,
+            bordercolor=BUTTON_BORDER,
+            focusthickness=1,
+            focuscolor=BUTTON_BORDER,
+            padding=0,
+        )
+        style.map(
+            "AFMini.TButton",
+            background=[("active", BUTTON_BG_HOVER)],
+            bordercolor=[("active", BUTTON_BORDER)],
+        )
+
+        # Progress bar style: dark, invisible trough with a glowing green bar
+        # The trough matches the DARK_BG so idle (0%) bars visually disappear,
+        # while the active portion uses the same neon green as primary actions.
+        #
+        # Progressbar internally prefixes the style with "Horizontal." for horizontal
+        # bars, so a Progressbar with style="AF.Progressbar" will actually look for
+        # the layout/style "Horizontal.AF.Progressbar". We clone the base horizontal
+        # layout and then customize colors so Tk has a valid layout for this style.
+        style.layout("Horizontal.AF.Progressbar", style.layout("Horizontal.TProgressbar"))
+        style.configure(
+            "Horizontal.AF.Progressbar",
+            troughcolor=DARK_BG,
+            background=BUTTON_BORDER,
+            bordercolor=BUTTON_BORDER,
+            lightcolor="#66ff99",
+            darkcolor=BUTTON_BORDER,
+            thickness=8,
+        )
+
+        # Scrollbar style: subtle dark theme: very dark grey trough, deep muted green thumb
+        style.configure(
+            "Vertical.TScrollbar",
+            troughcolor="#151515",        # darker than DARK_BG_ALT but not pure black
+            background="#0f3b24",        # deep, low-saturation green thumb
+            bordercolor="#0f3b24",
+            arrowcolor="#666666",        # neutral arrows so the thumb doesn't pop
+        )
+        style.map(
+            "Vertical.TScrollbar",
+            background=[("active", "#145232")],  # slightly lighter but still dark green on hover
+        )
+ 
+        # Ensure the root window background matches the dark theme
+        self.root.configure(bg=DARK_BG)
         
         # Main frame with padding
         main_frame = ttk.Frame(self.root, padding="3")
@@ -118,7 +239,12 @@ class MainApp:
         #self.ignore_patterns_label.grid(row=3, column=0, pady=(0, 0), sticky=tk.W)
         
         # Folder list frame
-        folder_frame = tk.Frame(main_frame, relief=tk.SOLID, borderwidth=1)
+        folder_frame = tk.Frame(
+            main_frame,
+            relief=tk.SOLID,
+            borderwidth=1,
+            bg=DARK_BG,
+        )
         folder_frame.grid(row=4, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), pady=(1, 7))
         folder_frame.columnconfigure(0, weight=1)
         folder_frame.rowconfigure(0, weight=1)
@@ -127,7 +253,8 @@ class MainApp:
         self.folder_canvas = tk.Canvas(
             folder_frame,
             borderwidth=1,
-            highlightthickness=0
+            highlightthickness=0,
+            bg=DARK_BG,
         )
         self.folder_canvas.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
 
@@ -162,7 +289,8 @@ class MainApp:
         self.browse_button = ttk.Button(
             button_frame,
             text="Browse...",
-            command=self._open_folder_dialog
+            command=self._open_folder_dialog,
+            style="AF.TButton",
         )
         self.browse_button.grid(row=0, column=0, padx=(0, 5))
         
@@ -170,7 +298,8 @@ class MainApp:
         self.sync_button = ttk.Button(
             button_frame,
             text="Scan",
-            command=self._start_sync
+            command=self._start_sync,
+            style="AF.TButton",
         )
         self.sync_button.grid(row=0, column=1, padx=(0, 5))
         
@@ -179,7 +308,8 @@ class MainApp:
             button_frame,
             text="Execute",
             state=tk.DISABLED,
-            command=self._confirm_sync
+            command=self._confirm_sync,
+            style="AF.TButton",
         )
         self.confirm_button.grid(row=0, column=2, padx=(0, 5))
         
@@ -187,7 +317,8 @@ class MainApp:
         self.load_favorites_button = ttk.Button(
             button_frame,
             text="Load Favorites",
-            command=self._load_favorite_folders
+            command=self._load_favorite_folders,
+            style="AF.TButton",
         )
         self.load_favorites_button.grid(row=0, column=3, padx=(0, 5))
         
@@ -195,7 +326,8 @@ class MainApp:
         self.save_favorites_button = ttk.Button(
             button_frame,
             text="Save Favorites",
-            command=self._save_current_selection_as_favorites
+            command=self._save_current_selection_as_favorites,
+            style="AF.TButton",
         )
         self.save_favorites_button.grid(row=0, column=4, padx=(0, 5))
         
@@ -205,6 +337,7 @@ class MainApp:
             text="Delete .bak files",
             command=self._delete_bak_files,
             state=tk.DISABLED,
+            style="AFDanger.TButton",
         )
         self.delete_bak_button.grid(row=0, column=5, padx=(0, 5))
         
@@ -212,7 +345,8 @@ class MainApp:
         self.settings_button = ttk.Button(
             button_frame,
             text="Settings",
-            command=self._open_settings_window
+            command=self._open_settings_window,
+            style="AF.TButton",
         )
         self.settings_button.grid(row=0, column=6)
     
@@ -291,11 +425,10 @@ class MainApp:
             # Store widget reference in dictionary
             self.folder_widgets[folder_path] = folder_item
         
-        # Enable or disable Delete .bak files button based on whether any folders are selected
+        # Always disable Delete .bak button when no folders are selected; enabling
+        # is controlled by _update_bak_previews() based on visible .bak rows.
         if getattr(self, "delete_bak_button", None) is not None:
-            if self.selected_folders:
-                self.delete_bak_button.config(state=tk.NORMAL)
-            else:
+            if not self.selected_folders:
                 self.delete_bak_button.config(state=tk.DISABLED)
     
     def _format_mtime(self, mtime: float) -> str:
@@ -360,16 +493,24 @@ class MainApp:
                 self.confirm_button.config(state=tk.DISABLED)
     
     def _update_bak_previews(self) -> None:
-        """Append .bak backup files under each selected folder into folder previews."""
-        # [Created-or-Modified] by openai/gpt-5.1 | 2025-11-21_01
+        """Refresh .bak backup file rows under each selected folder preview."""
+        # [Created-or-Modified] by openai/gpt-5.1 | 2025-12-04_02
         if not self.selected_folders or not self.folder_widgets:
+            # No folders or widgets – ensure Delete .bak button is disabled.
+            if getattr(self, "delete_bak_button", None) is not None:
+                self.delete_bak_button.config(state=tk.DISABLED)
             return
-    
+
+        any_bak = False
+
         for folder_path, widget in self.folder_widgets.items():
             base_path = Path(folder_path)
             if not base_path.exists():
+                # Folder no longer exists; clear any existing backup rows
+                if hasattr(widget, "show_backup_files"):
+                    widget.show_backup_files([])
                 continue
-    
+
             bak_relatives: list[str] = []
             try:
                 for bak in base_path.rglob("*.bak"):
@@ -380,12 +521,27 @@ class MainApp:
                         continue
                     bak_relatives.append(str(rel))
             except OSError as exc:
-                # Fail soft; log error and continue with other folders
+                # Fail soft; log error and clear backups for this folder
                 print(f"Error scanning for .bak files under {base_path!s}: {exc}")
+                if hasattr(widget, "show_backup_files"):
+                    widget.show_backup_files([])
                 continue
-    
-            if bak_relatives and hasattr(widget, "show_backup_files"):
+
+            if bak_relatives:
+                any_bak = True
+
+            # Delegate to the folder widget to render (or clear) backup rows.
+            # Passing an empty list will remove any previously displayed .bak rows.
+            if hasattr(widget, "show_backup_files"):
                 widget.show_backup_files(bak_relatives)
+
+        # Enable Delete .bak files button only when at least one backup row is visible;
+        # otherwise keep it disabled and its text grayed out.
+        if getattr(self, "delete_bak_button", None) is not None:
+            if any_bak:
+                self.delete_bak_button.config(state=tk.NORMAL)
+            else:
+                self.delete_bak_button.config(state=tk.DISABLED)
     
     def _remove_planned_action(self, action_to_remove: dict) -> None:
         """Remove a single planned action from the queue and refresh previews."""
@@ -482,14 +638,7 @@ class MainApp:
             )
             return
         
-        # For non-dry runs, show a clear warning before modifying files
-        if not self.config.get("dry_run", False):
-            confirm = messagebox.askyesno(
-                "Confirm Sync",
-                "This will now apply the planned changes and modify files.\n\nProceed?"
-            )
-            if not confirm:
-                return
+        # Execute immediately without an extra confirmation dialog; UI already shows planned actions.
         
         # Set syncing state
         self.is_syncing = True
@@ -559,9 +708,14 @@ class MainApp:
                         for widget in self.folder_widgets.values():
                             widget.update_status("Completed", "green")
                     
-                    # For real executions, mark each listed file as replaced in the preview
+                    # For real executions, update preview header and mark files as replaced
                     if not self.config.get("dry_run", False):
                         for widget in self.folder_widgets.values():
+                            # Update header from "will be" to "are now"
+                            if hasattr(widget, "update_preview_header_to_completed"):
+                                widget.update_preview_header_to_completed()
+                            
+                            # Mark each file row with checkmark
                             preview_rows = getattr(widget, "_preview_rows", {})
                             for rel_key in list(preview_rows.keys()):
                                 if hasattr(widget, "mark_preview_replaced"):
@@ -570,17 +724,7 @@ class MainApp:
                         # Also show any .bak backup files that now exist on disk
                         self._update_bak_previews()
                     
-                    # Show completion message
-                    if self.config.get("dry_run", False):
-                        messagebox.showinfo(
-                            "Sync Complete",
-                            "Dry run completed successfully.\n\nNo files were modified."
-                        )
-                    else:
-                        messagebox.showinfo(
-                            "Sync Complete",
-                            "Synchronization completed successfully."
-                        )
+                    # Completion status is communicated via folder status and preview updates.
                 
             except queue.Empty:
                 break
@@ -598,6 +742,7 @@ class MainApp:
         settings_window.geometry("600x520")
         settings_window.transient(self.root)
         settings_window.grab_set()
+        settings_window.configure(bg=DARK_BG)
 
         # Main frame with padding
         main_frame = ttk.Frame(settings_window, padding="15")
@@ -658,7 +803,10 @@ class MainApp:
         ignore_text = tk.Text(
             ignore_frame,
             height=5,
-            wrap="word"
+            wrap="word",
+            bg=DARK_BG_ALT,
+            fg=FG_PRIMARY,
+            insertbackground=FG_PRIMARY,
         )
         ignore_text.insert("1.0", patterns_str)
         ignore_text.pack(fill=tk.X, pady=(5, 0))
@@ -678,7 +826,10 @@ class MainApp:
         faves_text = tk.Text(
             faves_frame,
             height=8,
-            wrap="word"
+            wrap="word",
+            bg=DARK_BG_ALT,
+            fg=FG_PRIMARY,
+            insertbackground=FG_PRIMARY,
         )
         faves_text.insert("1.0", faves_str)
         faves_text.pack(fill=tk.X, pady=(5, 0))
@@ -691,7 +842,8 @@ class MainApp:
         cancel_button = ttk.Button(
             button_frame,
             text="Cancel",
-            command=settings_window.destroy
+            command=settings_window.destroy,
+            style="AF.TButton",
         )
         cancel_button.pack(side=tk.LEFT, padx=5)
 
@@ -699,6 +851,7 @@ class MainApp:
         save_button = ttk.Button(
             button_frame,
             text="Save",
+            style="AF.TButton",
             command=lambda: self._save_settings(
                 settings_window,
                 backup_var.get(),
@@ -876,14 +1029,7 @@ class MainApp:
             )
             return
         
-        confirm = messagebox.askyesno(
-            "Delete .bak Files",
-            "This will permanently delete all backup (.bak) files\n"
-            "in the listed folders.\n\nProceed?"
-        )
-        if not confirm:
-            return
-        
+        # Proceed immediately without an extra confirmation dialog to keep cleanup fast.
         deleted_count = 0
         errors: list[str] = []
         
@@ -892,8 +1038,11 @@ class MainApp:
             if not base_path.exists():
                 continue
             
+            # Collect all .bak files first to avoid generator iteration issues during deletion
+            bak_files = list(base_path.rglob("*.bak"))
+            
             # Delete all .bak files anywhere under this base folder
-            for bak in base_path.rglob("*.bak"):
+            for bak in bak_files:
                 try:
                     bak.unlink()
                     deleted_count += 1
@@ -906,13 +1055,12 @@ class MainApp:
                 "No .bak backup files were found to delete in the listed folders."
             )
         else:
-            msg = f"Deleted {deleted_count} .bak backup file(s)."
             if errors:
-                msg += "\n\nSome files could not be deleted:\n" + "\n".join(errors)
-            messagebox.showinfo("Delete .bak Files", msg)
+                print("Some .bak files could not be deleted:\n" + "\n".join(errors))
 
-            # After successful deletion, re-scan to refresh the planned file list
-            self._rescan_after_bak_delete()
+        # After deletion, refresh only the .bak backup previews
+        # so the executed/updated file list remains visible until the next Scan.
+        self._update_bak_previews()
 
     def _rescan_after_bak_delete(self) -> None:
         """Re-scan folders to refresh planned file list after deleting backups."""

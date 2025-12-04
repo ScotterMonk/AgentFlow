@@ -7,67 +7,53 @@ Before doing any coding work in Code mode, conceptually load and obey the follow
 ## Critical Resources
 
 ### Sources of knowledge
-- App knowledge: `agents.md`.
-    From `agents.md`:
-    a) Environment & Run Commands.
-    b) Critical Non-Standard Patterns.
-    c) Documentation.
-    d) External API Provider Framework.
-    e) Configuration.
-    f) Testing Guidance.
-- Codebase: `codebase_search`, `read_file`, `search_files`.
+- **App knowledge**: `agents.md`.
+    - *Contains:* Environment, Patterns, Docs, API Framework.
+- **Codebase**: `codebase_search`, `read_file`, `search_files`.
 - Git diff, recent commits.
-- `credentials` for everything: `.env`.
-- Database: see below.
-
-### Pre-Planning
-`plan values` to fill/use:
-- `short plan name`: yymmdd_two_word_description.
-- `user_query` and `user query file`: `.roo/docs/plans/plan_[timestamp]_[short plan name]_user.md`.
-- `plan file`: `.roo/docs/plans/plan_[short plan name].md`.
-- `plan`: Version of `plan file` in memory.
-- `log file`: `.roo/docs/plans/plan_[short plan name]_log.md`.
-    Logging Format:
-    `date + time; action summary` (semicolon separated).
-    - Ex: `"2025-08-14 07:23; Approved to begin"`.
-    - Ex: `"2025-08-14 07:25; Task completed: Added update_query() to utils_sql.py, refactored utils_sql.py, junk.py"`.
-- Backups: `.roo/docs/old_versions/[file name]_[timestamp]`.
-- `testing type`: "Run py scripts in terminal", "Use pytest", "Use browser", "Use all", "No testing", "Custom".
-- `completed plans folder`: `.roo/docs/plans_completed`.
+- **Credentials**: `.env`.
+- **Web automation** & **browsing**: `browser_action`
+- **Useful Discoveries**: Make use of and contribute to `.roo/docs/useful.md`.
 
 ### Database
 See `.roo/rules/02-database.md` for all database procedures.
 
-### Other
-- Web automation & browsing: `browser_action`
-- Make use of and contribute to Useful Discoveries: `.roo/docs/useful.md`.
-
 ### Modes
-For analysis/plan formation, referencing in Task instructions, or to determine when to mode-switch:
-- `/architect` (Planner-simple): Architecting a `plan` by creating `phase(s)` and `task(s)` from `user query`. Q/A. Get user approval. Pass flow to `/orchestrator`.
-- `/planner-a` (Planner-complex): Architecting a `plan` using a 3-step process:
-    - `/planner-a`: Planning stage 1 - create `phase(s)` from `user query`. Brainstorm with user. Pass flow to `/planner-b`.
-    - `/planner-b`: Planning stage 2 - create detailed `tasks` for each `phase`. Get user approval. Pass flow to `/planner-c`.
-    - `/planner-c`: Planning stage 3 - Q/A. Get user approval. Finalize `plan`. Pass flow to `/orchestrator`.
-- `/orchestrator`: Execute approved `plan` by coordinating tasks across modes.
-- `/code-monkey`: Coding, analysis, following instructions.
-- `/code`: Complex coding, analysis, debugging.
-- `/tester`: Testing.
-- `/front-end`: Front-end.
-- `/ask`: General Q/A.
-- `/task-simple`: Small ops/tasks.
-- `/githubber`: Use GitHub commands.
-- `/debug`: Troubleshooting, investigating errors, or diagnosing problems.
+**Planning & Orchestration**
+- `/architect`: Simple planning. Create phases and tasks -> QA -> User Approval -> Switch to `/orchestrator`.
+- `/planner-a`: Complex Plan Stage 1. Create phases -> Brainstorm -> Switch to `/planner-b`.
+- `/planner-b`: Complex Plan Stage 2. Create detailed tasks -> User Approval -> Switch to `/planner-c`.
+- `/planner-c`: Complex Plan Stage 3. QA -> Finalize -> Switch to `/orchestrator`.
+- `/orchestrator`: Manage execution. Coordinate implementation modes to fulfill plan.
 
-### Best mode for job
-If another mode is more appropriate for your task, pass task and appropriate parameters (concise WTS) on to appropriate one. 
-Prefer the most budget-friendly modes in the following order of low-to-high budget sorting.
-Budget/Intelligence/Skill:
-    a) low (ex: renaming, copying, moving files; doing simple text/value comparison or replacement, copying column names and column parameters from a database): `/task-simple`.
-    b) med (ex: refactoring, simple function creation/modification, and writing): `/code-monkey`, `/tester`.
-    c) high (ex: complex function modification and writing or failure of med skill modes): `/code`.
-    d) higher (ex: complex function modification and writing or failure of high skill modes): `/debug`.
-If front-end task with medium or high complexity, use `/front-end`.
+**Implementation & Ops**
+- `/code`: Complex engineering, analysis, deep debugging.
+- `/code-monkey`: Routine coding, strict instruction adherence.
+- `/front-end`: UI implementation.
+- `/tester`: Test creation and execution.
+- `/debug`: Error investigation and diagnosis.
+- `/githubber`: GitHub CLI operations.
+- `/task-simple`: Small, isolated operations.
+- `/ask`: General inquiries.
+
+### Mode selection strategy
+**Evaluate** the current `task`. If another mode is more appropriate, **pass** the `task` and parameters (concise WTS) to that mode.
+
+**Prioritize** budget-friendly modes in this order (Low to High):
+
+1.  **Low Budget** (Renaming, moving files, simple text replacement, DB column copying)
+    - Use `/task-simple`
+2.  **Medium Budget** (Refactoring, simple function creation, writing)
+    - Use `/code-monkey` or `/tester`
+3.  **High Budget** (Complex modification, or if Medium fails)
+    - Use `/code`
+4.  **Highest Budget** (Debugging, or if High fails)
+    - Use `/debug`
+
+**Special Exception:**
+- **Front-End Tasks** (Medium or High complexity): **Always use** `/front-end`
+
+---
 
 ## Standards
 
@@ -75,64 +61,95 @@ If front-end task with medium or high complexity, use `/front-end`.
 Be brief; don't echo user requests.
 
 ### Modularization
-CRITICAL: Keep Python and JS files small and modular, preferably less than 400 lines of code. 
-Create and reference utility files (`utils/`) liberally.
+**Scope**: Critical for Python, JS, and logic files.
+- **Exception**: Do NOT apply this to CSS.
+
+**Hard Limit**:
+- **Enforce** a maximum of **450 lines of code** per file.
+- **Split** larger files: Create more files with fewer functions rather than exceeding this limit.
+
+**Utility Strategy**:
+- **Extract** logic liberally into utility folders.
+- **Naming Convention**: Use `utils/` or `utils_db/`.
 
 ### Simplification
-Reference `.roo/docs/simplification.md` when:
-- Implementing similar functionality multiple ways
-- Accumulating special case handling
-- Complexity spiraling in a module
-Look for the unifying principle that eliminates multiple components.
+Triggers: Redundancy, special cases, complexity.
+Action: Consult `.roo/docs/simplification.md`. Refactor to unifying principles.
 
-### Flask html templates
-When you modify any .html file:
-If it is a Flask template, use VS Code's `jinja-html` language mode.
-After editing and saving a jinja-html .html file, VS Code tends to change the language mode for that file to "html". Fix by setting language mode to `jinja-html`.
+### Flask HTML Templates
+Constraint: Use `jinja-html` language mode for Flask templates.
+Enforcement: Re-apply `jinja-html` mode immediately after every save to prevent reversion.
 
-### Naming conventions
-Rationale: Domain-first naming groups related code, improves IDE autocomplete, and makes file navigation logical.
-Pattern: {specific}_{domain} → {domain}_{specific}
-Definitions:
-- Domain: Core subject area (user, dashboard, config, sync, auth, billing)
-- Specific: Qualifier or action (admin, scott, core, edit, add, delete, list)
-Case Rules:
-- Files, functions, variables, DB tables/columns: snake_case
-- Classes: PascalCase
-Examples by Type:
-Files:
-- `admin_dashboard_utils.py` → `dashboard_utils_admin.py`
-- `scott_core_utils.py` → `utils_scott_core.py`
-Functions/Variables:
-- `edit_user` → `user_edit`
-- `add_user` → `user_add`
-Classes:
-- `AdminPerson` → `PersonAdmin` or even better -> `Person` with type parameter set to "admin"
-- `ResellerPerson` -> `PersonReseller` or even better -> `Person` with type parameter set to "reseller"
-Do NOT rename without approval:
-- Public APIs (HTTP routes, library functions, CLI flags)
-- Database tables/columns (requires migration)
-- Standard Python patterns (`__init__.py`, `setUp()`)
-- Framework conventions (Django's `settings.py`)
-Prefer to:
-- Apply to new code always
-- Refactor internal names when editing that code
-- Keep tests/usage in sync
-Decision checklist:
-1) Public API or DB? → Get approval first
-2) Follows {specific}_{domain}? → Needs change
-3) Actively editing file? → Good time to rename
-4) Can identify domain/specific? → Proceed; otherwise ask
-Edge cases:
-- Multiple words: Use underscores (`utils_admin_user_profile.py`)
-- Ambiguous: Ask user or use most specific grouping
-CRITICAL: When renaming, refactor all references (imports, calls, docs, tests)
-After renaming, verify:
-- All imports updated
-- All function calls updated
-- Tests still pass
-- Documentation references updated
-- No VS Code Problems panel errors
+### Naming Conventions: Domain-First
+**Rationale**: Group related code by **Domain** (Subject) first, then **Specific** (Action/Qualifier).
+
+#### 1. The Core Pattern
+**Invert the standard naming order:**
+- **Bad**: `{specific}_{domain}` (e.g., `edit_user`)
+- **Good**: `{domain}_{specific}` (e.g., `user_edit`)
+
+**Casing Rules**:
+- **snake_case**: Files, functions, variables, DB tables/columns.
+- **PascalCase**: Classes.
+
+#### 2. Transformation Examples
+| Type | Old Pattern | **New Pattern (Target)** | Note |
+| :--- | :--- | :--- | :--- |
+| **Files** | `admin_dashboard_utils.py` | `dashboard_utils_admin.py` | Domain is `dashboard` |
+| **Functions** | `edit_user` | `user_edit` | Domain is `user` |
+| **Classes** | `AdminPerson` | `PersonAdmin` | Better: Use `Person` w/ type param |
+
+#### 3. Scope & Restrictions
+**When to Apply**:
+- **New Code**: **Always** apply this pattern.
+- **Existing Code**: Apply **only** if you are already actively editing the file.
+
+**STOP! Do NOT rename without explicit approval:**
+- **Public APIs**: HTTP routes, library exports, CLI flags.
+- **Database**: Tables and columns (requires migration).
+- **Standards**: `__init__.py`, `setUp()`, `settings.py` (Django).
+
+---
+
+#### 4. CRITICAL: Refactoring Checklist
+**If you rename a symbol, you MUST fix all references.**
+Before finishing, verify:
+1.  [ ] **Imports**: Updated in all other files?
+2.  [ ] **Calls**: Function/Class usage updated everywhere?
+3.  [ ] **Tests**: Do tests still pass?
+4.  [ ] **Docs**: Updated docstrings/comments?
+5.  [ ] **VS Code**: No errors in the Problems panel?
+
+### Code Standards
+
+#### 1. Mandatory Metadata
+**Every** function or class you touch MUST have this comment header:
+```python
+# [Created-or-Modified] by [Model_Name] | YYYY-MM-DD_[Iteration]
+# Example: # Modified by Claude-3.5-Sonnet | 2024-10-27_01
+```
+#### 2. Syntax & Style
+Quotes: Enforce Double Quotes (") over Single Quotes (').
+Good: x += "."
+Bad: x += '.'
+SQL: Always use Multi-line strings (""") for complex queries.
+Templates: Set language mode to jinja-html.
+Spacing: Keep vertical spacing compact (no excessive blank lines).
+Readability: Prioritize Readable Code over "clever" one-liners.
+
+#### 3. Comments
+Preserve: Do NOT delete existing comments.
+Add: Comment liberally. Explain why, not just what.
+
+#### 4. Logic & Operations
+File Collisions: If a file exists, append _[timestamp] to the new filename.
+Simplicity: Choose the simplest working solution.
+
+#### 5. Tooling Preference (Web)
+Primary: browser_action (ALWAYS try this first).
+Fallback: Other browser tools (Only if browser_action fails).
+
+---
 
 ## Workflow
 

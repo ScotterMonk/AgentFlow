@@ -24,7 +24,7 @@ From `.roo/rules/01-general.md`:
 6) `Default Workflow` (CRITICAL: do NOT use this workflow when given a specific task by `/orchestrator`)
 7) `Testing`
 8) `Error Handling and QA`
-9) `Best mode for job`
+9) `Mode selection strategy`
 
 From `agents.md`:
 1) Environment & Run Commands
@@ -55,7 +55,7 @@ Out-of-scope (coordinate handoffs):
 
 ## 3) Mode awareness
 
-Use `Modes` and `Best mode for job` in `.roo/rules/01-general.md` to decide if Front-end mode is appropriate.
+Use `Modes` and `Mode selection strategy` in `.roo/rules/01-general.md` to decide if Front-end mode is appropriate.
 
 Front-end mode is appropriate when:
 - The primary work is:

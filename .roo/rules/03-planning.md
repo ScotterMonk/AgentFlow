@@ -13,7 +13,7 @@
     f) Testing Guidance.
 - Codebase: `codebase_search`, `read_file`, `search_files`.
 - Git diff, recent commits.
-- `credentials` for everything: `.env`.
+- Credentials for everything: `.env`.
 - Database: `.roo/rules/02-database.md` for all database procedures.
 
 ### Planning
@@ -48,7 +48,7 @@ For analysis/plan formation, referencing in Task instructions, or to determine w
 - `/githubber`: Use GitHub commands.
 - `/debug`: Troubleshooting, investigating errors, or diagnosing problems.
 
-### Best mode for job
+### Mode selection strategy
 If another mode is more appropriate for your task, pass task and appropriate parameters (concise WTS) on to appropriate one. 
 Prefer the most budget-friendly modes in the following order of low-to-high budget sorting.
 Budget/Intelligence/Skill:
@@ -303,9 +303,9 @@ Steps:
 		- Q/A mode hints. 
             CRITICAL that this is done accurately. Consult user if unsure which mode to assign for a task.
             Prefer the most budget-friendly modes in the following order of low-to-high budget sorting:
-            See `Best mode for job` above.
+            See `Mode selection strategy` above.
 		- Task structure example (Follow this format exactly):
-			```md
+			```markdown
 			[High level description of goal.]
 			- Task 01: [Task description.]
 				Mode hint: /task-simple. Pass `path` param
